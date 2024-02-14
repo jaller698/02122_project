@@ -1,0 +1,16 @@
+# Use mariadb as base image
+FROM mariadb
+
+# Set the working directory to /app
+WORKDIR /app
+
+ENV MYSQL_ROOT_PASSWORD=mypass
+
+# Install necessary dependencies for compiling (assuming you need g++)
+RUN apt-get update && \
+    apt-get install -y \
+    g++ \
+    make \
+    libmysqlcppconn-dev libmysqlcppconn7v5 \
+    && rm -rf /var/lib/apt/lists/*
+

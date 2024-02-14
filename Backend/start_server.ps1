@@ -39,13 +39,13 @@ docker run -d --name $docker_name --mount type=bind,source="${PWD}",target=/app 
 $make_start_time = (Get-Date).ToUniversalTime().Ticks
 
 # Execute the command docker exec make
-# docker exec $docker_name make
+docker exec $docker_name make
 
 # End measuring time for docker exec make
 $make_end_time = (Get-Date).ToUniversalTime().Ticks
 
 # Calculate the duration of docker exec make in seconds
-#$make_duration = ($make_end_time - $make_start_time) / 1e7
+$make_duration = ($make_end_time - $make_start_time) / 1e7
 
 # Calculate the duration to wait in the wait function
 $wait_duration = 20 #- $make_duration
@@ -57,4 +57,4 @@ if ($wait_duration -gt 0) {
     Write-Host "The command docker exec make took longer than 20 seconds."
 }
 
-# docker exec $docker_name make run
+docker exec $docker_name make run

@@ -30,7 +30,7 @@ docker stop $docker_name
 docker rm $docker_name
 
 docker build -t cpp_docker .
-docker run -d --name $docker_name --mount type=bind,source="$(pwd)"/,target=/app --mount type=bind,source="$(pwd)"/db/,target=/var/lib/mysql -p 8080:8080 cpp_docker
+docker run -id --name $docker_name --mount type=bind,source="$(pwd)"/,target=/app --mount type=bind,source="$(pwd)"/db/,target=/var/lib/mysql -p 8080:8080/tcp cpp_docker
 
 # Start measuring time
 start_time=$(date +%s)
@@ -45,4 +45,4 @@ end_time=$(date +%s)
 time_taken=$((end_time - start_time))
 
 wait 20 - $time_taken
-docker exec $docker_name make run
+docker exec -it $docker_name make run

@@ -26,7 +26,7 @@ void listen() {
     // Set up HTTP listener
     std::cout << "Setting up HTTP listener...." << std::endl;
     http_listener listener("http://0.0.0.0:8080");
-    listener.support(handle_get_request);
+    listener.support(methods::GET, handle_get_request);
     listener.support(methods::POST, handle_post_request);
 
     try {

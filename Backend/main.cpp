@@ -4,6 +4,5 @@
 int main() {
     createTableAndShowContents();
     listen();
-    // code block end
     return 0;
 }

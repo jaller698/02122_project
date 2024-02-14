@@ -33,7 +33,7 @@ docker stop $docker_name
 docker rm $docker_name
 
 docker build -t cpp_docker .
-docker run -d --name $docker_name --mount type=bind,source="${PWD}",target=/app --mount type=bind,source="${PWD}/db/",target=/var/lib/mysql cpp_docker
+docker run -d --name $docker_name --mount type=bind,source="${PWD}",target=/app --mount type=bind,source="${PWD}/db/",target=/var/lib/mysql -p 8080:8080/tcp cpp_docker
 
 # Start measuring time for docker exec make
 $make_start_time = (Get-Date).ToUniversalTime().Ticks
@@ -57,4 +57,4 @@ if ($wait_duration -gt 0) {
     Write-Host "The command docker exec make took longer than 20 seconds."
 }
 
-docker exec $docker_name make run
+docker exec -ti $docker_name make run

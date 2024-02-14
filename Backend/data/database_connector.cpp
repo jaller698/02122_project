@@ -24,35 +24,102 @@ void createTableAndShowContents() {
 
         /* Create the 'test' database if it doesn't exist */
         statement = connection->createStatement();
-        statement->execute("CREATE DATABASE IF NOT EXISTS test");
+        statement->execute("CREATE DATABASE IF NOT EXISTS CarbonFootprint;");
         delete statement;
 
 
         /* Connect to the MySQL database */
-        connection->setSchema("test");
+        connection->setSchema("CarbonFootprint");
 
         /* Create a table */
+        /*
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))");
-        cout << "Table 'users' created successfully." << endl;
+        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50), Password VARCHAR(50), PRIMARY KEY(Username))");
+        cout << "Table 'Users' created successfully." << endl;
+        delete statement;
+        */
+         statement = connection->createStatement();
+        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50))");
+        cout << "Table 'Users' created successfully." << endl;
+        delete statement;
+
+        statement = connection->createStatement();
+        statement->execute("CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(30), \
+            AnswerQ1 INT,\
+            AnswerQ2 INT,\
+            AnswerQ3 INT,\
+            AnswerQ4 INT,\
+            AnswerQ5 INT,\
+            AnswerQ6 INT,\
+            FOREIGN KEY(Username) REFERENCES Users(Username));"
+        );
+
+       cout << "Table 'InitialSurvey' created successfully." << endl;
+        delete statement;
+
+        statement = connection->createStatement();
+        statement->execute("CREATE TABLE IF NOT EXISTS GoalsSurvey(\
+                Username VARCHAR(30),\
+                AnswerQ1 INT,\
+                AnswerQ2 INT,\
+                AnswerQ3 INT,\
+                AnswerQ4 INT,\
+                AnswerQ5 INT,\
+                AnswerQ6 INT,\
+                FOREIGN KEY(Username) REFERENCES Users(Username)\
+            );"
+        );
+
+        cout << "Table 'GoalsSurvey' created successfully." << endl;
+        delete statement;
+
+        statement = connection->createStatement();
+        statement->execute("CREATE TABLE IF NOT EXISTS UpdatedSurvey(\
+                Username VARCHAR(30),\
+                SurveyNR INT PRIMARY KEY,\
+                AnswerQ1 INT,\
+                AnswerQ2 INT,\
+                AnswerQ3 INT,\
+                AnswerQ4 INT,\
+                AnswerQ5 INT,\
+                AnswerQ6 INT,\
+                FOREIGN KEY(Username) REFERENCES Users(Username)\
+            );"
+        );
+
+        cout << "Table 'UpdatedSurvey' created successfully." << endl;
+        delete statement;
+
+        statement = connection->createStatement();
+        statement->execute("CREATE TABLE CarbonFootprint.ComparisonData(\
+                ComparisonType VARCHAR(50) PRIMARY KEY,\
+                AnswerQ1 INT,\
+                AnswerQ2 INT,\
+                AnswerQ3 INT,\
+                AnswerQ4 INT,\
+                AnswerQ5 INT,\
+                AnswerQ6 INT\
+            );"
+        );
+
+        cout << "Table 'ComparisonData' created successfully." << endl;
         delete statement;
 
         /* Insert some data into the table */
         statement = connection->createStatement();
-        statement->execute("INSERT INTO users (name) VALUES ('Alice')");
-        statement->execute("INSERT INTO users (name) VALUES ('Bob')");
-        statement->execute("INSERT INTO users (name) VALUES ('Charlie')");
+        statement->execute("INSERT INTO Users (Username) VALUES ('Alice')");
+        statement->execute("INSERT INTO Users (Username) VALUES ('Bob')");
+        statement->execute("INSERT INTO Users (Username) VALUES ('Charlie')");
         cout << "Data inserted into the table." << endl;
         delete statement;
 
         /* Retrieve and display contents of the table */
         statement = connection->createStatement();
-        result_set = statement->executeQuery("SELECT * FROM users");
+        result_set = statement->executeQuery("SELECT * FROM Users");
 
-        cout << "Contents of the 'users' table:" << endl;
+        cout << "Contents of the 'Users' table:" << endl;
         while (result_set->next()) {
-            cout << "ID: " << result_set->getInt("id");
-            cout << ", Name: " << result_set->getString("name") << endl;
+            cout << "Name: " << result_set->getString("Username") << endl;
         }
 
         delete result_set;

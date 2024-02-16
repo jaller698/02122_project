@@ -1,7 +1,23 @@
+#pragma once
+
 #include <cpprest/http_listener.h>
 #include <cpprest/json.h>
 #include <iostream>
 
-void handle_get_request(web::http::http_request request);
-void handle_post_request(web::http::http_request request);
-void listen();
+using namespace web;
+using namespace web::http;
+using namespace web::http::experimental::listener;
+
+class RestAPIEndpoint {
+public:
+    RestAPIEndpoint();
+    void listen();
+
+private:
+    http_listener listener_;
+
+    void handle_get_request(http_request request);
+    void handle_post_request(http_request request);
+    void handle_put_request(http_request request);
+};
+

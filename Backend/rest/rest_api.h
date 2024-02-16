@@ -16,8 +16,10 @@ public:
 private:
     http_listener listener_;
 
+    void handle_head_request(http_request request);
     void handle_get_request(http_request request);
     void handle_post_request(http_request request);
     void handle_put_request(http_request request);
+    bool is_request_valid(const http_request &request, bool json_required = false, bool content_length_required = false);
 };
 

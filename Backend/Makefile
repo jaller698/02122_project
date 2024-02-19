@@ -3,12 +3,15 @@
 
 CXX := g++
 CXXFLAGS := -I . -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
+TEST_FLAGS := $(CXXFLAGS) -lgtest 
 
 DEPS := database_connector.hpp rest_api.h 
 SRC := main.cpp data/database_connector.cpp rest/rest_api.cpp
+TEST_SRC := test/main_test.cpp test/test_rest_api.cpp
 
 OBJ_DIR := _build
 OBJ := $(addprefix $(OBJ_DIR)/,$(SRC:.cpp=.o))
+TEST_OBJ := $(addprefix $(OBJ_DIR)/,$(TEST_SRC:.cpp=.o))
 
 CXXFLAGS += $(if $(DEBUG),-DDEBUG)
 
@@ -23,6 +26,10 @@ $(OBJ_DIR)/%.o: %.cpp
 
 run: main
 	./main
+
+test: $(TEST_OBJ)
+	$(CXX) -o bin_test $^ $(TEST_FLAGS)
+	./bin_test
 
 clean:
 	rm -f main $(OBJ)

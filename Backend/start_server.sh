@@ -45,4 +45,9 @@ end_time=$(date +%s)
 time_taken=$((end_time - start_time))
 
 wait 20 - $time_taken
-docker exec -it $docker_name make run
+
+docker exec -it $docker_name make run &
+
+if [ $1 == "test" ]; then
+    docker exec -it $docker_name make test
+fi

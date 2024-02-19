@@ -36,7 +36,7 @@ docker run -id --name $docker_name --mount type=bind,source="$(pwd)"/,target=/ap
 start_time=$(date +%s)
 
 # Execute the command docker exec make
-docker exec $docker_name make
+docker exec $docker_name make 
 
 # End measuring time
 end_time=$(date +%s)
@@ -52,8 +52,7 @@ else
     wait 20 - $time_taken
 fi
 
-nohup docker exec -i $docker_name make run & 
-
+gnome-terminal --window-with-profile=default -- docker exec -it $docker_name make run
 if [ "$1" = "test" ]
 then
     echo "Running tests"

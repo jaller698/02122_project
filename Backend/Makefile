@@ -5,7 +5,7 @@ CXX := g++
 CXXFLAGS := -I . -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
 TEST_FLAGS := $(CXXFLAGS) -lgtest 
 
-DEPS := database_connector.hpp rest_api.h 
+DEPS := database_connector.hpp rest_api.h
 SRC := main.cpp data/database_connector.cpp rest/rest_api.cpp
 TEST_SRC := test/main_test.cpp test/test_rest_api.cpp
 

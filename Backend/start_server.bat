@@ -9,13 +9,9 @@ docker run -d --name %docker_name% --mount type=bind,source="%cd%",target=/app -
 
 TIMEOUT 20
 
-// Either run the server or run the server in seperate thread and then test
-if %1%=="test" (
-    start docker exec -ti %docker_name% make run
-    docker exec -ti %docker_name% make test
-) else (
-    docker exec -ti %docker_name% make run
-)
+start docker exec -ti %docker_name% make run
+// Uncomment the following line to run the tests
+// docker exec -ti %docker_name% make test
 
 
 
@@ -24,3 +20,6 @@ if %1%=="test" (
 
 
 
+
+
+ 

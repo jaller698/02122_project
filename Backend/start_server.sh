@@ -44,10 +44,22 @@ end_time=$(date +%s)
 # Calculate the time taken in seconds
 time_taken=$((end_time - start_time))
 
-wait 20 - $time_taken
-
-docker exec -it $docker_name make run &
-
-if [ $1 == "test" ]; then
-    docker exec -it $docker_name make test
+# Check if the "db" folder exists
+if [ -d "db" ]; then
+    echo "Skipping most of wait function as 'db' folder exists."
+    wait 4
+else
+    wait 20 - $time_taken
 fi
+
+nohup docker exec -i $docker_name make run & 
+
+if [ "$1" = "test" ]
+then
+    echo "Running tests"
+    wait 3
+    docker exec -i $docker_name make test
+else 
+    echo "Not running tests"
+fi
+

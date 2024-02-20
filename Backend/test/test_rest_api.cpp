@@ -1,9 +1,7 @@
 #include <gtest/gtest.h>
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
-
-// We need to include the source file to test the class, but I would prefer to include the header file
-#include "../rest/rest_api.cpp"
+#include "../rest/rest_api.h"
 
 class RestAPIEndpointTest : public ::testing::Test {
 protected:

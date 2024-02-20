@@ -16,14 +16,33 @@ protected:
     }
 
     // Helper function to send a POST request with JSON data
-    void sendPostRequest(const std::string& endpoint, const web::json::value& jsonBody) {
+    http_response sendPostRequest(const std::string& endpoint, const web::json::value& jsonBody) {
         web::http::client::http_client client("http://localhost:8080");
         web::http::http_request request(web::http::methods::POST);
         request.set_request_uri(endpoint);
         request.set_body(jsonBody);
-        client.request(request).wait();
+        request.headers().set_content_type(U("application/json"));
+        http_response response = client.request(request).get();
+        return response;
+    }
+
+    http_response sendGetRequest(const std::string& endpoint) {
+        web::http::client::http_client client("http://localhost:8080");
+        web::http::http_request request(web::http::methods::GET);
+        request.set_request_uri(endpoint);
+        http_response response = client.request(request).get();
+        return response;
     }
 };
+
+TEST_F(RestAPIEndpointTest, ValidGetRequest) {
+    RestAPIEndpoint endpoint;
+
+    // Send a valid GET request
+    auto response = sendGetRequest("/api/endpoint");
+    //std::cout << response.extract_json() << std::endl;
+    ASSERT_EQ(status_codes::OK, response.status_code());
+}
 
 TEST_F(RestAPIEndpointTest, ValidPostRequest) {
     RestAPIEndpoint endpoint;
@@ -34,11 +53,11 @@ TEST_F(RestAPIEndpointTest, ValidPostRequest) {
     requestBody[U("age")] = web::json::value::number(25);
 
     // Send a valid POST request
-    sendPostRequest("/api/endpoint", requestBody);
-
+    auto response = sendPostRequest("/api/endpoint", requestBody);
+    //std::cout << response.extract_json() << std::endl;
     // TODO: Add your assertions here
     // For example, you can check if the response status code is OK
-    // ASSERT_EQ(status_codes::OK, response.status_code());
+    ASSERT_EQ(status_codes::OK, response.status_code());
 }
 
 TEST_F(RestAPIEndpointTest, InvalidPostRequest) {
@@ -48,9 +67,8 @@ TEST_F(RestAPIEndpointTest, InvalidPostRequest) {
     web::json::value requestBody;
 
     // Send an invalid POST request
-    sendPostRequest("/api/endpoint", requestBody);
-
-    // TODO: Add your assertions here
+    auto response = sendPostRequest("/api/endpoint", requestBody);
+        // TODO: Add your assertions here
     // For example, you can check if the response status code is BadRequest
-    // ASSERT_EQ(status_codes::BadRequest, response.status_code());
+    ASSERT_EQ(status_codes::BadRequest, response.status_code());
 }

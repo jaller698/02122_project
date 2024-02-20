@@ -52,12 +52,12 @@ else
     wait 20 - $time_taken
 fi
 
-gnome-terminal --window-with-profile=default -- docker exec -it $docker_name make run
+gnome-terminal --window-with-profile=default -- docker exec -it $docker_name make DEBUG=1 run 
 if [ "$1" = "test" ]
 then
     echo "Running tests"
     wait 3
-    docker exec -i $docker_name make test
+    docker exec -i $docker_name make DEBUG=1 test
 else 
     echo "Not running tests"
 fi

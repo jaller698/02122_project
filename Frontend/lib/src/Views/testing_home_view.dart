@@ -1,3 +1,8 @@
+import 'package:carbon_footprint/src/modals/delete_data.dart';
+import 'package:carbon_footprint/src/modals/fetch_data.dart';
+import 'package:carbon_footprint/src/modals/send_data.dart';
+import 'package:carbon_footprint/src/modals/update_data.dart';
+import 'package:carbon_footprint/src/modals/websocket.dart';
 import 'package:flutter/material.dart';
 
 class TestingHomeView extends StatefulWidget {
@@ -16,22 +21,34 @@ class _TestingHomeViewState extends State<TestingHomeView> {
     return Scaffold(
       // list of widgets to switch between depending on the current page index
       body: <Widget>[
-        const NetworkMessageView(),
-        const Stack(children: [
-          Placeholder(),
-          Center(child: Text('page 2')),
-        ]),
+        const FetchData(),
+        const SendData(),
+        const UpdateData(),
+        const DeleteData(),
+        const WebSocket(),
       ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.leak_add),
-            label: 'page 1',
+            label: 'FetchData',
           ),
           NavigationDestination(
-            icon: Icon(Icons.tune),
-            label: 'page 2',
+            icon: Icon(Icons.send),
+            label: 'SendData',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.update),
+            label: 'UpdateData',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.delete),
+            label: 'DeleteData',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.link),
+            label: 'WebSocket',
           ),
         ],
         onDestinationSelected: (int index) =>
@@ -40,19 +57,5 @@ class _TestingHomeViewState extends State<TestingHomeView> {
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
     );
-  }
-}
-
-class NetworkMessageView extends StatelessWidget {
-  const NetworkMessageView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Stack(children: [
-      Placeholder(),
-      Center(child: Text('page 1')),
-    ]);
   }
 }

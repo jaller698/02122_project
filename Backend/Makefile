@@ -6,8 +6,8 @@ CXXFLAGS := -I . -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
 CXXFLAGS += $(if $(DEBUG),-DDEBUG)
 TEST_FLAGS := $(CXXFLAGS) -lgtest 
 
-DEPS := database_connector.hpp rest_api.h
-SRC := data/database_connector.cpp rest/rest_api.cpp
+DEPS := database_connector.hpp rest_api.h logic.h
+SRC := data/database_connector.cpp rest/rest_api.cpp logic/logic.cpp
 TEST_SRC := test/main_test.cpp test/test_rest_api.cpp
 
 OBJ_DIR := _build

@@ -8,11 +8,11 @@ Protocol description
 GET, on endpoint questions, gets all the questions and the type of answers that are expected
     "questions/GET": {} => "response": {
         "PageTitle": "string",
-        "questions" : [
-            {"map of question's names": "type of answer"},
-            {"map of question's names": "type of answer"},
+        "questions" : {
+            "question's names": "type of answer",
+            "question's names": "type of answer",
             ...
-        ]
+        }
     }
 
 POST, on endpoint questions, sends the answers to the questions and gets the carbon score

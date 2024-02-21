@@ -7,8 +7,19 @@ web::json::value handle_data(const std::string& endpoint, web::json::value reque
    if (endpoint == "/questions") {
        // handle questions
        //get question, or return answers
+        if(write_data==true){
+            //we are writing to the database
 
-       
+            //lav funktion til at skrive til databasen, tag inspiration "Database_connecter"
+
+
+        }else{
+            //we are reading the questions from the database
+
+
+        }
+        
+        //this code needs to be moved
         web::json::value questions = web::json::value::object();
         questions["title"] = web::json::value::string("Questions");
         questions["questions"] = web::json::value::object();
@@ -41,12 +52,9 @@ web::json::value handle_data(const std::string& endpoint, web::json::value reque
    return web::json::value::null();
 }
 
-
-
-using namespace std;
-
-
-void insert(string table, int input){
+//amake funktions for the other database manipulators, delete put get query etc.
+//use these in the functions above
+void insert(string table, object input){
 
     switch (table)
     {
@@ -57,11 +65,6 @@ void insert(string table, int input){
         break;
     case "UpdatedSurvey","InitialSurvey":
         /* code */
-        statement = connection->createStatement();
-        "INSERT INTO "
-        statement->execute("INSERT INTO InitialSurvey (Username) VALUES ('Alice')");
-        cout << "Data inserted into the table." << endl;
-        delete statement;
 
 
         break;
@@ -75,14 +78,6 @@ void insert(string table, int input){
     default:
         break;
     }
-
-    statement = connection->createStatement();
-    string command="INSERT INTO Users (Username) VALUES ('tester')";
-    statement->execute(command);
-    statement->execute("INSERT INTO Users (Username) VALUES ('Bob')");
-    statement->execute("INSERT INTO Users (Username) VALUES ('Charlie')");
-    cout << "Data inserted into the table." << endl;
-    delete statement;
 
 
 }

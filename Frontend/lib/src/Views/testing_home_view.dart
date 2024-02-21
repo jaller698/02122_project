@@ -5,6 +5,8 @@ import 'package:carbon_footprint/src/modals/update_data.dart';
 import 'package:carbon_footprint/src/modals/websocket.dart';
 import 'package:flutter/material.dart';
 
+import '../CarbonForm/carbon_form_view.dart';
+
 class TestingHomeView extends StatefulWidget {
   const TestingHomeView({super.key});
   static const routeName = '/';
@@ -26,6 +28,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
         const UpdateData(),
         const DeleteData(),
         const WebSocket(),
+        const CarbonFormView(),
       ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(
@@ -49,6 +52,10 @@ class _TestingHomeViewState extends State<TestingHomeView> {
           NavigationDestination(
             icon: Icon(Icons.link),
             label: 'WebSocket',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.list_alt), 
+            label: 'form',
           ),
         ],
         onDestinationSelected: (int index) =>

@@ -7,24 +7,24 @@ Protocol description
 
 GET, on endpoint questions, gets all the questions and the type of answers that are expected
     "questions/GET": {} => "response": {
-        "PageTitle": "string",
-        "questions" : {
-            "question's names": "type of answer",
-            "question's names": "type of answer",
+        "title": "string",
+        "questions" : [
+            {"question name 1": "type of answer"},
+            {"question name 2": "type of answer"},
             ...
         }
     }
 
 POST, on endpoint questions, sends the answers to the questions and gets the carbon score
     "questions/POST": {
-        "PageTitle": "string",
-        "questions" : [ "answers", ...]
+        "title": "string",
+        "answers" : [ "answers", ...]
     } => "response": { "carbonScore": int}
 
 PUT, on endpoint questions, sends the answers to the questions and gets the carbon score
     "questions/PUT": {
-        "PageTitle": "string",
-        "questions" : [ "answers", ...]
+        "title": "string",
+        "answers" : [ "answers", ...]
     } => "response": { "carbonScore": int}
 
 POST, on endpoint users, sends a request for a new user

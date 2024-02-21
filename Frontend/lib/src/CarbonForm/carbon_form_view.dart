@@ -2,6 +2,8 @@ import 'package:carbon_footprint/src/CarbonForm/carbon_form.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_fetch.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:io' show Platform;
+
 class CarbonFormView extends StatefulWidget {
   const CarbonFormView({
     super.key,
@@ -40,25 +42,44 @@ class _CarbonFormViewState extends State<CarbonFormView> {
   }
 }
 
-class CarbonFormWidget extends StatelessWidget {
-  CarbonFormWidget({
+class CarbonFormDialog extends StatelessWidget {
+  CarbonFormDialog({
     super.key,
-    required this.carbonForm,
-  });
+    required fullscreen,
+    required carbonForm,
+  }) :  _fullscreen = fullscreen,
+        _carbonForm = carbonForm;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final CarbonForm carbonForm;
+  final bool _fullscreen;
+
+  final CarbonForm _carbonForm;
 
   @override
   Widget build(BuildContext context) {
+    return [
+      Dialog(child: _form(),), 
+      Dialog.fullscreen(child: _form(),),
+    ][(Platform.isIOS || Platform.isAndroid) ? 1 : 0];
+  }
+
+  Widget _form() {
     return Form(
       key: _formKey,
       child: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: 1, 
+        itemCount: _carbonForm.questions.length, 
         itemBuilder: (BuildContext context, int index) {
-          return TextFormField(); 
-          
+          return TextFormField(
+              decoration: InputDecoration(
+                labelText: _carbonForm.questions.elementAt(index).title,
+                border: const OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.next,
+              validator: (String? value) {
+                return null;
+              },
+          ); 
         },
       ),
     );

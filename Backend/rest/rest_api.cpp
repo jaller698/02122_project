@@ -156,6 +156,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             request.reply(status_codes::BadRequest);
             return;
         }
+        auto response_body = handle_data(endpoint, request_body, true);
         std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
         json::value response_body;
         try {

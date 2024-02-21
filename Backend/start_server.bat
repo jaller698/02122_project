@@ -7,7 +7,11 @@ md db
 docker build -t cpp_docker .
 docker run -d --name %docker_name% --mount type=bind,source="%cd%",target=/app --mount type=bind,source="%cd%/db",target=/var/lib/mysql -p 8080:8080/tcp cpp_docker
 
-docker exec -ti %docker_name% make run
+TIMEOUT 20
+
+start docker exec -ti %docker_name% make run
+REM Uncomment the following line to run the tests
+docker exec -ti %docker_name% make test
 
 
 
@@ -16,3 +20,6 @@ docker exec -ti %docker_name% make run
 
 
 
+
+
+ 

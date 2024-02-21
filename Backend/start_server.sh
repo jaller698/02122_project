@@ -36,7 +36,7 @@ docker run -id --name $docker_name --mount type=bind,source="$(pwd)"/,target=/ap
 start_time=$(date +%s)
 
 # Execute the command docker exec make
-docker exec $docker_name make
+docker exec $docker_name make 
 
 # End measuring time
 end_time=$(date +%s)
@@ -44,5 +44,21 @@ end_time=$(date +%s)
 # Calculate the time taken in seconds
 time_taken=$((end_time - start_time))
 
-wait 20 - $time_taken
-docker exec -it $docker_name make run
+# Check if the "db" folder exists
+if [ -d "db" ]; then
+    echo "Skipping most of wait function as 'db' folder exists."
+    wait 4
+else
+    wait 20 - $time_taken
+fi
+
+gnome-terminal --window-with-profile=default -- docker exec -it $docker_name make DEBUG=1 run 
+if [ "$1" = "test" ]
+then
+    echo "Running tests"
+    wait 3
+    docker exec -i $docker_name make DEBUG=1 test
+else 
+    echo "Not running tests"
+fi
+

@@ -15,4 +15,16 @@ RUN apt-get update && \
     libcpprest-dev build-essential libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# install gtest (a testing framework for C++ made by Google)
+RUN apt-get update && \
+    apt-get install -y \
+    git cmake\
+    && git clone https://github.com/google/googletest.git \
+    && cd googletest \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make \
+    && make install
+
 EXPOSE 8080

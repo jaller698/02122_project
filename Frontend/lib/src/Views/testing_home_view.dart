@@ -28,7 +28,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
         const UpdateData(),
         const DeleteData(),
         const WebSocket(),
-        const CarbonFormView(),
+        CarbonFormView(),
       ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(

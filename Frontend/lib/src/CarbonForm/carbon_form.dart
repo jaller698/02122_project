@@ -1,6 +1,6 @@
 class CarbonForm {
   final String title;
-  final Map<String, dynamic> questions;
+  final List<CarbonQuestion> questions;
 
   const CarbonForm({
     required this.title,
@@ -15,16 +15,41 @@ class CarbonForm {
       } =>
         CarbonForm(
           title: title,
-          questions: questions,
+          questions: convertQuestions(questions),
         ),
-      _ => throw const FormatException('Failed to load album.'),
+      _ => throw const FormatException('Failed to decode carbon form'),
     };
   }
+
+  static List<CarbonQuestion> convertQuestions(Map<String, dynamic> questions) {
+    List<CarbonQuestion> questions0 = List<CarbonQuestion>.empty(growable: true);
+    for (MapEntry element in questions.entries) {
+      questions0.add(CarbonQuestion(title: element.key, type: CarbonQuestionType.values.firstWhere((e) => e.name == element.value)));
+    }
+
+    return questions0;
+  }
+}
+
+enum CarbonQuestionType {
+  number,
+  text,
+  dateTime,
+}
+
+class CarbonQuestion {
+  final String title;
+  final CarbonQuestionType type;
+
+  const CarbonQuestion({
+    required this.title,
+    required this.type,
+  });
 }
 
 class CarbonFormAnswer {
   final String title;
-  final Map<String, dynamic> answers;
+  final List<String> answers;
 
   const CarbonFormAnswer({
     required this.title,
@@ -35,13 +60,13 @@ class CarbonFormAnswer {
     return switch (json) {
       {
         'title': String title,
-        'questions': Map<String, dynamic> questions,
+        'questions': List<String> answers,
       } =>
         CarbonFormAnswer(
           title: title,
-          answers: questions,
+          answers: answers,
         ),
-      _ => throw const FormatException('Failed to load album.'),
+      _ => throw const FormatException('Failed to encode carbon form'),
     };
   }
 }

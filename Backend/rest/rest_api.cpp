@@ -33,6 +33,7 @@ void RestAPIEndpoint::listen() {
 */
 void RestAPIEndpoint::handle_head_request(http_request request) {
     if (!is_request_valid(request)) {
+        request.reply(status_codes::BadRequest);
         return;
     }
     std::string endpoint = request.relative_uri().to_string();
@@ -54,14 +55,36 @@ void RestAPIEndpoint::handle_head_request(http_request request) {
 */
 void RestAPIEndpoint::handle_get_request(http_request request) {
     if (!is_request_valid(request)) {
+        request.reply(status_codes::BadRequest);
         return;
     }
-    
     std::string endpoint = request.relative_uri().to_string();
+
 #ifdef DEBUG
     std::cout << "\033[33mDEBUG:\033[0m Received a GET request, on endpoint: " << endpoint << std::endl;
 #endif
-    request.reply(status_codes::OK, U("Hello, world!"));
+
+    auto request_body = request.extract_json().get();
+    if (request_body.is_null()) {
+        request.reply(status_codes::OK, U("No data supplied"));
+        return;
+    }
+    if (!is_request_valid(request, true)) {
+        request.reply(status_codes::BadRequest);
+        return;
+    }
+    json::value response_body;
+    try {
+        response_body = handle_data(endpoint, request_body);
+    } catch (std::exception &e) {
+        std::cerr << "Error in GET: " << e.what() << std::endl;
+        request.reply(status_codes::NotImplemented);
+        return;
+    }
+#ifdef DEBUG
+    std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
+#endif
+    request.reply(status_codes::OK, response_body);
 }
 
 /*
@@ -71,19 +94,19 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
 */
 void RestAPIEndpoint::handle_put_request(http_request request) {
     if (!is_request_valid(request, true)) {
+        request.reply(status_codes::BadRequest);
         return;
     }
-
-    std::string endpoint = request.relative_uri().to_string();
-
-
-    try {
 #ifdef DEBUG
         std::cout << "\033[33mDEBUG:\033[0m Received a PUT request, on endpoint: " << endpoint << std::endl;
 #endif
+
+    std::string endpoint = request.relative_uri().to_string();
+
+    try {
         throw std::runtime_error("Not implemented");
     } catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Error in PUT: " << e.what() << std::endl;
         request.reply(status_codes::NotImplemented);
     }
 }
@@ -95,6 +118,7 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
 */
 void RestAPIEndpoint::handle_post_request(http_request request) {
     if (!is_request_valid(request, true)) {
+        request.reply(status_codes::BadRequest);
         return;
     }
 
@@ -112,7 +136,16 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             return;
         }
         std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
-        request.reply(status_codes::OK, request_body);
+        json::value response_body;
+        try {
+            response_body = handle_data(endpoint, request_body);
+        } catch (std::exception &e) {
+            std::cerr << "Error in POST: " << e.what() << std::endl;
+            request.reply(status_codes::NotImplemented);
+            return;
+        }
+        std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
+        request.reply(status_codes::OK, response_body);
     });
 }
 

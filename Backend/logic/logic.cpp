@@ -8,6 +8,7 @@ web::json::value handle_data(const std::string& endpoint, web::json::value reque
        // handle questions
         web::json::value questions = web::json::value::object();
         questions["title"] = web::json::value::string("Questions");
+        questions["questions"] = web::json::value::object();
         questions["questions"]["question 1"] = web::json::value::string("string");
         questions["questions"]["question 2"] = web::json::value::string("int");
         std::cout << "Returning questions: " << questions.serialize() << std::endl;

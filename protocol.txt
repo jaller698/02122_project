@@ -12,7 +12,7 @@ GET, on endpoint questions, gets all the questions and the type of answers that 
             {"question name 1": "type of answer"},
             {"question name 2": "type of answer"},
             ...
-        }
+        ]
     }
 
 POST, on endpoint questions, sends the answers to the questions and gets the carbon score

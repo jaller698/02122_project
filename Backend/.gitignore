@@ -1,2 +1,5 @@
 main
+bin_test
 db/**
+_build/**
+nohup.out

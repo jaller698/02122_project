@@ -46,7 +46,14 @@ protected:
 TEST_F(RestAPIEndpointTest, ValidGetRequest) {
 
     // Send a valid GET request
-    auto response = sendGetRequest("/api/endpoint");
+    auto response = sendGetRequest("/users");
+    ASSERT_EQ(status_codes::OK, response->status_code());
+}
+
+TEST_F(RestAPIEndpointTest, ValidGetDataRequest) {
+
+    // Send an invalid GET request
+    auto response = sendGetRequest("/users");
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 
@@ -58,7 +65,7 @@ TEST_F(RestAPIEndpointTest, ValidPostRequest) {
     requestBody[U("age")] = web::json::value::number(25);
 
     // Send a valid POST request
-    auto response = sendPostRequest("/api/endpoint", requestBody);
+    auto response = sendPostRequest("/questions", requestBody);
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
@@ -69,7 +76,7 @@ TEST_F(RestAPIEndpointTest, InvalidPostRequest) {
     web::json::value requestBody;
 
     // Send an invalid POST request
-    auto response = sendPostRequest("/api/endpoint", requestBody);
+    auto response = sendPostRequest("/users", requestBody);
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::BadRequest, response->status_code());
 }
@@ -82,7 +89,7 @@ TEST_F (RestAPIEndpointTest, ValidPutRequest) {
     requestBody[U("age")] = web::json::value::number(25);
 
     // Send a valid PUT request, currently not implemented
-    auto response = sendPutRequest("/api/endpoint", requestBody);
+    auto response = sendPutRequest("/users", requestBody);
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::NotImplemented, response->status_code());
 }

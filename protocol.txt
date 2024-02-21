@@ -1,0 +1,59 @@
+Protocol description
+"endpoint/METHOD": {
+    "client data"
+} => "response": {
+    "server data"
+}
+
+GET, on endpoint questions, gets all the questions and the type of answers that are expected
+    "questions/GET": {} => "response": {
+        "PageTitle": "string",
+        "questions" : [
+            {"map of question's names": "type of answer"},
+            {"map of question's names": "type of answer"},
+            ...
+        ]
+    }
+
+POST, on endpoint questions, sends the answers to the questions and gets the carbon score
+    "questions/POST": {
+        "PageTitle": "string",
+        "questions" : [ "answers", ...]
+    } => "response": { "carbonScore": int}
+
+PUT, on endpoint questions, sends the answers to the questions and gets the carbon score
+    "questions/PUT": {
+        "PageTitle": "string",
+        "questions" : [ "answers", ...]
+    } => "response": { "carbonScore": int}
+
+POST, on endpoint users, sends a request for a new user
+    "users/POST" : {
+        "userID" : "string",
+        "password" : "optional string"
+    } => "response" : {}
+
+GET, on endpoint userScore, sends a request for the user's carbon score
+    "userScore/GET" : {
+        "userid" : "string"
+    } => "response" : {
+        "carbonScore": int
+    }
+
+// maybe respond with token, which should be included in header token in other requests 
+GET, on endpoint users, sends a request for a login user
+    "users/GET" : {
+        "userID" : "string",
+        "password" : "optional string"
+    } => "response" : {} // statuscode defines whether the login is correct 200 vs 401
+
+GET, on endpoint comparison, sends a request for comparison
+    "comparison/GET" : {
+        "landCode" :  ["some optional string (i.e. DK)", ...]
+    } => "response" : {
+        "data" : [
+            "Dk": "score"
+            "SE": "worse-score"
+            ...
+        ] // if land code is specified, array should contain one entry
+    }

@@ -34,7 +34,8 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
             setState(() => awatingData = false);
 
             Navigator.restorablePushNamed(context, CarbonFormView.routeName,
-                arguments: value);
+                arguments: CarbonForm.toJson(value));
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
           }).catchError((error) {
             setState(() => awatingData = false);
             ScaffoldMessenger.of(context).hideCurrentSnackBar();

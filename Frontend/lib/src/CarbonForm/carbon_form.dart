@@ -15,13 +15,14 @@ class CarbonForm {
       } =>
         CarbonForm(
           title: title,
-          questions: convertQuestions(questions),
+          questions: convertQuestionsFromJson(questions),
         ),
       _ => throw const FormatException('Failed to decode carbon form'),
     };
   }
 
-  static List<CarbonQuestion> convertQuestions(Map<String, dynamic> questions) {
+  static List<CarbonQuestion> convertQuestionsFromJson(
+      Map<String, dynamic> questions) {
     List<CarbonQuestion> questions0 =
         List<CarbonQuestion>.empty(growable: true);
     for (MapEntry element in questions.entries) {
@@ -33,11 +34,35 @@ class CarbonForm {
 
     return questions0;
   }
+
+  static Map<String, dynamic> toJson(CarbonForm form) {
+    Map<String, dynamic> m = <String, dynamic>{};
+
+    m['title'] = form.title;
+    m['questions'] = convertQuestionsToJson(form.questions); // TODO
+
+    return m;
+  }
+
+  static Map<String, dynamic> convertQuestionsToJson(
+      List<CarbonQuestion> questions) {
+    Map<String, dynamic> m = <String, dynamic>{};
+
+    for (var q in questions) {
+      m[q.title] = q.type.name;
+    }
+
+    return m;
+  }
 }
 
 enum CarbonQuestionType {
-  number,
-  text,
+  arbitrary,
+  int,
+  float,
+  string,
+  date,
+  time,
   dateTime,
 }
 

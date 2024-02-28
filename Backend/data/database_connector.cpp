@@ -122,7 +122,9 @@ void dataBaseStart::createTableAndShowContents()
         // call our test insert function
         std::cout << "hello";
         std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
-        insert("InitialSurvey", m);
+        //insert("InitialSurvey", m);
+        int tmp[] ={2,3,4,5,6,7};
+        insert("GoalsSurvey",tmp)
 
         result_set = statement->executeQuery("SELECT * FROM InitialSurvey");
 
@@ -144,7 +146,7 @@ void dataBaseStart::createTableAndShowContents()
     }
 }
 
-void dataBaseStart::insert(std::string table, std::string input[7])
+void dataBaseStart::insert(std::string table, int input[])
 {
  
     
@@ -181,6 +183,13 @@ void dataBaseStart::insert(std::string table, std::string input[7])
     {
         /* code */
         // set all the variables to the input answers
+        std::string inputStr = "INSERT INTO " + table + " VALUES ('Alice', " + (input[0]).c_str() + ", " + (input[1]).c_str() + ", " + (input[2]).c_str() + ", " + (input[3]).c_str()+ ", " + (input[4]).c_str()+ ", " + (input[5]).c_str()+ ")";
+        cout << inputStr;
+        statement = connection->createStatement();
+         cout << "WE MADE IT";
+        statement->execute(inputStr);
+        std::cout << "first and second inserted into table" << std::endl;
+        cout << "yippee";
     }
 
     if (table == "ComparisonData")

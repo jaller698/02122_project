@@ -9,9 +9,9 @@ docker run -d --name %docker_name% --mount type=bind,source="%cd%",target=/app -
 
 TIMEOUT 20
 
-start docker exec -ti %docker_name% make run
+docker exec -ti %docker_name% make run
 REM Uncomment the following line to run the tests
-docker exec -ti %docker_name% make test
+REM docker exec -ti %docker_name% make test
 
 
 

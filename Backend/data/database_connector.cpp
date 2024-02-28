@@ -1,16 +1,12 @@
-#include <iostream>
-#include <mysql_connection.h>
-#include <mysql_driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/driver.h>
-#include <cppconn/resultset.h>
-#include <cppconn/statement.h>
-#include <logic\logic.h>
+#include "database_connector.hpp"
 
 using namespace std;
 
-void createTableAndShowContents() {
-    try {
+void dataBaseStart::createTableAndShowContents()
+{
+
+    try
+    {
         sql::mysql::MySQL_Driver *mysql_driver;
         sql::Connection *connection;
         sql::Statement *statement;
@@ -28,7 +24,6 @@ void createTableAndShowContents() {
         statement->execute("CREATE DATABASE IF NOT EXISTS CarbonFootprint;");
         delete statement;
 
-
         /* Connect to the MySQL database */
         connection->setSchema("CarbonFootprint");
 
@@ -39,23 +34,22 @@ void createTableAndShowContents() {
         cout << "Table 'Users' created successfully." << endl;
         delete statement;
         */
-         statement = connection->createStatement();
+        statement = connection->createStatement();
         statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50))");
         cout << "Table 'Users' created successfully." << endl;
         delete statement;
 
         statement = connection->createStatement();
         statement->execute("CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(30), \
-            AnswerQ1 INT,\
-            AnswerQ2 INT,\
-            AnswerQ3 INT,\
-            AnswerQ4 INT,\
-            AnswerQ5 INT,\
-            AnswerQ6 INT,\
-            FOREIGN KEY(Username) REFERENCES Users(Username));"
-        );
+            AnswerQ1 VARCHAR(50),\
+            AnswerQ2 VARCHAR(50),\
+            AnswerQ3 VARCHAR(50),\
+            AnswerQ4 VARCHAR(50),\
+            AnswerQ5 VARCHAR(50),\
+            AnswerQ6 VARCHAR(50),\
+            FOREIGN KEY(Username) REFERENCES Users(Username));");
 
-       cout << "Table 'InitialSurvey' created successfully." << endl;
+        cout << "Table 'InitialSurvey' created successfully." << endl;
         delete statement;
 
         statement = connection->createStatement();
@@ -68,8 +62,7 @@ void createTableAndShowContents() {
                 AnswerQ5 INT,\
                 AnswerQ6 INT,\
                 FOREIGN KEY(Username) REFERENCES Users(Username)\
-            );"
-        );
+            );");
 
         cout << "Table 'GoalsSurvey' created successfully." << endl;
         delete statement;
@@ -85,23 +78,21 @@ void createTableAndShowContents() {
                 AnswerQ5 INT,\
                 AnswerQ6 INT,\
                 FOREIGN KEY(Username) REFERENCES Users(Username)\
-            );"
-        );
+            );");
 
         cout << "Table 'UpdatedSurvey' created successfully." << endl;
         delete statement;
 
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE CarbonFootprint.ComparisonData(\
+        statement->execute("CREATE TABLE IF NOT EXISTS ComparisonData (\
                 ComparisonType VARCHAR(50) PRIMARY KEY,\
-                AnswerQ1 INT,\
-                AnswerQ2 INT,\
-                AnswerQ3 INT,\
-                AnswerQ4 INT,\
-                AnswerQ5 INT,\
-                AnswerQ6 INT\
-            );"
-        );
+                AnswerQ1 VARCHAR(50),\
+                AnswerQ2 VARCHAR(50),\
+                AnswerQ3 VARCHAR(50),\
+                AnswerQ4 VARCHAR(50),\
+                AnswerQ5 VARCHAR(50),\
+                AnswerQ6 VARCHAR(50)\
+            );");
 
         cout << "Table 'ComparisonData' created successfully." << endl;
         delete statement;
@@ -119,28 +110,82 @@ void createTableAndShowContents() {
         result_set = statement->executeQuery("SELECT * FROM Users");
 
         cout << "Contents of the 'Users' table:" << endl;
-        while (result_set->next()) {
+        while (result_set->next())
+        {
             cout << "Name: " << result_set->getString("Username") << endl;
         }
 
-        delete result_set;
+        // delete result_set;
         delete statement;
         delete connection;
 
-        //call our test insert function
-        logic.insert("InitialSurvey",["first","second"]);
+        // call our test insert function
+        std::cout << "hello";
+        std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
+        insert("InitialSurvey", m);
 
-        //try to print it from here
-        cout << "Contents of the 'Users' table:" << endl;
-        while (result_set->next()) {
-            cout << "Name: " << result_set->getString("Username") << endl;
-        }
+        result_set = statement->executeQuery("SELECT * FROM InitialSurvey");
 
-    } catch (sql::SQLException &e) {
+        // try to print it from here this doesnt print what it should
+        cout << "Checking if we just put stuff into the database" << endl;
+        // while (result_set->next()) {
+        //     cout << "stuff: " << result_set->getString() << endl;
+        // }
+
+        delete result_set;
+    }
+    catch (sql::SQLException &e)
+    {
         cout << "# ERR: SQLException in " << __FILE__;
         cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
         cout << "# ERR: " << e.what();
         cout << " (MySQL error code: " << e.getErrorCode();
         cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+    }
+}
+
+void dataBaseStart::insert(std::string table, std::string input[7])
+{
+ 
+    
+    mysql_driver = sql::mysql::get_mysql_driver_instance();
+   
+    connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
+    connection->setSchema("CarbonFootprint");
+
+    if (table == "User")
+    {
+        /* code */
+        // set all the variables to the input answers
+    }
+
+    if (table == "UpdatedSurvey")
+    {
+        /* code */
+        // set all the variables to the input answers
+    }
+
+    if (table == "InitialSurvey")
+    {
+        /* code */
+        std::string inputStr = "INSERT INTO " + table + " VALUES ('" + input[0] + "', '" + input[1] + "', '" + input[2] + "', '" + input[3] + "', '" + input[4]+ "', '" + input[5]+ "', '" + input[6]+ "')";
+        cout << inputStr;
+        statement = connection->createStatement();
+         cout << "WE MADE IT";
+        statement->execute(inputStr);
+        std::cout << "first and second inserted into table" << std::endl;
+        cout << "yippee";
+    }
+
+    if (table == "GoalsSurvey")
+    {
+        /* code */
+        // set all the variables to the input answers
+    }
+
+    if (table == "ComparisonData")
+    {
+        /* code */
+        // set all the variables to the input answers
     }
 }

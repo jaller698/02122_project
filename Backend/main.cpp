@@ -2,7 +2,8 @@
 #include "rest/rest_api.h"
 
 int main() {
-    createTableAndShowContents();
+    dataBaseStart db;
+    db.createTableAndShowContents();
     RestAPIEndpoint rest_api_endpoint;
     rest_api_endpoint.listen();
     return 0;

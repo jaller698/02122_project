@@ -97,13 +97,13 @@ void dataBaseStart::createTableAndShowContents()
         cout << "Table 'ComparisonData' created successfully." << endl;
         delete statement;
 
-        /* Insert some data into the table */
+        /* Insert some data into the table 
         statement = connection->createStatement();
         statement->execute("INSERT INTO Users (Username) VALUES ('Alice')");
         statement->execute("INSERT INTO Users (Username) VALUES ('Bob')");
         statement->execute("INSERT INTO Users (Username) VALUES ('Charlie')");
         cout << "Data inserted into the table." << endl;
-        delete statement;
+        delete statement;*/
 
         /* Retrieve and display contents of the table */
         statement = connection->createStatement();
@@ -117,15 +117,16 @@ void dataBaseStart::createTableAndShowContents()
 
         // delete result_set;
         delete statement;
-        delete connection;
+
 
         // call our test insert function
         std::cout << "hello";
-        std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
+        //std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
         //insert("InitialSurvey", m);
-        int tmp[] ={2,3,4,5,6,7};
-        insert("GoalsSurvey",tmp)
+        std::vector<std::string> tmp ={"2","3","4","5","6","7"};
+        insert("GoalsSurvey", tmp);
 
+        statement = connection->createStatement();
         result_set = statement->executeQuery("SELECT * FROM InitialSurvey");
 
         // try to print it from here this doesnt print what it should
@@ -146,7 +147,7 @@ void dataBaseStart::createTableAndShowContents()
     }
 }
 
-void dataBaseStart::insert(std::string table, int input[])
+void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
  
     
@@ -183,7 +184,7 @@ void dataBaseStart::insert(std::string table, int input[])
     {
         /* code */
         // set all the variables to the input answers
-        std::string inputStr = "INSERT INTO " + table + " VALUES ('Alice', " + (input[0]).c_str() + ", " + (input[1]).c_str() + ", " + (input[2]).c_str() + ", " + (input[3]).c_str()+ ", " + (input[4]).c_str()+ ", " + (input[5]).c_str()+ ")";
+        std::string inputStr = "INSERT INTO " + table + " VALUES ('Alice', " + input.at(0) + ", " + (input[1]) + ", " + (input[2]) + ", " + (input[3]) + ", " + (input[4])+ ", " + (input[5]) + ")";
         cout << inputStr;
         statement = connection->createStatement();
          cout << "WE MADE IT";

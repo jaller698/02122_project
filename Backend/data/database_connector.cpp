@@ -5,6 +5,7 @@
 #include <cppconn/driver.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
+#include <logic\logic.h>
 
 using namespace std;
 
@@ -125,6 +126,15 @@ void createTableAndShowContents() {
         delete result_set;
         delete statement;
         delete connection;
+
+        //call our test insert function
+        logic.insert("InitialSurvey",["first","second"]);
+
+        //try to print it from here
+        cout << "Contents of the 'Users' table:" << endl;
+        while (result_set->next()) {
+            cout << "Name: " << result_set->getString("Username") << endl;
+        }
 
     } catch (sql::SQLException &e) {
         cout << "# ERR: SQLException in " << __FILE__;

@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart';
 import 'package:carbon_footprint/src/modals/delete_data.dart';
 import 'package:carbon_footprint/src/modals/fetch_data.dart';
 import 'package:carbon_footprint/src/modals/send_data.dart';
@@ -7,15 +8,15 @@ import 'package:flutter/material.dart';
 
 import '../CarbonForm/carbon_form_view.dart';
 
-class TestingHomeView extends StatefulWidget {
-  const TestingHomeView({super.key});
+class MainView extends StatefulWidget {
+  const MainView({super.key});
   static const routeName = '/';
 
   @override
-  State<TestingHomeView> createState() => _TestingHomeViewState();
+  State<MainView> createState() => _MainViewState();
 }
 
-class _TestingHomeViewState extends State<TestingHomeView> {
+class _MainViewState extends State<MainView> {
   int _currentPageIndex = 0;
 
   @override
@@ -24,11 +25,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
       // list of widgets to switch between depending on the current page index
       body: <Widget>[
         const FetchData(),
-        const SendData(),
-        const UpdateData(),
-        const DeleteData(),
-        const WebSocket(),
-        CarbonFormView(),
+        const Center(child: CarbonFormButton()),
       ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(
@@ -37,7 +34,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
             icon: Icon(Icons.leak_add),
             label: 'FetchData',
           ),
-          NavigationDestination(
+          /*NavigationDestination(
             icon: Icon(Icons.send),
             label: 'SendData',
           ),
@@ -52,7 +49,7 @@ class _TestingHomeViewState extends State<TestingHomeView> {
           NavigationDestination(
             icon: Icon(Icons.link),
             label: 'WebSocket',
-          ),
+          ),*/
           NavigationDestination(
             icon: Icon(Icons.list_alt), 
             label: 'form',

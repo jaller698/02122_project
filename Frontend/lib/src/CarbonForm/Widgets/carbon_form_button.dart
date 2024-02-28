@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carbon_footprint/src/CarbonForm/carbon_form.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +37,7 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
                 arguments: value);
           }).catchError((error) {
             setState(() => awatingData = false);
-
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("ERROR: $error", softWrap: false),
                 showCloseIcon: true,

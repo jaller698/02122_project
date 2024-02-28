@@ -7,10 +7,8 @@ import 'dart:io' show Platform;
 import 'Widgets/carbon_form_button.dart';
 
 class CarbonFormView extends StatefulWidget {
-  const CarbonFormView({
-    super.key,
-    required carbonForm
-  }) : _carbonForm = carbonForm;
+  const CarbonFormView({super.key, required carbonForm})
+      : _carbonForm = carbonForm;
 
   static const routeName = '/Carbon_Form';
 
@@ -31,18 +29,18 @@ class _CarbonFormViewState extends State<CarbonFormView> {
       key: _formKey,
       child: ListView.builder(
         padding: const EdgeInsets.all(8),
-        itemCount: widget._carbonForm.questions.length, 
+        itemCount: widget._carbonForm.questions.length,
         itemBuilder: (BuildContext context, int index) {
           return TextFormField(
-              decoration: InputDecoration(
-                labelText: widget._carbonForm.questions.elementAt(index).title,
-                border: const OutlineInputBorder(),
-              ),
-              textInputAction: TextInputAction.next,
-              validator: (String? value) {
-                return null;
-              },
-          ); 
+            decoration: InputDecoration(
+              labelText: widget._carbonForm.questions.elementAt(index).title,
+              border: const OutlineInputBorder(),
+            ),
+            textInputAction: TextInputAction.next,
+            validator: (String? value) {
+              return null;
+            },
+          );
         },
       ),
     );

@@ -22,9 +22,13 @@ class CarbonForm {
   }
 
   static List<CarbonQuestion> convertQuestions(Map<String, dynamic> questions) {
-    List<CarbonQuestion> questions0 = List<CarbonQuestion>.empty(growable: true);
+    List<CarbonQuestion> questions0 =
+        List<CarbonQuestion>.empty(growable: true);
     for (MapEntry element in questions.entries) {
-      questions0.add(CarbonQuestion(title: element.key, type: CarbonQuestionType.values.firstWhere((e) => e.name == element.value)));
+      questions0.add(CarbonQuestion(
+          title: element.key,
+          type: CarbonQuestionType.values
+              .firstWhere((e) => e.name == element.value)));
     }
 
     return questions0;

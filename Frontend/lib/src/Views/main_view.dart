@@ -51,7 +51,7 @@ class _MainViewState extends State<MainView> {
             label: 'WebSocket',
           ),*/
           NavigationDestination(
-            icon: Icon(Icons.list_alt), 
+            icon: Icon(Icons.list_alt),
             label: 'form',
           ),
         ],

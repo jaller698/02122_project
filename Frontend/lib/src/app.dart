@@ -1,4 +1,5 @@
-import 'package:carbon_footprint/src/Views/testing_home_view.dart';
+import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
+import 'package:carbon_footprint/src/Views/main_view.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -21,9 +22,11 @@ class MyApp extends StatelessWidget {
           settings: routeSettings,
           builder: (BuildContext context) {
             switch (routeSettings.name) {
-              case TestingHomeView.routeName:
+              case CarbonFormView.routeName:
+                return CarbonFormView(carbonForm: routeSettings.arguments);
+              case MainView.routeName:
               default:
-                return const TestingHomeView();
+                return const MainView();
             }
           },
         );

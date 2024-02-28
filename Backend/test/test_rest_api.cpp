@@ -54,6 +54,7 @@ TEST_F(RestAPIEndpointTest, ValidGetDataRequest) {
 
     // Send an invalid GET request
     auto response = sendGetRequest("/users");
+    ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 
@@ -85,11 +86,16 @@ TEST_F (RestAPIEndpointTest, ValidPutRequest) {
 
     // Create a JSON object for the request body
     web::json::value requestBody;
-    requestBody[U("name")] = web::json::value::string(U("John"));
-    requestBody[U("age")] = web::json::value::number(25);
+    requestBody[U("userID")] = web::json::value::string(U("John"));
+    requestBody[U("password")] = web::json::value::string(U("password123"));
 
     // Send a valid PUT request, currently not implemented
     auto response = sendPutRequest("/users", requestBody);
     ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::NotImplemented, response->status_code());
+    ASSERT_EQ(status_codes::OK, response->status_code());
+
+    //test that a second attempt will return 304
+    auto badResponse = sendPutRequest("/users", requestBody);
+    ASSERT_NE(badResponse, nullptr);
+    ASSERT_EQ(status_codes::NotModified, badResponse->status_code());
 }

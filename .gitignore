@@ -6,7 +6,8 @@ Frontend/carbon_footprint/macos/Flutter/GeneratedPluginRegistrant.swift
 Frontend/carbon_footprint/linux/flutter/generated_plugins.cmake
 Frontend/carbon_footprint/linux/flutter/generated_plugin_registrant.h
 Frontend/carbon_footprint/linux/flutter/generated_plugin_registrant.cc
-.vscode/settings.json
+.vscode/**
+**/.vscode/**
 Frontend/linux/flutter/generated_plugin_registrant.cc
 Frontend/linux/flutter/generated_plugin_registrant.h
 Frontend/linux/flutter/generated_plugins.cmake

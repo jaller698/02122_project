@@ -93,6 +93,18 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
 *  PUT does not have any effect if invoked twice on the same resource. 
 */
 void RestAPIEndpoint::handle_put_request(http_request request) {
+    auto client_address = request.remote_address();
+    // ensure no PUT request is handled twice
+    for (const auto &_request : last_requests) {
+        //std::cout << "Comparing " << _request.to_string() << " with " << request.to_string() << std::endl;
+        if (_request.to_string() == request.to_string()) {
+            std::cout << "Request already handled" << std::endl;
+            request.reply(status_codes::NotModified);
+            return;
+        }
+    }
+    std::cout << "Adding request to last_requests" << std::endl;
+    last_requests.push_back(request);
     if (!is_request_valid(request, true)) {
         request.reply(status_codes::BadRequest);
         return;
@@ -104,10 +116,19 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
     std::string endpoint = request.relative_uri().to_string();
 
     try {
-        throw std::runtime_error("Not implemented");
+        request.extract_json().then([=](json::value request_body) {
+            std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
+            if (request_body.is_null()) {
+                request.reply(status_codes::BadRequest);
+                return;
+            }
+            json::value response_body = handle_data(endpoint, request_body);
+            std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
+            request.reply(status_codes::OK, response_body);
+        });
     } catch (const std::exception &e) {
         std::cerr << "Error in PUT: " << e.what() << std::endl;
-        request.reply(status_codes::NotImplemented);
+        request.reply(status_codes::InternalError, e.what());
     }
 }
 
@@ -141,7 +162,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             response_body = handle_data(endpoint, request_body);
         } catch (std::exception &e) {
             std::cerr << "Error in POST: " << e.what() << std::endl;
-            request.reply(status_codes::NotImplemented);
+            request.reply(status_codes::InternalError, e.what());
             return;
         }
         std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
@@ -151,7 +172,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
 
 bool RestAPIEndpoint::is_request_valid(const http_request &request, bool json_required, bool content_length_required) {
     // Check if the request is valid
-    if (request.headers().content_type() != U("application/json") && json_required) {
+    if ((request.headers().content_type().find("json") == std::string::npos) && json_required) {
         request.reply(status_codes::UnsupportedMediaType);
         return false;
     }

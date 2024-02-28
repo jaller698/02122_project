@@ -16,7 +16,7 @@ public:
 
 private:
     http_listener listener_;
-
+    std::vector<http_request> last_requests;
     void handle_head_request(http_request request);
     void handle_get_request(http_request request);
     void handle_post_request(http_request request);

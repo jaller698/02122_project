@@ -1,4 +1,5 @@
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
+import 'package:carbon_footprint/src/CarbonForm/Widgets/snackbar_catch_error.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
 import 'package:flutter/material.dart';
 
@@ -39,30 +40,7 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
           }).catchError((error) {
             setState(() => awatingData = false);
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("ERROR: $error", softWrap: false),
-                showCloseIcon: true,
-                duration: const Duration(seconds: 30),
-                action: SnackBarAction(
-                  label: "Details",
-                  onPressed: () => showDialog<String>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Error"),
-                      content: SingleChildScrollView(
-                        child: Text("ERROR: $error"),
-                      ),
-                      actions: [
-                        TextButton(
-                          child: const Text('Close'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                )));
+            SnackBarCatchError(context, error);
           });
         },
         child: const Text("request form"),

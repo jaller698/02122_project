@@ -1,4 +1,7 @@
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
+import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form_answer.dart';
+import 'package:carbon_footprint/src/CarbonForm/Widgets/snackbar_catch_error.dart';
+import 'package:carbon_footprint/src/CarbonForm/http/carbon_form_send.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -68,7 +71,14 @@ class _CarbonFormViewState extends State<CarbonFormView> {
         icon: const Icon(Icons.check),
         onPressed: () {
           if (_formKey.currentState!.saveAndValidate()) {
-            debugPrint(_formKey.currentState?.value.toString());
+            Future<void> future = sendCarbonForm(CarbonFormAnwser(
+                title: widget._carbonForm.title,
+                anwsers: _formKey.currentState!.value));
+
+            future.then((value) => Navigator.pop(context)).catchError((error) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              SnackBarCatchError(context, error);
+            });
           }
         },
       ),

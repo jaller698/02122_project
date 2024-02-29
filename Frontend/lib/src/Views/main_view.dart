@@ -1,12 +1,7 @@
 import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart';
-import 'package:carbon_footprint/src/modals/delete_data.dart';
 import 'package:carbon_footprint/src/modals/fetch_data.dart';
-import 'package:carbon_footprint/src/modals/send_data.dart';
-import 'package:carbon_footprint/src/modals/update_data.dart';
-import 'package:carbon_footprint/src/modals/websocket.dart';
-import 'package:flutter/material.dart';
 
-import '../CarbonForm/carbon_form_view.dart';
+import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

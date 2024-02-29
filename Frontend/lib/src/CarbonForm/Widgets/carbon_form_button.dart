@@ -1,8 +1,8 @@
-import 'package:carbon_footprint/src/CarbonForm/carbon_form.dart';
+import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
 import 'package:flutter/material.dart';
 
-import '../carbon_form_fetch.dart';
+import '../http/carbon_form_fetch.dart';
 
 class CarbonFormButton extends StatefulWidget {
   const CarbonFormButton({

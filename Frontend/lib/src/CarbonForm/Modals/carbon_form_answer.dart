@@ -1,19 +1,19 @@
-class CarbonFormAnwser {
+class CarbonFormAnswer {
   final String title;
   final Map<String, dynamic> anwsers;
 
-  const CarbonFormAnwser({
+  const CarbonFormAnswer({
     required this.title,
     required this.anwsers,
   });
 
-  factory CarbonFormAnwser.fromJson(Map<String, dynamic> json) {
+  factory CarbonFormAnswer.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
         'title': String title,
         'questions': Map<String, dynamic> anwsers,
       } =>
-        CarbonFormAnwser(
+        CarbonFormAnswer(
           title: title,
           anwsers: anwsers,
         ),
@@ -21,11 +21,11 @@ class CarbonFormAnwser {
     };
   }
 
-  static Map<String, dynamic> toJson(CarbonFormAnwser form) {
+  static Map<String, dynamic> toJson(CarbonFormAnswer form) {
     Map<String, dynamic> m = <String, dynamic>{};
 
     m['title'] = form.title;
-    m['anwsers'] = form.anwsers;
+    m['anwsers'] = form.anwsers.toString();
 
     return m;
   }

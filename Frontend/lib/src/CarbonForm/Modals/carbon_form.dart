@@ -64,6 +64,10 @@ enum CarbonQuestionType {
   date,
   time,
   dateTime,
+  dateRange,
+  checkBox,
+  dropDown,
+  slider,
 }
 
 class CarbonQuestion {
@@ -74,28 +78,4 @@ class CarbonQuestion {
     required this.title,
     required this.type,
   });
-}
-
-class CarbonFormAnswer {
-  final String title;
-  final List<String> answers;
-
-  const CarbonFormAnswer({
-    required this.title,
-    required this.answers,
-  });
-
-  factory CarbonFormAnswer.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'title': String title,
-        'questions': List<String> answers,
-      } =>
-        CarbonFormAnswer(
-          title: title,
-          answers: answers,
-        ),
-      _ => throw const FormatException('Failed to encode carbon form'),
-    };
-  }
 }

@@ -41,7 +41,16 @@ class _MainViewState extends State<MainView> {
         child: <Widget>[
           const DashboardView(),
           const CarbonTrackerView(),
-          const Center(child: CarbonFormButton()),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CarbonFormButton(),
+              FilledButton(
+                child: const Text('settings'),
+                onPressed: () => showLicensePage(context: context),
+              )
+            ],
+          ),
           const Placeholder(
               child: Center(child: Card(child: Text('Column BARS, todo')))),
         ][_currentPageIndex],

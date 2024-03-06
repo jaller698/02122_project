@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 Future<void> sendCarbonForm(CarbonFormAnwser answer) async {
   final response = await http.post(
-    Uri.parse('http://localhost:8080'),
+    Uri.parse('http://10.209.240.130:8080/questions'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

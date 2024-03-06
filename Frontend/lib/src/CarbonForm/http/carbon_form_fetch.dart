@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 Future<CarbonForm> fetchCarbonForm() async {
-  return CarbonForm.fromJson(
+  /*return CarbonForm.fromJson(
       await jsonDecode(await rootBundle.loadString('assets/carbon_form.json'))
           as Map<String, dynamic>);
-
+  */
   final response = await http
-      .get(Uri.parse('http://localhost:8080'))
+      .get(Uri.parse('http://10.209.240.130:8080/questions'))
       .timeout(const Duration(seconds: 5));
-
+  print("TEST:" + response.statusCode.toString());
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

@@ -54,10 +54,9 @@ void RestAPIEndpoint::handle_head_request(http_request request) {
 *  Requests using GET should only be used to request data (they shouldn't include data)
 */
 void RestAPIEndpoint::handle_get_request(http_request request) {
-    if (!is_request_valid(request)) {
-        request.reply(status_codes::BadRequest);
-        return;
-    }
+    //if (!is_request_valid(request)) {
+    //    return;
+    //}
     std::string endpoint = request.relative_uri().to_string();
 
 #ifdef DEBUG
@@ -65,17 +64,13 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
 #endif
 
     auto request_body = request.extract_json().get();
-    if (request_body.is_null()) {
+    if (request_body.is_null() && endpoint == "/") {
         request.reply(status_codes::OK, U("No data supplied"));
-        return;
-    }
-    if (!is_request_valid(request, true)) {
-        request.reply(status_codes::BadRequest);
         return;
     }
     json::value response_body;
     try {
-        response_body = handle_data(endpoint, request_body);
+        response_body = handle_data(endpoint, request_body, false);
     } catch (std::exception &e) {
         std::cerr << "Error in GET: " << e.what() << std::endl;
         request.reply(status_codes::NotImplemented);
@@ -122,7 +117,7 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
                 request.reply(status_codes::BadRequest);
                 return;
             }
-            json::value response_body = handle_data(endpoint, request_body);
+            json::value response_body = handle_data(endpoint, request_body, true);
             std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
             request.reply(status_codes::OK, response_body);
         });
@@ -157,7 +152,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
         std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
         json::value response_body;
         try {
-            response_body = handle_data(endpoint, request_body);
+            response_body = handle_data(endpoint, request_body, true);
         } catch (std::exception &e) {
             std::cerr << "Error in POST: " << e.what() << std::endl;
             request.reply(status_codes::InternalError, e.what());

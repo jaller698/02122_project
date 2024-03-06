@@ -13,15 +13,15 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
         {
             auto title = request_body.at("title").as_string();
             auto userID = request_body.at("userID").as_string();
-            auto tmp = request_body.at("questions").as_array();
+            web::json::value tmp = request_body.at("answers");
             std::vector<std::string> answers;
             answers.push_back(userID);
-            for (const auto& element : tmp)
+            /*for (int i = 0; i < tmp.size(); i++) TODO Christian fix this!
             {
-                answers.push_back(element.to_string());
-            }
+                std::cout << "Answer: " << tmp[1].as_array()[1] << std::endl;
+            }*/
             dataBaseStart db;
-            db.insert("InitialSurvey",answers);
+            //db.insert("InitialSurvey",answers);
             auto carbonScore = 0;
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);

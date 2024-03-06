@@ -2,6 +2,10 @@ import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart'
 import 'package:carbon_footprint/src/modals/fetch_data.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import '../CarbonTracker/carbon_tracker_view.dart';
+import '../Dashboard/dashboard_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -35,10 +39,11 @@ class _MainViewState extends State<MainView> {
           }
         },
         child: <Widget>[
-          const Placeholder(),
-          const Placeholder(),
+          const DashboardView(),
+          const CarbonTrackerView(),
           const Center(child: CarbonFormButton()),
-          const Placeholder(),
+          const Placeholder(
+              child: Center(child: Card(child: Text('Column BARS, todo')))),
         ][_currentPageIndex],
       ),
 

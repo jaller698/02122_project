@@ -92,12 +92,9 @@ void dataBaseStart::init()
 
         statement = connection->createStatement();
         statement->execute("CREATE TABLE IF NOT EXISTS Questions(\
-                Q1 VARCHAR(100),\
-                Q2 VARCHAR(100),\
-                Q3 VARCHAR(100),\
-                Q4 VARCHAR(100),\
-                Q5 VARCHAR(100),\
-                Q6 VARCHAR(100)\
+                ID VARCHAR(100) PRIMARY KEY,\
+                Question VARCHAR(100),\
+                Type VARCHAR(100)\
             );");
 
         cout << "Table 'Questions' created successfully." << endl;
@@ -163,21 +160,15 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         // statement = connection->createStatement();
         // statement->execute(command);
     } else if(table=="Questions"){
-        //vi antager at der kun er 1 række i Questions, hvis der nogensinde kommer kopier af spørgsmålene går det her i stykker
         std::string command = "SELECT * FROM " + table;
 
-        web::json::value questions = web::json::value::object();
-        questions["title"] = web::json::value::string("Questions");
         statement = connection->createStatement();
         output = statement->executeQuery(command);
-        int i=1;
+        web::json::value questions = web::json::value::object();
         while (output->next()) {
-            if(i>6){
-                break;
-            }
-            questions["questions"]["question "+i] = web::json::value::string(output->getString("Q"+i));
-            i++;
+            questions[output->getString(1)] = web::json::value::string(output->getString(2));
         }
+
         return questions;
 
     }else {
@@ -185,8 +176,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         statement = connection->createStatement();
         statement->execute(command);
     }
-    web::json::value hehe = web::json::value::object();
-    return hehe;
+    return web::json::value::null();
 }
 
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)

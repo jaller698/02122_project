@@ -84,14 +84,23 @@ void dataBaseStart::init()
                 AnswerQ3 INT,\
                 AnswerQ4 INT,\
                 AnswerQ5 INT,\
-                AnswerQ6 INT,\
+                AnswerQ6 INT\
             );");
 
         cout << "Table 'ComparisonData' created successfully." << endl;
         delete statement;
 
-        std::vector<std::string> tmp ={"Alice", "2","3","4","5","6","7"};
+        std::vector<std::string> tmp ={"Alice", "2","3","4","5", "6","7"};
         insert("InitialSurvey", tmp);
+        insert("GoalsSurvey", tmp);
+        
+        std::vector<std::string> ComparisonData ={"Danish", "2","3","4","5", "6","7"};
+        insert("ComparisonData", ComparisonData);
+
+        std::vector<std::string> tmp2 ={"Alice", "66", "2","3","4","5", "6","7"};
+        insert("UpdatedSurvey", tmp2);
+
+
 
 
         /*// call our test insert function
@@ -135,49 +144,29 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
     {
         /* code */
         // set all the variables to the input answers
-    }
-
-    if (table == "UpdatedSurvey")
-    {
-        /* code */
-        // set all the variables to the input answers
-    }
-
-    if (table == "InitialSurvey")
-    {
-        int tableSize = 6;
-        if (input.size() != 7)
-        {
-            cout << "Error: input size is not 7" << endl;
-            return;
-        }
-        std::string inputStr = "INSERT INTO " + table + " VALUES('" + input[0] + "'";
-        for (int i = 1; i <= tableSize; i++)
-        {
-            inputStr += ", " + input[i];
-        }
-        inputStr += ")";
-        std::cout << inputStr << std::endl;
-        // " VALUES ('" + input[0] + "', '" + input[1] + "', '" + input[2] + "', '" + input[3] + "', '" + input[4]+ "', '" + input[5]+ "', '" + input[6]+ "')";
-        cout << inputStr;
+    } else if (table == "UpdatedSurvey") {
+        std::string inputStr = createStatement(input, table, 7);
+        statement = connection->createStatement();
+        statement->execute(inputStr);
+    } else {
+        std::string inputStr = createStatement(input, table);
         statement = connection->createStatement();
         statement->execute(inputStr);
     }
+}
 
-    if (table == "GoalsSurvey")
+std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)
+{
+    std::string output = "INSERT INTO " + table + " VALUES('" + input[0] + "'";
+    if (input.size() != tableSize+1)
     {
-        /* code */
-        // set all the variables to the input answers
-        std::string inputStr = "INSERT INTO " + table + " VALUES ('Alice', " + input[0] + ", " + (input[1]) + ", " + (input[2]) + ", " + (input[3]) + ", " + (input[4])+ ", " + (input[5]) + ")";
-        cout << inputStr;
-        statement = connection->createStatement();
-        statement->execute(inputStr);
-
+        std::cerr << "input is not the presumed size\n";
     }
-
-    if (table == "ComparisonData")
+    for (int i = 1; i <= tableSize; i++)
     {
-        /* code */
-        // set all the variables to the input answers
+        output += ", " + input[i];
     }
+    output += ")";
+    std::cout << output << std::endl;
+    return output;
 }

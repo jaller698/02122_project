@@ -11,25 +11,36 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
         // get question, or return answers
         if (write_data == true)
         {
-            // we are writing to the database
-            // lav funktion til at skrive til databasen, tag inspiration "Database_connecter"
-            
-            // insert(request_body.at("title").as_string(), k);
-            // std::string k[2]=request_body.at("anwsers").as_array();
+            auto title = request_body.at("title").as_string();
+            auto userID = request_body.at("userID").as_string();
+            auto tmp = request_body.at("questions").as_array();
+            std::vector<std::string> answers;
+            answers.push_back(userID);
+            for (const auto& element : tmp)
+            {
+                answers.push_back(element.to_string());
+            }
+            dataBaseStart db;
+            db.insert("InitialSurvey",answers);
+            auto carbonScore = 0;
+            web::json::value response = web::json::value::object();
+            response["response"]["carbonScore"] = web::json::value::number(carbonScore);
+            return response;
         }
         else
         {
-            // we are reading the questions from the database
+            //TODO: This needs to be updated dynamically
+            web::json::value questions = web::json::value::object();
+            questions["title"] = web::json::value::string("Questions");
+            questions["questions"]["question 1"] = web::json::value::string("int");
+            questions["questions"]["question 2"] = web::json::value::string("int");
+            questions["questions"]["question 3"] = web::json::value::string("int");
+            questions["questions"]["question 4"] = web::json::value::string("int");
+            questions["questions"]["question 5"] = web::json::value::string("int");
+            questions["questions"]["question 6"] = web::json::value::string("int");
+            std::cout << "Returning questions: " << questions.serialize() << std::endl;
+            return questions;
         }
-
-        // this code needs to be moved
-        web::json::value questions = web::json::value::object();
-        questions["title"] = web::json::value::string("Questions");
-        questions["questions"] = web::json::value::object();
-        questions["questions"]["question 1"] = web::json::value::string("string");
-        questions["questions"]["question 2"] = web::json::value::string("int");
-        std::cout << "Returning questions: " << questions.serialize() << std::endl;
-        return questions;
     }
     else if (endpoint == "/users")
     {

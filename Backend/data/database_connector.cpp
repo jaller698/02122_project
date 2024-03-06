@@ -90,7 +90,20 @@ void dataBaseStart::init()
         cout << "Table 'ComparisonData' created successfully." << endl;
         delete statement;
 
-        std::vector<std::string> tmp ={"Alice", "2","3","4","5", "6","7"};
+        statement = connection->createStatement();
+        statement->execute("CREATE TABLE IF NOT EXISTS Questions(\
+                Q1 VARCHAR(100),\
+                Q2 VARCHAR(100),\
+                Q3 VARCHAR(100),\
+                Q4 VARCHAR(100),\
+                Q5 VARCHAR(100),\
+                Q6 VARCHAR(100)\
+            );");
+
+        cout << "Table 'Questions' created successfully." << endl;
+        delete statement;
+
+        /*std::vector<std::string> tmp ={"Alice", "2","3","4","5", "6","7"};
         insert("InitialSurvey", tmp);
         insert("GoalsSurvey", tmp);
         
@@ -99,7 +112,7 @@ void dataBaseStart::init()
 
         std::vector<std::string> tmp2 ={"Alice", "66", "2","3","4","5", "6","7"};
         insert("UpdatedSurvey", tmp2);
-
+        */
 
 
 

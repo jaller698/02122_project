@@ -146,9 +146,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
     std::string endpoint = request.relative_uri().to_string();
 
     // Extract the JSON data from the request body
-#ifdef DEBUG
     std::cout << "\033[33mDEBUG:\033[0m Received a POST request, on endpoint: " << endpoint << std::endl;
-#endif
 
     request.extract_json().then([=](json::value request_body) {
         // Process the JSON data
@@ -156,7 +154,6 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             request.reply(status_codes::BadRequest);
             return;
         }
-        auto response_body = handle_data(endpoint, request_body, true);
         std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
         json::value response_body;
         try {

@@ -16,12 +16,14 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
             web::json::value tmp = request_body.at("answers");
             std::vector<std::string> answers;
             answers.push_back(userID);
-            /*for (int i = 0; i < tmp.size(); i++) TODO Christian fix this!
+            for (int i = 1; i <= tmp.size(); i++) //TODO Christian fix this!
             {
-                std::cout << "Answer: " << tmp[1].as_array()[1] << std::endl;
-            }*/
+                std::string question = "question " + std::to_string(i);
+                std::cout << "Answer[" << i << "] : " << tmp[question] << std::endl;
+                answers.push_back(tmp[question].as_string());
+            }
             dataBaseStart db;
-            //db.insert("InitialSurvey",answers);
+            db.insert("InitialSurvey",answers);
             auto carbonScore = 0;
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);

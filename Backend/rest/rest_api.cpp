@@ -119,7 +119,7 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
             }
             json::value response_body = handle_data(endpoint, request_body, true);
             std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
-            request.reply(status_codes::OK, response_body);
+            request.reply(status_codes::Created, response_body);
         });
     } catch (const std::exception &e) {
         std::cerr << "Error in PUT: " << e.what() << std::endl;
@@ -159,7 +159,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             return;
         }
         std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
-        request.reply(status_codes::OK, response_body);
+        request.reply(status_codes::Created, response_body);
     });
 }
 

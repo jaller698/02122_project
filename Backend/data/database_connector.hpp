@@ -19,7 +19,7 @@ class dataBaseStart{
         sql::ResultSet *result_set;
     public:
         void insert(std::string table, std::vector<std::string> input);
-        void createTableAndShowContents();
+        void init();
 
 
 };

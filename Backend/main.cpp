@@ -3,7 +3,7 @@
 
 int main() {
     dataBaseStart db;
-    db.createTableAndShowContents();
+    db.init();
     RestAPIEndpoint rest_api_endpoint;
     rest_api_endpoint.listen();
     return 0;

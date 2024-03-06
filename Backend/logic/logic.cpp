@@ -16,11 +16,11 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
             web::json::value tmp = request_body.at("answers");
             std::vector<std::string> answers;
             answers.push_back(userID);
-            for (int i = 1; i <= tmp.size(); i++) //TODO Christian fix this!
+            auto it = tmp.as_object().begin();
+            std::advance(it, 1);
+            for (auto &answer : tmp.as_object())
             {
-                std::string question = "question " + std::to_string(i);
-                std::cout << "Answer[" << i << "] : " << tmp[question] << std::endl;
-                answers.push_back(tmp[question].as_string());
+                answers.push_back(answer.second.as_string());
             }
             dataBaseStart db;
             db.insert("InitialSurvey",answers);

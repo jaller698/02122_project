@@ -144,10 +144,53 @@ void dataBaseStart::init()
     }
 }
 
+web::json::value dataBaseStart::get(std::string table, std::string key){
+    mysql_driver = sql::mysql::get_mysql_driver_instance();
+    sql::ResultSet *output;
+    connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
+    connection->setSchema("CarbonFootprint");
+    
+ if (table == "User")
+    {
+        /* code */
+        // set all the variables to the input answers
+        std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
+        statement = connection->createStatement();
+        statement->execute(command);
+
+    } else if (table == "UpdatedSurvey") {
+        // std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
+        // statement = connection->createStatement();
+        // statement->execute(command);
+    } else if(table=="Questions"){
+        //vi antager at der kun er 1 række i Questions, hvis der nogensinde kommer kopier af spørgsmålene går det her i stykker
+        std::string command = "SELECT * FROM " + table;
+
+        web::json::value questions = web::json::value::object();
+        questions["title"] = web::json::value::string("Questions");
+        statement = connection->createStatement();
+        output = statement->executeQuery(command);
+        int i=1;
+        while (output->next()) {
+            if(i>6){
+                break;
+            }
+            questions["questions"]["question "+i] = web::json::value::string(output->getString("Q"+i));
+            i++;
+        }
+        return questions;
+
+    }else {
+        std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
+        statement = connection->createStatement();
+        statement->execute(command);
+    }
+    web::json::value hehe = web::json::value::object();
+    return hehe;
+}
+
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
- 
-    
     mysql_driver = sql::mysql::get_mysql_driver_instance();
    
     connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");

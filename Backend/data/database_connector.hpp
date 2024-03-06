@@ -20,6 +20,7 @@ class dataBaseStart{
         std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 6);
     public:
         void insert(std::string table, std::vector<std::string> input);
+        web::json::value get(std::string table, std::string key);
         void init();
 
 

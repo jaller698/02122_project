@@ -30,18 +30,23 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
             return response;
         }
         else
-        {
+        {   
+            dataBaseStart db;
+
+            return db.get("Questions","");
+            
+            
             //TODO: This needs to be updated dynamically
-            web::json::value questions = web::json::value::object();
-            questions["title"] = web::json::value::string("Questions");
-            questions["questions"]["question 1"] = web::json::value::string("int");
-            questions["questions"]["question 2"] = web::json::value::string("int");
-            questions["questions"]["question 3"] = web::json::value::string("int");
-            questions["questions"]["question 4"] = web::json::value::string("int");
-            questions["questions"]["question 5"] = web::json::value::string("int");
-            questions["questions"]["question 6"] = web::json::value::string("int");
-            std::cout << "Returning questions: " << questions.serialize() << std::endl;
-            return questions;
+            // web::json::value questions = web::json::value::object();
+            // questions["title"] = web::json::value::string("Questions");
+            // questions["questions"]["question 1"] = web::json::value::string("int");
+            // questions["questions"]["question 2"] = web::json::value::string("int");
+            // questions["questions"]["question 3"] = web::json::value::string("int");
+            // questions["questions"]["question 4"] = web::json::value::string("int");
+            // questions["questions"]["question 5"] = web::json::value::string("int");
+            // questions["questions"]["question 6"] = web::json::value::string("int");
+            // std::cout << "Returning questions: " << questions.serialize() << std::endl;
+            
         }
     }
     else if (endpoint == "/users")

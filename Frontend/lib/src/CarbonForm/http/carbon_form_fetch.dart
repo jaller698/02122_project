@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 Future<CarbonForm> fetchCarbonForm() async {
-  //return CarbonForm.fromJson(await jsonDecode(await rootBundle.loadString('assets/carbon_form.json')) as Map<String, dynamic>);
+  return CarbonForm.fromJson(
+      await jsonDecode(await rootBundle.loadString('assets/carbon_form.json'))
+          as Map<String, dynamic>);
 
   final response = await http
       .get(Uri.parse('http://localhost:8080'))

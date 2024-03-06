@@ -18,36 +18,47 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // list of widgets to switch between depending on the current page index
-      body: <Widget>[
-        const FetchData(),
-        const Center(child: CarbonFormButton()),
-      ][_currentPageIndex],
+      body: GestureDetector(
+        onHorizontalDragUpdate: (details) {
+          double xPos = details.delta.dx;
+
+          print(xPos);
+
+          // swipe right
+          if (xPos > 0) {
+            setState(() => _currentPageIndex++);
+          }
+
+          // swipe left
+          if (xPos < 0) {
+            setState(() => _currentPageIndex--);
+          }
+        },
+        child: <Widget>[
+          const Placeholder(),
+          const Placeholder(),
+          const Center(child: CarbonFormButton()),
+          const Placeholder(),
+        ][_currentPageIndex],
+      ),
 
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.leak_add),
-            label: 'FetchData',
-          ),
-          /*NavigationDestination(
-            icon: Icon(Icons.send),
-            label: 'SendData',
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
           ),
           NavigationDestination(
-            icon: Icon(Icons.update),
-            label: 'UpdateData',
+            icon: Icon(Icons.task_alt),
+            label: 'Tracker',
           ),
           NavigationDestination(
-            icon: Icon(Icons.delete),
-            label: 'DeleteData',
+            icon: Badge(child: Icon(Icons.list_alt)),
+            label: 'Forms',
           ),
           NavigationDestination(
-            icon: Icon(Icons.link),
-            label: 'WebSocket',
-          ),*/
-          NavigationDestination(
-            icon: Icon(Icons.list_alt),
-            label: 'form',
+            icon: Icon(Icons.leaderboard),
+            label: 'Stats',
           ),
         ],
         onDestinationSelected: (int index) =>

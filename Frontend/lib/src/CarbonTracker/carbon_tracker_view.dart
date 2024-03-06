@@ -7,6 +7,21 @@ class CarbonTrackerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return Placeholder(
+          fallbackHeight: 100,
+          child: Center(
+            child: Card(
+              child: Text('task - $index'),
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+      itemCount: 8,
+    );
   }
 }

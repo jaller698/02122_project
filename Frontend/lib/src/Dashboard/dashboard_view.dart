@@ -1,17 +1,25 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({
     super.key,
   });
 
+  static List<Segment> segments = [
+    const Segment(value: 29, color: Colors.purple, label: Text("Transport")),
+    const Segment(value: 20, color: Colors.deepOrange, label: Text("Home")),
+    const Segment(value: 18, color: Colors.lime, label: Text("Food")),
+    const Segment(value: 33, color: Colors.green, label: Text("Other")),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final progressBar = PrimerProgressBar(segments: segments);
+
     return ListView(
-      children: const <Widget>[
-        Placeholder(
+      children: <Widget>[
+        const Placeholder(
           fallbackHeight: 400,
           child: Center(
             child: Card(
@@ -20,16 +28,14 @@ class DashboardView extends StatelessWidget {
             ),
           ),
         ),
-        Placeholder(
-          fallbackHeight: 50,
-          child: Center(
-            child: Card(
-              child: Text('Linear progressbar to personal emission goal'),
-            ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: progressBar,
           ),
         ),
-        Divider(),
-        Row(
+        const Divider(),
+        const Row(
           children: [
             Expanded(
               flex: 2,
@@ -45,7 +51,7 @@ class DashboardView extends StatelessWidget {
             ),
           ],
         ),
-        Row(
+        const Row(
           children: [
             Expanded(
               flex: 1,
@@ -61,8 +67,8 @@ class DashboardView extends StatelessWidget {
             ),
           ],
         ),
-        Divider(),
-        Placeholder(
+        const Divider(),
+        const Placeholder(
           fallbackHeight: 50,
           child: Center(
             child: Card(

@@ -70,9 +70,9 @@ class _LoginViewState extends State<LoginView> {
                             if (_formKey.currentState?.saveAndValidate() ??
                                 false) {
                               Future<bool> futureSession = getUserSession(
-                                  _formKey.currentState!.fields['username']
+                                  _formKey.currentState!.value['username']
                                       as String,
-                                  _formKey.currentState!.fields['password']
+                                  _formKey.currentState!.value['password']
                                       as String);
                               futureSession.then((value) {
                                 if (value) {

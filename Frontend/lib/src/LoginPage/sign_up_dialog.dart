@@ -99,9 +99,9 @@ class _SignUpDialogState extends State<SignUpDialog> {
                           if (_formKey.currentState?.saveAndValidate() ??
                               false) {
                             Future<bool> futureSession = createNewUser(
-                                _formKey.currentState!.fields['username']
+                                _formKey.currentState!.value['username']
                                     as String,
-                                _formKey.currentState!.fields['password']
+                                _formKey.currentState!.value['password']
                                     as String);
                             futureSession.then((value) {
                               Navigator.pop(context, true);

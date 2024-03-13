@@ -41,7 +41,7 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
     else if (endpoint == "/users")
     {
         if(write_data==true){
-            auto UN = request_body.at("Username").as_string();
+            auto UN = request_body.at("User").as_string();
             //auto PASS = request_body.at("Password").as_string();
             std::vector<std::string> userInfo;
             userInfo.push_back(UN);

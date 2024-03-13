@@ -63,6 +63,10 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
     json::value response_body;
     try {
         response_body = handle_data(endpoint, request_body, false);
+        if (response_body.has_field("Fail")){
+            request.reply(status_codes::Unauthorized);
+            return;
+        }
     } catch (std::exception &e) {
         ERROR("Error in GET: ", e);
         request.reply(status_codes::InternalError);

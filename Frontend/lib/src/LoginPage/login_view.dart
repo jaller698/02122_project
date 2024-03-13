@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/LoginPage/http/get_user_session.dart';
 import 'package:carbon_footprint/src/Views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -28,15 +29,15 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               children: <Widget>[
                 FormBuilderTextField(
-                  name: "userName",
-                  decoration: const InputDecoration(labelText: 'User Name'),
+                  name: "username",
+                  decoration: const InputDecoration(labelText: 'Username'),
                   textInputAction: TextInputAction.next,
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(),
                   ]),
                 ),
                 FormBuilderTextField(
-                  name: "userPassword",
+                  name: "password",
                   decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   validator: FormBuilderValidators.compose([
@@ -68,8 +69,19 @@ class _LoginViewState extends State<LoginView> {
                           onPressed: () {
                             if (_formKey.currentState?.saveAndValidate() ??
                                 false) {
-                              Navigator.popAndPushNamed(
-                                  context, MainView.routeName);
+                              Future<bool> futureSession = getUserSession(
+                                  _formKey.currentState!.fields['username']
+                                      as String,
+                                  _formKey.currentState!.fields['password']
+                                      as String);
+                              futureSession.then((value) {
+                                if (value) {
+                                  Navigator.popAndPushNamed(
+                                      context, MainView.routeName);
+                                } else {
+                                  // TODO fail to login
+                                }
+                              });
                             }
                           },
                           child: const Text('Login')),

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:carbon_footprint/src/LoginPage/http/create_new_user.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -98,7 +98,14 @@ class _SignUpDialogState extends State<SignUpDialog> {
                         onPressed: () {
                           if (_formKey.currentState?.saveAndValidate() ??
                               false) {
-                            Navigator.pop(context, true);
+                            Future<bool> futureSession = createNewUser(
+                                _formKey.currentState!.fields['username']
+                                    as String,
+                                _formKey.currentState!.fields['password']
+                                    as String);
+                            futureSession.then((value) {
+                              Navigator.pop(context, true);
+                            });
                           }
                         },
                         child: const Text('Sign up'),

@@ -8,6 +8,8 @@ class dataBaseStart{
         sql::Statement *statement;
         sql::ResultSet *result_set;
         std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 6);
+        web::json::value readQuestions();
+        void updateQuestions();
     public:
         void insert(std::string table, std::vector<std::string> input);
         web::json::value get(std::string table, std::string key);
@@ -15,3 +17,4 @@ class dataBaseStart{
 
 
 };
+

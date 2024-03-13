@@ -36,7 +36,7 @@ docker run -id --name $docker_name --mount type=bind,source="$(pwd)"/,target=/ap
 start_time=$(date +%s)
 
 # Execute the command docker exec make
-docker exec $docker_name make 
+docker exec $docker_name make DEBUG=1
 
 # End measuring time
 end_time=$(date +%s)

@@ -32,20 +32,10 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
         else
         {   
             dataBaseStart db;
-
-            return db.get("Questions","");
-            
-            
-            //TODO: This needs to be updated dynamically
-            // web::json::value questions = web::json::value::object();
-            // questions["title"] = web::json::value::string("Questions");
-            // questions["questions"]["question 1"] = web::json::value::string("int");
-            // questions["questions"]["question 2"] = web::json::value::string("int");
-            // questions["questions"]["question 3"] = web::json::value::string("int");
-            // questions["questions"]["question 4"] = web::json::value::string("int");
-            // questions["questions"]["question 5"] = web::json::value::string("int");
-            // questions["questions"]["question 6"] = web::json::value::string("int");
-            
+            web::json::value questions = web::json::value::object();
+            questions["title"] = web::json::value::string("Questions");
+            questions["questions"] = db.get("Questions","");
+            return questions;
         }
     }
     else if (endpoint == "/users")

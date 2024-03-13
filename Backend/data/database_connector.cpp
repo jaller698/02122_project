@@ -1,5 +1,6 @@
 #include "database_connector.hpp"
 
+
 using namespace std;
 
 void dataBaseStart::init()
@@ -95,47 +96,12 @@ void dataBaseStart::init()
         DEBUG_PRINT("Table 'Questions' created successfully.");
         delete statement;
 
-        /*std::vector<std::string> tmp ={"Alice", "2","3","4","5", "6","7"};
-        insert("InitialSurvey", tmp);
-        insert("GoalsSurvey", tmp);
+        updateQuestions();
         
-        std::vector<std::string> ComparisonData ={"Danish", "2","3","4","5", "6","7"};
-        insert("ComparisonData", ComparisonData);
-
-        std::vector<std::string> tmp2 ={"Alice", "66", "2","3","4","5", "6","7"};
-        insert("UpdatedSurvey", tmp2);
-        */
-        statement = connection->createStatement();
-        statement->execute("INSERT INTO Users (Username) VALUES('Alice')");
-        delete statement;
-
-        /*// call our test insert function
-        std::cout << "hello";
-        //std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
-        insert("InitialSurvey", m);
-        std::vector<std::string> tmp
-         ={"2","3","4","5","6","7"};
-        insert("GoalsSurvey", tmp);
-
-        statement = connection->createStatement();
-        result_set = statement->executeQuery("SELECT * FROM InitialSurvey");
-
-        // try to print it from here this doesnt print what it should
-        cout << "Checking if we just put stuff into the database" << endl;
-        // while (result_set->next()) {
-        //     cout << "stuff: " << result_set->getString() << endl;
-        // }
-
-        delete result_set; */
     }
     catch (sql::SQLException &e)
     {
-        // TODO make this print prettier
-        cout << "# ERR: SQLException in " << __FILE__;
-        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-        cout << "# ERR: " << e.what();
-        cout << " (MySQL error code: " << e.getErrorCode();
-        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        ERROR("Error in init: ", e);
     }
 }
 
@@ -176,7 +142,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         output = statement->executeQuery(command);
         web::json::value questions = web::json::value::object();
         while (output->next()) {
-            questions[output->getString(2)] = web::json::value::string(output->getString(3));
+            questions[output->getString("Question")] = web::json::value::string(output->getString("Type"));
         }
 
         return questions;
@@ -192,7 +158,6 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
     mysql_driver = sql::mysql::get_mysql_driver_instance();
-   
     connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
     connection->setSchema("CarbonFootprint");
 
@@ -230,6 +195,65 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
         output += ", " + input[i];
     }
     output += ")";
-    DEBUG_PRINT(output);
+    DEBUG_PRINT(output);    
     return output;
+}
+
+
+web::json::value dataBaseStart::readQuestions(){
+    web::json::value questions = web::json::value::object();
+    try {
+        std::ifstream f("questions.json");
+        std::stringstream strStream;
+        strStream << f.rdbuf();
+        f.close(); 
+        questions = web::json::value::parse(strStream);
+        DEBUG_PRINT(questions.serialize());
+        return questions;
+
+    } catch (std::exception &e) {
+        ERROR("Error in getQuestions: ", e);
+    }
+}
+
+void dataBaseStart::updateQuestions()
+{
+    try{
+        mysql_driver = sql::mysql::get_mysql_driver_instance();
+        connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
+        connection->setSchema("CarbonFootprint");
+
+        // Compare the input to the questions in the database
+        web::json::value questions = readQuestions();
+        web::json::array inputQuestions = questions.at("questions").as_array();
+
+        for (auto &question : inputQuestions)
+        {
+            DEBUG_PRINT("Checking question: " + question.at("question").as_string());
+            std::string command = "SELECT * FROM Questions WHERE ID = '" + question.at("id").as_string() + "'";
+            DEBUG_PRINT("SQL Command: " + command);
+            statement = connection->createStatement();
+            result_set = statement->executeQuery(command);
+            if (result_set->next())
+            {
+                // Check if the question is the same, if so we don't update not even the type
+                std::string result = result_set->getString(2);
+                if (result != question.at("question").as_string())
+                {
+                    DEBUG_PRINT("Updating question: " + question.at("question").as_string());
+                    std::string inputStr = "UPDATE Questions SET Question = '" + question.at("question").as_string() + "', Type ='" + question.at("Type").as_string() + "' WHERE ID = '" + question.at("id").as_string() + "'";
+                    statement = connection->createStatement();
+                    statement->execute(inputStr);
+                }
+            } else {
+                // If there is no question with the same ID, we insert it
+                DEBUG_PRINT("Inserting question: " + question.at("question").as_string());
+                std::string inputStr = "INSERT INTO Questions VALUES('" + question.at("id").as_string() + "', '" + question.at("question").as_string() + "', '" + question.at("Type").as_string() + "')";
+                statement = connection->createStatement();
+                statement->execute(inputStr);
+            }
+        }
+    } catch (std::exception &e) {
+        ERROR("Error in updateQuestions: ", e);
+    }
 }

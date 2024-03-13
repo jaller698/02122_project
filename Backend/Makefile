@@ -2,7 +2,7 @@
 # To run in debug mode (with debug prints), run `make DEBUG=1 (run)` in the terminal.
 
 CXX := g++
-CXXFLAGS := -I . -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
+CXXFLAGS := -I . -std=c++20 -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
 CXXFLAGS += $(if $(DEBUG),-DDEBUG)
 TEST_FLAGS := $(CXXFLAGS) -lgtest 
 
@@ -34,4 +34,4 @@ test: $(TEST_OBJ) $(OBJ)
 	./bin_test
 
 clean:
-	rm -f main $(OBJ)
+	rm -rf $(OBJ_DIR) main bin_test

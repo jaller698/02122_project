@@ -12,7 +12,6 @@ Future<CarbonForm> fetchCarbonForm() async {
   final response = await http
       .get(Uri.parse('${SettingsController.address}/questions'))
       .timeout(const Duration(seconds: 5));
-  print("TEST:" + response.statusCode.toString());
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'LoginPage/login_view.dart';
+import 'Settings/settings_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
               switch (routeSettings.name) {
                 case CarbonFormView.routeName:
                   return CarbonFormView(carbonForm: routeSettings.arguments);
+                  return const SettingsView();
                 case MainView.routeName:
                   return const MainView();
                 default:

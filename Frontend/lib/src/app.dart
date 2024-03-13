@@ -1,6 +1,9 @@
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
 import 'package:carbon_footprint/src/Views/main_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'LoginPage/login_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,12 +24,25 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute<void>(
           settings: routeSettings,
           builder: (BuildContext context) {
-            switch (routeSettings.name) {
-              case CarbonFormView.routeName:
-                return CarbonFormView(carbonForm: routeSettings.arguments);
-              case MainView.routeName:
-              default:
-                return const MainView();
+            if (kIsWeb) {
+              // web page routes
+              switch (routeSettings.name) {
+                case CarbonFormView.routeName:
+                  return CarbonFormView(carbonForm: routeSettings.arguments);
+                case MainView.routeName:
+                default:
+                  return const MainView();
+              }
+            } else {
+              // app page routes
+              switch (routeSettings.name) {
+                case CarbonFormView.routeName:
+                  return CarbonFormView(carbonForm: routeSettings.arguments);
+                case MainView.routeName:
+                  return const MainView();
+                default:
+                  return const LoginView();
+              }
             }
           },
         );

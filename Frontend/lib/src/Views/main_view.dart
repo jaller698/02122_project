@@ -9,7 +9,7 @@ import '../Dashboard/dashboard_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
-  static const routeName = '/';
+  static const routeName = '/home';
 
   @override
   State<MainView> createState() => _MainViewState();

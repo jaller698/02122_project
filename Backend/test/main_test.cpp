@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "common.h"
 #include <cmath>
 
 // test method
@@ -8,7 +9,7 @@ double squareRoot(double n) {
 }
 
 int main(int argc, char** argv) {
-    std::cout << "Running main_test.cpp" << std::endl;
+    INFO("Running main_test.cpp");
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

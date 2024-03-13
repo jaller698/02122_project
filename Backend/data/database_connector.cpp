@@ -29,7 +29,7 @@ void dataBaseStart::init()
 
         statement = connection->createStatement();
         statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50))");
-        cout << "Table 'Users' created successfully." << endl;
+        DEBUG_PRINT("Table 'Users' created successfully.");
         delete statement;
 
         statement = connection->createStatement();
@@ -41,8 +41,7 @@ void dataBaseStart::init()
             AnswerQ5 INT,\
             AnswerQ6 INT,\
             FOREIGN KEY(Username) REFERENCES Users(Username));");
-
-        cout << "Table 'InitialSurvey' created successfully." << endl;
+        DEBUG_PRINT("Table 'InitialSurvey' created successfully.");
         delete statement;
 
         statement = connection->createStatement();
@@ -56,8 +55,7 @@ void dataBaseStart::init()
                 AnswerQ6 INT,\
                 FOREIGN KEY(Username) REFERENCES Users(Username)\
             );");
-
-        cout << "Table 'GoalsSurvey' created successfully." << endl;
+        DEBUG_PRINT("Table 'GoalsSurvey' created successfully.");
         delete statement;
 
         statement = connection->createStatement();
@@ -72,8 +70,7 @@ void dataBaseStart::init()
                 AnswerQ6 INT,\
                 FOREIGN KEY(Username) REFERENCES Users(Username)\
             );");
-
-        cout << "Table 'UpdatedSurvey' created successfully." << endl;
+        DEBUG_PRINT("Table 'UpdatedSurvey' created successfully.");
         delete statement;
 
         statement = connection->createStatement();
@@ -86,8 +83,7 @@ void dataBaseStart::init()
                 AnswerQ5 INT,\
                 AnswerQ6 INT\
             );");
-
-        cout << "Table 'ComparisonData' created successfully." << endl;
+        DEBUG_PRINT("Table 'ComparisonData' created successfully.");
         delete statement;
 
         statement = connection->createStatement();
@@ -96,8 +92,7 @@ void dataBaseStart::init()
                 Question VARCHAR(100),\
                 Type VARCHAR(100)\
             );");
-
-        cout << "Table 'Questions' created successfully." << endl;
+        DEBUG_PRINT("Table 'Questions' created successfully.");
         delete statement;
 
         /*std::vector<std::string> tmp ={"Alice", "2","3","4","5", "6","7"};
@@ -133,6 +128,7 @@ void dataBaseStart::init()
     }
     catch (sql::SQLException &e)
     {
+        // TODO make this print prettier
         cout << "# ERR: SQLException in " << __FILE__;
         cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
         cout << "# ERR: " << e.what();
@@ -206,13 +202,13 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
     std::string output = "INSERT INTO " + table + " VALUES('" + input[0] + "'";
     if (input.size() != tableSize+1)
     {
-        std::cerr << "input is not the presumed size\n";
+        WARNING("input is not the presumed size");
     }
     for (int i = 1; i <= tableSize; i++)
     {
         output += ", " + input[i];
     }
     output += ")";
-    std::cout << output << std::endl;
+    DEBUG_PRINT(output);
     return output;
 }

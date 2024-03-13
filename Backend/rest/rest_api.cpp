@@ -8,21 +8,19 @@ RestAPIEndpoint::RestAPIEndpoint() : listener_("http://0.0.0.0:8080") {
 }
 
 void RestAPIEndpoint::listen() {
-#ifdef DEBUG
-    std::cout << "\033[33mDEBUG:\033[0m Listening on " << listener_.uri().to_string() << std::endl;
-#endif
+    DEBUG_PRINT("Listening on " + listener_.uri().to_string());
     try {
         listener_
             .open()
             .then([this]() {
-                std::cout << "Server is listening..." << std::endl;
+                INFO("Server is ready & listening...");
             })
             .wait();
         std::cin.get();
         listener_.close().wait();
     }
     catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        ERROR("We should not have any exceptions here, but got one Error: ", e);
     }
 }
 
@@ -37,10 +35,7 @@ void RestAPIEndpoint::handle_head_request(http_request request) {
         return;
     }
     std::string endpoint = request.relative_uri().to_string();
-
-#ifdef DEBUG
-    std::cout << "\033[33mDEBUG:\033[0m Received a HEAD request, on endpoint: " << endpoint << std::endl;
-#endif
+    DEBUG_PRINT("Received a HEAD request, on endpoint: " + endpoint);
 
     // Reply with the appropriate headers
     http_response response(status_codes::OK);
@@ -58,10 +53,7 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
     //    return;
     //}
     std::string endpoint = request.relative_uri().to_string();
-
-#ifdef DEBUG
-    std::cout << "\033[33mDEBUG:\033[0m Received a GET request, on endpoint: " << endpoint << std::endl;
-#endif
+    DEBUG_PRINT("Received a GET request, on endpoint: " + endpoint);
 
     auto request_body = request.extract_json().get();
     if (request_body.is_null() && endpoint == "/") {
@@ -72,13 +64,12 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
     try {
         response_body = handle_data(endpoint, request_body, false);
     } catch (std::exception &e) {
-        std::cerr << "Error in GET: " << e.what() << std::endl;
-        request.reply(status_codes::NotImplemented);
+        ERROR("Error in GET: ", e);
+        request.reply(status_codes::InternalError);
         return;
     }
-#ifdef DEBUG
-    std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
-#endif
+    DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
+
     request.reply(status_codes::OK, response_body);
 }
 
@@ -91,38 +82,33 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
     auto client_address = request.remote_address();
     // ensure no PUT request is handled twice
     for (const auto &_request : last_requests) {
-        //std::cout << "Comparing " << _request.to_string() << " with " << request.to_string() << std::endl;
         if (_request.to_string() == request.to_string()) {
-            std::cout << "Request already handled" << std::endl;
+            INFO("Request already handled");
             request.reply(status_codes::NotModified);
             return;
         }
     }
-    std::cout << "Adding request to last_requests" << std::endl;
     last_requests.push_back(request);
     if (!is_request_valid(request, true)) {
         request.reply(status_codes::BadRequest);
         return;
     }
-#ifdef DEBUG
-        std::cout << "\033[33mDEBUG:\033[0m Received a PUT request, on endpoint: " << endpoint << std::endl;
-#endif
-
     std::string endpoint = request.relative_uri().to_string();
+    DEBUG_PRINT("Received a PUT request, on endpoint: " + endpoint);
 
     try {
         request.extract_json().then([=](json::value request_body) {
-            std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
+            DEBUG_PRINT("Recieved JSON data: " + request_body.serialize());
             if (request_body.is_null()) {
                 request.reply(status_codes::BadRequest);
                 return;
             }
             json::value response_body = handle_data(endpoint, request_body, true);
-            std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
+            DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
             request.reply(status_codes::Created, response_body);
         });
     } catch (const std::exception &e) {
-        std::cerr << "Error in PUT: " << e.what() << std::endl;
+        ERROR("Error in PUT: ", e);
         request.reply(status_codes::InternalError, e.what());
     }
 }
@@ -141,7 +127,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
     std::string endpoint = request.relative_uri().to_string();
 
     // Extract the JSON data from the request body
-    std::cout << "\033[33mDEBUG:\033[0m Received a POST request, on endpoint: " << endpoint << std::endl;
+    DEBUG_PRINT("Received a POST request, on endpoint: " + endpoint);
 
     request.extract_json().then([=](json::value request_body) {
         // Process the JSON data
@@ -149,16 +135,16 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             request.reply(status_codes::BadRequest);
             return;
         }
-        std::cout << "Received JSON data: " << request_body.serialize() << std::endl;
+        DEBUG_PRINT("Received JSON data: " + request_body.serialize());
         json::value response_body;
         try {
             response_body = handle_data(endpoint, request_body, true);
         } catch (std::exception &e) {
-            std::cerr << "Error in POST: " << e.what() << std::endl;
+            ERROR("Error in POST: ", e);
             request.reply(status_codes::InternalError, e.what());
             return;
         }
-        std::cout << "Sends JSON data: " << response_body.serialize() << std::endl;
+        DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
         request.reply(status_codes::Created, response_body);
     });
 }
@@ -166,10 +152,12 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
 bool RestAPIEndpoint::is_request_valid(const http_request &request, bool json_required, bool content_length_required) {
     // Check if the request is valid
     if ((request.headers().content_type().find("json") == std::string::npos) && json_required) {
+        WARNING("Request does not contain JSON data");
         request.reply(status_codes::UnsupportedMediaType);
         return false;
     }
     if (request.headers().content_length() == 0 && content_length_required) {
+        WARNING("Request does not contain a content length");
         request.reply(status_codes::LengthRequired);
         return false;
     }

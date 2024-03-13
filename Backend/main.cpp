@@ -1,5 +1,4 @@
-#include "data/database_connector.hpp"
-#include "rest/rest_api.h"
+#include "common.h"
 
 int main() {
     dataBaseStart db;

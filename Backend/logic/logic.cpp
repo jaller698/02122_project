@@ -2,9 +2,8 @@
 
 web::json::value handle_data(const std::string &endpoint, web::json::value request_body, bool write_data)
 {
-#ifdef DEBUG
-    std::cout << "Received a request on endpoint: " << endpoint << "with body" << request_body.serialize() << std::endl;
-#endif
+DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + request_body.serialize());
+
     if (endpoint == "/questions")
     {
         // handle questions
@@ -45,7 +44,6 @@ web::json::value handle_data(const std::string &endpoint, web::json::value reque
             // questions["questions"]["question 4"] = web::json::value::string("int");
             // questions["questions"]["question 5"] = web::json::value::string("int");
             // questions["questions"]["question 6"] = web::json::value::string("int");
-            // std::cout << "Returning questions: " << questions.serialize() << std::endl;
             
         }
     }

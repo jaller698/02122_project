@@ -128,12 +128,7 @@ void dataBaseStart::init()
     }
     catch (sql::SQLException &e)
     {
-        // TODO make this print prettier
-        cout << "# ERR: SQLException in " << __FILE__;
-        cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;
-        cout << "# ERR: " << e.what();
-        cout << " (MySQL error code: " << e.getErrorCode();
-        cout << ", SQLState: " << e.getSQLState() << " )" << endl;
+        ERROR("Error in init: ", e);
     }
 }
 
@@ -162,7 +157,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         output = statement->executeQuery(command);
         web::json::value questions = web::json::value::object();
         while (output->next()) {
-            questions[output->getString(1)] = web::json::value::string(output->getString(2));
+            questions[output->getString("Question")] = web::json::value::string(output->getString("Type"));
         }
 
         return questions;
@@ -178,7 +173,6 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
     mysql_driver = sql::mysql::get_mysql_driver_instance();
-   
     connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
     connection->setSchema("CarbonFootprint");
 
@@ -209,6 +203,6 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
         output += ", " + input[i];
     }
     output += ")";
-    DEBUG_PRINT(output);
+    DEBUG_PRINT(output);    
     return output;
 }

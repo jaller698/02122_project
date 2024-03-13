@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   final response = await http.post(
-    Uri.parse('http://localhost:8080'),
+    Uri.parse('http://10.209.240.130:8080/questions'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -19,6 +19,6 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to create album.');
+    throw Exception('Failed to create album.' + response.statusCode.toString());
   }
 }

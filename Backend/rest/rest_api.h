@@ -1,9 +1,5 @@
 #pragma once
-
-#include <cpprest/http_listener.h>
-#include <cpprest/json.h>
-#include <iostream>
-#include "logic/logic.h"
+#include "../common.h"
 
 using namespace web;
 using namespace web::http;

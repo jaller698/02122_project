@@ -2,13 +2,19 @@
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
 #include "../rest/rest_api.h"
+#include "../data/database_connector.hpp"
+#include <thread>
 
 class RestAPIEndpointTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Set up any necessary resources before each test
+        createTableAndShowContents();
+        std::thread rest_api_thread([&]() {
+            RestAPIEndpoint rest_api_endpoint;
+            rest_api_endpoint.listen();
+        });
     }
-
     void TearDown() override {
         // Clean up any resources after each test
     }

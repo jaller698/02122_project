@@ -1,8 +1,8 @@
-#include "data/database_connector.hpp"
-#include "rest/rest_api.h"
+#include "common.h"
 
 int main() {
-    createTableAndShowContents();
+    dataBaseStart db;
+    db.init();
     RestAPIEndpoint rest_api_endpoint;
     rest_api_endpoint.listen();
     return 0;

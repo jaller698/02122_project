@@ -36,14 +36,105 @@ class _CarbonFormViewState extends State<CarbonFormView> {
             var _question = widget._carbonForm.questions[index];
 
             switch (_question.type) {
-              // TODO
-              case CarbonQuestionType.arbitrary:
-              case CarbonQuestionType.date:
-              case CarbonQuestionType.dateTime:
-              case CarbonQuestionType.float:
               case CarbonQuestionType.int:
-              case CarbonQuestionType.string:
+                return FormBuilderTextField(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  validator: FormBuilderValidators.integer(),
+                );
+              case CarbonQuestionType.float:
+                return FormBuilderTextField(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  validator: FormBuilderValidators.numeric(),
+                );
+              case CarbonQuestionType.date:
+                return FormBuilderDateTimePicker(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  inputType: InputType.date,
+                  keyboardType: TextInputType.number,
+                  validator: FormBuilderValidators.required(),
+                );
+              case CarbonQuestionType.dateTime:
+                return FormBuilderDateTimePicker(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  inputType: InputType.both,
+                  keyboardType: TextInputType.number,
+                  validator: FormBuilderValidators.required(),
+                );
               case CarbonQuestionType.time:
+                return FormBuilderDateTimePicker(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  inputType: InputType.time,
+                  keyboardType: TextInputType.number,
+                  validator: FormBuilderValidators.required(),
+                );
+              case CarbonQuestionType.dateRange:
+                return FormBuilderDateRangePicker(
+                  name: _question.title,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                  firstDate: DateTime(DateTime.now().year - 30),
+                  lastDate: DateTime(DateTime.now().year + 200),
+                  keyboardType: TextInputType.datetime,
+                  textInputAction: TextInputAction.next,
+                  validator: FormBuilderValidators.required(),
+                );
+              case CarbonQuestionType.checkBox:
+                return FormBuilderCheckbox(
+                  name: _question.title,
+                  title: Text(_question.type.name),
+                  validator: FormBuilderValidators.required(),
+                );
+              case CarbonQuestionType.dropDown:
+                return FormBuilderDropdown(
+                  name: _question.title,
+                  items: [], // TODO
+                );
+              case CarbonQuestionType.slider:
+                return FormBuilderSlider(
+                  name: _question.title,
+                  initialValue: 0,
+                  min: 0,
+                  max: 100,
+                  decoration: InputDecoration(
+                    labelText: widget._carbonForm.questions[index].title,
+                    hintText: widget._carbonForm.questions[index].type.name,
+                    border: const OutlineInputBorder(),
+                  ),
+                );
+              case CarbonQuestionType.arbitrary:
+              case CarbonQuestionType.string:
               default:
                 return FormBuilderTextField(
                   name: _question.title,
@@ -71,7 +162,7 @@ class _CarbonFormViewState extends State<CarbonFormView> {
         icon: const Icon(Icons.check),
         onPressed: () {
           if (_formKey.currentState!.saveAndValidate()) {
-            Future<void> future = sendCarbonForm(CarbonFormAnwser(
+            Future<void> future = sendCarbonForm(CarbonFormAnswer(
                 title: widget._carbonForm.title,
                 anwsers: _formKey.currentState!.value));
 

@@ -9,7 +9,7 @@ import '../Dashboard/dashboard_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
-  static const routeName = '/';
+  static const routeName = '/home';
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -41,7 +41,16 @@ class _MainViewState extends State<MainView> {
         child: <Widget>[
           const DashboardView(),
           const CarbonTrackerView(),
-          const Center(child: CarbonFormButton()),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CarbonFormButton(),
+              FilledButton(
+                child: const Text('settings'),
+                onPressed: () => showLicensePage(context: context),
+              )
+            ],
+          ),
           const Placeholder(
               child: Center(child: Card(child: Text('Column BARS, todo')))),
         ][_currentPageIndex],

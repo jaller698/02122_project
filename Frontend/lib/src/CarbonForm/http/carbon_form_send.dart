@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form_answer.dart';
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   final response = await http.post(
-    Uri.parse('http://10.209.240.130:8080/questions'),
+    Uri.parse('${SettingsController.address}/questions'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

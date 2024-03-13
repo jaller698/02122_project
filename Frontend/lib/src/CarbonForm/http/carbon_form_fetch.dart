@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
-import 'package:flutter/services.dart';
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<CarbonForm> fetchCarbonForm() async {
@@ -10,7 +10,7 @@ Future<CarbonForm> fetchCarbonForm() async {
           as Map<String, dynamic>);
   */
   final response = await http
-      .get(Uri.parse('http://10.209.240.130:8080/questions'))
+      .get(Uri.parse('${SettingsController.address}/questions'))
       .timeout(const Duration(seconds: 5));
   print("TEST:" + response.statusCode.toString());
   if (response.statusCode == 200) {

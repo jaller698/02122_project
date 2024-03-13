@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<bool> createNewUser(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://localhost:8080/users'),
+    Uri.parse('${SettingsController.address}/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

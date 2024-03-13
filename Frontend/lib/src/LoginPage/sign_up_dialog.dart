@@ -28,7 +28,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
             child: Column(
               children: <Widget>[
                 FormBuilderTextField(
-                  name: 'userName',
+                  name: 'username',
                   decoration: const InputDecoration(labelText: 'User name'),
                   validator: FormBuilderValidators.required(),
                 ),

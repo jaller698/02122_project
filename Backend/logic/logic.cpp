@@ -23,6 +23,7 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
             }
             dataBaseStart db;
             db.insert("InitialSurvey",answers);
+            //automate this
             auto carbonScore = 0;
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
@@ -49,11 +50,31 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
     }
     else if (endpoint == "/users")
     {
+        if(write_data==true){
+            auto UN = request_body.at("Username").as_string();
+            //auto PASS = request_body.at("Password").as_string();
+            std::vector<std::string> userInfo;
+            userInfo.push_back(UN);
+            //userInfo.push_back(PASS);
+            dataBaseStart db;
+            db.insert("Users",userInfo);
+            web::json::value response = web::json::value::object();
+            response["response"] = web::json::value::string("User created :)");
+            return response;
+            
+        }else{
+
+            dataBaseStart db;
+            auto Name = request_body.at("User").as_string();
+            return db.get("Users",Name);
+
+
+        }
         // create new user, or login existing user.  switch is the write_data bool
         //  handle request for either a new user or login
-        std::string userID = request_body.at("userID").as_string();
-        std::string password = request_body.at("password").as_string();
-        return web::json::value::null();
+        // std::string userID = request_body.at("userID").as_string();
+        // std::string password = request_body.at("password").as_string();
+        // return web::json::value::null();
     }
     else if (endpoint == "/userScore")
     {

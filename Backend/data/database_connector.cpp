@@ -105,14 +105,16 @@ void dataBaseStart::init()
         std::vector<std::string> tmp2 ={"Alice", "66", "2","3","4","5", "6","7"};
         insert("UpdatedSurvey", tmp2);
         */
-
-
+        statement = connection->createStatement();
+        statement->execute("INSERT INTO Users (Username) VALUES('Alice')");
+        delete statement;
 
         /*// call our test insert function
         std::cout << "hello";
         //std::string m[7] = {"Alice", "second", "second", "second", "second", "second", "second"};
         insert("InitialSurvey", m);
-        std::vector<std::string> tmp ={"2","3","4","5","6","7"};
+        std::vector<std::string> tmp
+         ={"2","3","4","5","6","7"};
         insert("GoalsSurvey", tmp);
 
         statement = connection->createStatement();
@@ -143,13 +145,25 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
     connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
     connection->setSchema("CarbonFootprint");
     
- if (table == "User")
+ if (table == "Users")
     {
+        web::json::value User = web::json::value::object();
         /* code */
         // set all the variables to the input answers
         std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
         statement = connection->createStatement();
-        statement->execute(command);
+        output = statement->executeQuery(command);
+       
+
+        if (output->next()) {
+            User["User"] = web::json::value::string(output->getString(1));
+            // User["Pass"] = web::json::value::string(output->getString(2));
+            // User["Score"] = web::json::value::string(output->getString(3));
+        }else{
+            User["Fail"] = web::json::value::string("User does not exists");
+        }
+       
+        return User;
 
     } else if (table == "UpdatedSurvey") {
         // std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
@@ -162,7 +176,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         output = statement->executeQuery(command);
         web::json::value questions = web::json::value::object();
         while (output->next()) {
-            questions[output->getString(1)] = web::json::value::string(output->getString(2));
+            questions[output->getString(2)] = web::json::value::string(output->getString(3));
         }
 
         return questions;
@@ -182,19 +196,26 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
     connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
     connection->setSchema("CarbonFootprint");
 
-    if (table == "User")
+    if (table == "Users")
     {
         /* code */
         // set all the variables to the input answers
+        //UPDATE THIS FOR WHEN WE IMPLEMENT PASSWORDS/CARBONSCORE
+        statement = connection->createStatement();
+        statement->execute("INSERT INTO Users (Username) VALUES('"+input[0] +"')");
+        
+
     } else if (table == "UpdatedSurvey") {
         std::string inputStr = createStatement(input, table, 7);
         statement = connection->createStatement();
         statement->execute(inputStr);
     } else {
+        //we dont need to say tablesize, since its 6 by default
         std::string inputStr = createStatement(input, table);
         statement = connection->createStatement();
         statement->execute(inputStr);
     }
+    delete statement;
 }
 
 std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)

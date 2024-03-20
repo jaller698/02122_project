@@ -11,7 +11,7 @@ class CarbonTrackerView extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (context, index) {
           return ListTile(
-            leading: const Card(
+            /*leading: const Card(
               child: Padding(
                 padding: EdgeInsets.all(6.0),
                 child: Icon(
@@ -19,7 +19,7 @@ class CarbonTrackerView extends StatelessWidget {
                   size: 34,
                 ),
               ),
-            ),
+            ),*/
             title: const Text('Car'),
             subtitle: Text(
                 'At 15:38 - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}'),
@@ -95,3 +95,7 @@ class CarbonTrackItem {}
 //      hydro
 //      nuclear
 //    by month?
+
+
+// form creater on website
+//    creation from ymal or json file

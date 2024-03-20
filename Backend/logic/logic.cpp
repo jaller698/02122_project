@@ -42,10 +42,12 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
     {
         if(write_data==true){
             auto UN = request_body.at("User").as_string();
-            //auto PASS = request_body.at("Password").as_string();
+            auto PASS = request_body.at("Password").as_string();
+            auto Score = "0";
             std::vector<std::string> userInfo;
             userInfo.push_back(UN);
-            //userInfo.push_back(PASS);
+            userInfo.push_back(PASS);
+            userInfo.push_back(Score);
             dataBaseStart db;
             db.insert("Users",userInfo);
             web::json::value response = web::json::value::object();
@@ -68,11 +70,36 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
     }
     else if (endpoint == "/userScore")
     {
+        if(write_data==true){
+            auto UN = request_body.at("User").as_string();
+            auto SC = request_body.at("Score").as_string();
+            //auto PASS = request_body.at("Password").as_string();
+            std::vector<std::string> userInfo;
+            userInfo.push_back(UN);
+            //userInfo.push_back(PASS);
+            dataBaseStart db;
+            db.insert("Users",userInfo);
+            web::json::value response = web::json::value::object();
+            response["response"] = web::json::value::string("User created :)");
+            return response;
+            
+        }else{
+
+            dataBaseStart db;
+            auto Name = request_body.at("User").as_string();
+            return db.get("Users",Name).at("Score");
+
+
+        }
+
+
         // get the users score, NOT update it, that will be done in the questions segment
         // handle request for a user's score
-        web::json::value userScore = web::json::value::object();
-        userScore["score"] = web::json::value::number(100);
-        return userScore;
+        
+        
+        // web::json::value userScore = web::json::value::object();
+        // userScore["score"] = web::json::value::number(100);
+        // return userScore;
     }
     else if (endpoint == "/comparison")
     {

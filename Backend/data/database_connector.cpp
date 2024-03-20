@@ -167,7 +167,9 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
         // set all the variables to the input answers
         //UPDATE THIS FOR WHEN WE IMPLEMENT PASSWORDS/CARBONSCORE
         statement = connection->createStatement();
-        statement->execute("INSERT INTO Users (Username) VALUES('"+input[0] +"')");
+        std::cout<<"heheh"<<std::endl;
+        std::string command = createStatement(input, table, 3);
+        statement->execute(command);
         
 
     } else if (table == "UpdatedSurvey") {

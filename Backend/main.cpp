@@ -4,13 +4,16 @@ int main() {
     try
     {
        dataBaseStart db;
-        db.init();
-        RestAPIEndpoint rest_api_endpoint;
-        rest_api_endpoint.listen();
+       db.init();
+       RestAPIEndpoint rest_api_endpoint;
+       rest_api_endpoint.listen();
     }
     catch(const std::exception& e)
     {
-        ERROR("error in main",e);
+        ERROR("Error in top-level of program ",e);
+    } catch (...)
+    {
+        ERROR("Unknown error in top-level of program",std::runtime_error("Unknown error"));
     }
     
     

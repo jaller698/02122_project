@@ -8,14 +8,6 @@ void dataBaseStart::init()
 
     try
     {
-        sql::mysql::MySQL_Driver *mysql_driver;
-        sql::Connection *connection;
-        sql::Statement *statement;
-        sql::ResultSet *result_set;
-
-        /* Create a connection */
-        mysql_driver = sql::mysql::get_mysql_driver_instance();
-        connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
 
         /* Connect to the MySQL database */
         connection->setSchema("mysql");
@@ -29,7 +21,7 @@ void dataBaseStart::init()
         connection->setSchema("CarbonFootprint");
 
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50))");
+        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50), CarbonScore INT)");
         DEBUG_PRINT("Table 'Users' created successfully.");
         delete statement;
 
@@ -106,9 +98,7 @@ void dataBaseStart::init()
 }
 
 web::json::value dataBaseStart::get(std::string table, std::string key){
-    mysql_driver = sql::mysql::get_mysql_driver_instance();
     sql::ResultSet *output;
-    connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
     connection->setSchema("CarbonFootprint");
     
  if (table == "Users")
@@ -123,8 +113,8 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
 
         if (output->next()) {
             User["User"] = web::json::value::string(output->getString(1));
-            // User["Pass"] = web::json::value::string(output->getString(2));
-            // User["Score"] = web::json::value::string(output->getString(3));
+            User["Pass"] = web::json::value::string(output->getString(2));
+            User["Score"] = web::json::value::string(output->getString(3));
         }else{
             User["Fail"] = web::json::value::string("User does not exists");
         }
@@ -157,30 +147,34 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
 
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
-    mysql_driver = sql::mysql::get_mysql_driver_instance();
-    connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
-    connection->setSchema("CarbonFootprint");
+    try {
+        connection->setSchema("CarbonFootprint");
+        if (table == "Users")
+        {
+            /* code */
+            // set all the variables to the input answers
+            //UPDATE THIS FOR WHEN WE IMPLEMENT PASSWORDS/CARBONSCORE
+            statement = connection->createStatement();
+            std::string command = "INSERT into " + table + " VALUES('" + input[0] + "', '" + input[1] + "', '" + input[2] + "')";
+            DEBUG_PRINT(command);
+            statement->execute(command);
+            
 
-    if (table == "Users")
-    {
-        /* code */
-        // set all the variables to the input answers
-        //UPDATE THIS FOR WHEN WE IMPLEMENT PASSWORDS/CARBONSCORE
-        statement = connection->createStatement();
-        statement->execute("INSERT INTO Users (Username) VALUES('"+input[0] +"')");
-        
-
-    } else if (table == "UpdatedSurvey") {
-        std::string inputStr = createStatement(input, table, 7);
-        statement = connection->createStatement();
-        statement->execute(inputStr);
-    } else {
-        //we dont need to say tablesize, since its 6 by default
-        std::string inputStr = createStatement(input, table);
-        statement = connection->createStatement();
-        statement->execute(inputStr);
+        } else if (table == "UpdatedSurvey") {
+            std::string inputStr = createStatement(input, table, 7);
+            statement = connection->createStatement();
+            statement->execute(inputStr);
+        } else {
+            //we dont need to say tablesize, since its 6 by default
+            std::string inputStr = createStatement(input, table);
+            statement = connection->createStatement();
+            statement->execute(inputStr);
+        }
+        delete statement;
+    } catch (sql::SQLException &e) {
+        ERROR("Error in insert: ", e);
+        throw e;
     }
-    delete statement;
 }
 
 std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)
@@ -188,7 +182,8 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
     std::string output = "INSERT INTO " + table + " VALUES('" + input[0] + "'";
     if (input.size() != tableSize+1)
     {
-        WARNING("input is not the presumed size");
+        WARNING("input is not the presumed size, expected " + std::to_string(tableSize+1) + " but got " + std::to_string(input.size()) + " elements");
+        throw logic_error("input is not the presumed size");
     }
     for (int i = 1; i <= tableSize; i++)
     {
@@ -219,8 +214,6 @@ web::json::value dataBaseStart::readQuestions(){
 void dataBaseStart::updateQuestions()
 {
     try{
-        mysql_driver = sql::mysql::get_mysql_driver_instance();
-        connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
         connection->setSchema("CarbonFootprint");
 
         // Compare the input to the questions in the database

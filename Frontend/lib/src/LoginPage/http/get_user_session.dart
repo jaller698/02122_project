@@ -4,7 +4,11 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<bool> getUserSession(String username, String password) async {
-  final response = await http.post(
+  http.BaseRequest request;
+
+  final response = await request.method('GET', Uri.parse('${SettingsController.address}/users')
+  
+  http.get(
     Uri.parse('${SettingsController.address}/users'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

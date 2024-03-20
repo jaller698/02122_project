@@ -1,3 +1,3 @@
 class SettingsController {
-  static const String address = 'http://10.209.240.130:8080';
+  static const String address = 'http://192.168.1.19:8080';
 }

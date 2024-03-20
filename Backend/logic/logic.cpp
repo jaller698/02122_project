@@ -55,10 +55,12 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
             return response;
             
         }else{
-
+            DEBUG_PRINT("Getting USER from data: " + request_body.serialize());
             dataBaseStart db;
-            auto Name = request_body.at("User").as_string();
-            return db.get("Users",Name);
+            std::string Name = request_body.at("User").as_string();
+            auto response = db.get("Users",Name);
+            DEBUG_PRINT("Sending USER data: " + response.serialize());
+            return response;
 
 
         }
@@ -112,6 +114,7 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
         comparison["data"][0] = web::json::value::number(2000);
         return comparison;
     }
+    WARNING("no suitable endpoint found");
     return web::json::value::null();
 }
 

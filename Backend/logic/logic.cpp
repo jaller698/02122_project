@@ -59,6 +59,18 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
                 dataBaseStart db;
                 std::string Name = request_body.at("User").as_string();
                 auto response = db.get("Users",Name);
+                
+                // compare the two passwords
+                DEBUG_PRINT("Comparing passwords: " + response.at("Pass").serialize() + " with " + request_body.at("Password").serialize());
+                if (response.at("Pass").as_string() == request_body.at("Password").as_string())
+                {
+                    response["Response"] = web::json::value::string("User logged in");
+                }
+                else
+                {
+                    response["Fail"] = web::json::value::string("User not logged in");
+                }
+
                 DEBUG_PRINT("Sending USER data: " + response.serialize());
                 return response;
 

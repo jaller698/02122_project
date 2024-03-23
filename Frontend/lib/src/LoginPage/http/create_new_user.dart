@@ -4,8 +4,7 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<bool> createNewUser(String username, String password) async {
-  var _digest = utf8.encode(password);
-  var _sha256 = sha256.convert(_digest);
+  var _hashedPassword = sha256.convert(utf8.encode(password));
   final response = await http.post(
     Uri.parse('${SettingsController.address}/users'),
     headers: <String, String>{
@@ -13,7 +12,7 @@ Future<bool> createNewUser(String username, String password) async {
     },
     body: jsonEncode(<String, String>{
       'User': username,
-      'Password': _sha256.toString(),
+      'Password': _hashedPassword.toString(),
     }),
   );
 

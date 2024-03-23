@@ -21,7 +21,7 @@ void dataBaseStart::init()
         connection->setSchema("CarbonFootprint");
 
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(50), CarbonScore INT)");
+        statement->execute("CREATE TABLE IF NOT EXISTS Users (Username VARCHAR(50) PRIMARY KEY, Password VARCHAR(64), CarbonScore INT)");
         DEBUG_PRINT("Table 'Users' created successfully.");
         delete statement;
 

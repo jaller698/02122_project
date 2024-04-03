@@ -8,28 +8,23 @@ class CarbonTrackerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.separated(
-        itemBuilder: (context, index) {
-          return ListTile(
-            /*leading: const Card(
-              child: Padding(
-                padding: EdgeInsets.all(6.0),
-                child: Icon(
-                  Icons.directions_car,
-                  size: 34,
-                ),
-              ),
-            ),*/
-            title: const Text('Car'),
-            subtitle: Text(
-                'At 15:38 - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}'),
-            trailing: const Text('42g'),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const Divider();
-        },
-        itemCount: 8,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          const SliverAppBar(
+            title: Text('date'),
+          ),
+          SliverList.builder(
+            itemCount: 8,
+            itemBuilder: (context, index) {
+              ListTile(
+                title: const Text('Car'),
+                subtitle: Text(
+                    'At 15:38 - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}'),
+                trailing: const Text('42g'),
+              );
+            },
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Add task'),
@@ -37,19 +32,101 @@ class CarbonTrackerView extends StatelessWidget {
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
+            showDragHandle: true,
             builder: (context) {
               return SizedBox(
                 height: 200,
                 child: ListView(
-                  children: const <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.explore),
-                      title: Text('Transport'),
+                  padding: const EdgeInsets.all(8.0),
+                  children: <Widget>[
+                    Card(
+                      child: ListTile(
+                        style: ListTileStyle.drawer,
+                        leading: const Icon(Icons.explore),
+                        title: const Text('Transport'),
+                        onTap: () {
+                          showModalBottomSheet(
+                            constraints: BoxConstraints(maxHeight: 400),
+                            context: context,
+                            showDragHandle: true,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 500,
+                                child: ListView(
+                                  padding: const EdgeInsets.all(8.0),
+                                  children: const <Widget>[
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_walk),
+                                        title: Text('by Foot'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_bike),
+                                        title: Text('by Bicycle'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_car),
+                                        title: Text('by Car'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_bus),
+                                        title: Text('by Bus'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_train),
+                                        title: Text('by Train'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.directions_boat),
+                                        title: Text('by Boat'),
+                                      ),
+                                    ),
+                                    Card(
+                                      child: ListTile(
+                                        style: ListTileStyle.list,
+                                        leading: Icon(Icons.flight),
+                                        title: Text('by Plane'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
-                    ListTile(
-                      leading: Icon(Icons.restaurant),
-                      title: Text('Food'),
-                    )
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.restaurant),
+                        title: const Text('Food'),
+                        onTap: () {},
+                      ),
+                    ),
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.tune),
+                        title: const Text('Custom'),
+                        onTap: () {},
+                      ),
+                    ),
                   ],
                 ),
               );

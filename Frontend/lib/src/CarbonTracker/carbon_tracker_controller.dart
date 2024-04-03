@@ -1,16 +1,39 @@
+import 'package:localstore/localstore.dart';
+
 class CarbonTrackerController {
-  static Map<DateTime, CarbonTrackerItem>? _carbonTrackerItems;
-
-  // use shared_preferences
-  Future<void> loadTrackerItems() async {}
-
-  Future<Map<DateTime, CarbonTrackerItem>> retriveTrackerItems() async {
+  static Map<DateTime, dynamic>? _carbonTrackerItems;
+  static Map<DateTime, dynamic> get carbonTrackerItems {
+    if (_carbonTrackerItems == null) {
+      loadTrackerItems().then((value) => _carbonTrackerItems);
+    }
     return _carbonTrackerItems!;
   }
 
-  Future<void> updateTrackerItems() async {}
+  static final db = Localstore.instance;
+  // use shared_preferences
+  static Future<Map<DateTime, dynamic>> loadTrackerItems() async {
+    final id = db.collection('carbontracker').doc().id;
+    _carbonTrackerItems = <DateTime, dynamic>{};
+    db.collection('carbontracker').doc(id).get().then(
+      (value) {
+        if (value == null) {
+          return;
+        }
 
-  Future<void> addTrackerItem() async {}
+        for (var date in value.keys) {
+          _carbonTrackerItems![DateTime.parse(date)] = value[date];
+        }
+      },
+    );
+
+    return _carbonTrackerItems!;
+  }
+
+  static Future<Map<DateTime, dynamic>> retriveTrackerItems() async {
+    return _carbonTrackerItems ?? await loadTrackerItems();
+  }
+
+  static Future<void> updateTrackerItems() async {}
+
+  static Future<void> addTrackerItem() async {}
 }
-
-class CarbonTrackerItem {}

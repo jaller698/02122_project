@@ -15,27 +15,34 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/comparison", handle_comparison}
 };
 
-int calculateCarbonScore (std::vector<int> answers)
+double calculateCarbonScore (std::vector<int> answers)
 {
-    //some of the questions in weeks, but we measure in years, so we time them with 52
-    int res=0;
-    //Q1
-    res=res+answers[0]*90;
-    //Q2
-    res=res+answers[1]*31*52;
-    //Q3
-    res=res+(answers[2]*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
-    //Q4
-    res=res+answers[3]*60*7*2.4*((100-57.5)/100)*52;
-    //Q5
-    if(answers[4]==0){
-        res=res+60*2;
-    }else{
-        res=res+60/answers[4];
+    try {
+        //some of the questions in weeks, but we measure in years, so we time them with 52
+        DEBUG_PRINT("Calculating carbon score")
+        double res=0;
+        //Q1
+        res+=answers.at(0)*90;
+        //Q2
+        res+=answers.at(1)*31*52;
+        //Q3
+        res+=(answers.at(2)*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
+        //Q4
+        res += (answers.at(3))*60*7*2.4*((100-57.5)/100)*52;
+        //Q5
+        if(answers.at(4) == 0){
+            res += 60*2;
+        }else{
+            res += 60/(answers.at(4));
+        }
+        //Q6
+        res += answers.at(5)*0;
+        DEBUG_PRINT("Got a carbon score of: " + std::to_string(res));
+        return res;
+    } catch (const std::exception &e) {
+        ERROR("Error in calculating carbon score: ", e);
+        throw e;
     }
-    //Q6
-    res=res+answers[5]*0;
-    return res;
 }
 
 // Function which based on the endpoint, sends the data to the correct handler
@@ -74,21 +81,20 @@ struct Response handle_questions_write(const web::json::value &request_body)
             answers.push_back(userID);
             auto it = tmp.as_object().begin();
             std::advance(it, 1);
-            //Det er lige nu lavet til at spørgsmålene altid returnere Ints, hvis noget ændres skal dette omskrives.
             std::vector<int> ansMath;
             for (auto &answer : tmp.as_object())
             {
-                ansMath.push_back(answer.second.as_integer());
+                ansMath.push_back(stoi(answer.second.as_string()));
                 answers.push_back(answer.second.as_string());
-
             }
             dataBaseStart db;
             db.insert("InitialSurvey",answers);
-            int carbonScore = calculateCarbonScore(ansMath);
+            double carbonScore = (double) calculateCarbonScore(ansMath);
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
+            DEBUG_PRINT("updating carbon score to: " + std::to_string(carbonScore));
             db.updateUserScore(userID, carbonScore);
-            return Response(http::status_codes::OK, response);
+            return Response(http::status_codes::Created, response);
     } catch (const std::exception &e) {
         ERROR("Error in handling writing questions: ", e);
         return Response(http::status_codes::InternalError, web::json::value::null());

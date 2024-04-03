@@ -194,6 +194,14 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
     return output;
 }
 
+void dataBaseStart::updateUserScore(std::string username, int score){
+    connection->setSchema("CarbonFootprint");
+    std::string command = "UPDATE Users SET CarbonScore = " + std::to_string(score) + " WHERE Username = '" + username + "'";
+    statement = connection->createStatement();
+    statement->execute(command);
+    delete statement;
+}
+
 
 web::json::value dataBaseStart::readQuestions(){
     web::json::value questions = web::json::value::object();

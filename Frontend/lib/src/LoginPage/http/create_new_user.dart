@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:crypto/crypto.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ Future<bool> createNewUser(String username, String password) async {
   );
 
   if (response.statusCode == 201) {
+    UserController().username = username;
     return true;
   } else if (response.statusCode == 401) {
     // todo

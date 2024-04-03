@@ -29,10 +29,6 @@ class CarbonTrackerController {
     return _carbonTrackerItems!;
   }
 
-  static Future<Map<DateTime, dynamic>> retriveTrackerItems() async {
-    return _carbonTrackerItems ?? await loadTrackerItems();
-  }
-
   static Future<void> updateTrackerItems() async {}
 
   static Future<void> addTrackerItem() async {}

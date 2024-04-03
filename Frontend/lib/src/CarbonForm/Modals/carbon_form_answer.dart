@@ -1,9 +1,11 @@
 class CarbonFormAnswer {
   final String title;
+  final String user;
   final Map<String, dynamic> anwsers;
 
   const CarbonFormAnswer({
     required this.title,
+    required this.user,
     required this.anwsers,
   });
 
@@ -11,10 +13,12 @@ class CarbonFormAnswer {
     return switch (json) {
       {
         'title': String title,
+        'userID': String user,
         'questions': Map<String, dynamic> anwsers,
       } =>
         CarbonFormAnswer(
           title: title,
+          user: user,
           anwsers: anwsers,
         ),
       _ => throw const FormatException('Failed to decode carbon form'),
@@ -25,7 +29,7 @@ class CarbonFormAnswer {
     Map<String, dynamic> m = <String, dynamic>{};
 
     m['title'] = form.title;
-    m['userID'] = "Alice";
+    m['userID'] = form.user;
     m['answers'] = form.anwsers;
 
     return m;

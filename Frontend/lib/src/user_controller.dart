@@ -9,6 +9,9 @@ class UserController {
   String get username {
     return _username ?? 'account';
   }
+  set username(String v) {
+    _username=v;
+  }
 
   String? _sessionID;
 

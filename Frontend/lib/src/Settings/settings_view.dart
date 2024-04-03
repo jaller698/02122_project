@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -15,6 +16,8 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   final _formKey = GlobalKey<FormBuilderState>();
 
+  final SettingsController _settingsController = SettingsController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +29,18 @@ class _SettingsViewState extends State<SettingsView> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              FormBuilderSwitch(name: 'darkmode', title: const Text('Darkmode'))
+              FormBuilderSwitch(
+                name: 'darkmode',
+                title: const Text('Darkmode'),
+                initialValue: _settingsController.themeMode == ThemeMode.dark,
+                onChanged: (value) {
+                  if (value == null) return;
+
+                  value
+                      ? _settingsController.updateThemeMode(ThemeMode.dark)
+                      : _settingsController.updateThemeMode(ThemeMode.light);
+                },
+              )
             ],
           ),
         ),

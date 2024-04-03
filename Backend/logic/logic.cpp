@@ -29,6 +29,7 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
     try {
         if (endpoint == "/questions")
         {
+            if(write_data == true){
             auto title = request_body.at("title").as_string();
             auto userID = request_body.at("userID").as_string();
             web::json::value tmp = request_body.at("answers");
@@ -53,6 +54,13 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
             return response;
+            }else{
+                dataBaseStart db;
+                web::json::value questions = web::json::value::object();
+                questions["title"] = web::json::value::string("Questions");
+                questions["questions"] = db.get("Questions","");
+                return questions;
+            }
         }
         else if (endpoint == "/users")
         {

@@ -1,5 +1,28 @@
 #include "logic.h"
 
+int calculateCarbonScore (std::vector<int> answers)
+{
+    //some of the questions in weeks, but we measure in years, so we time them with 52
+    int res=0;
+    //Q1
+    res=res+answers[0]*90;
+    //Q2
+    res=res+answers[1]*31*52;
+    //Q3
+    res=res+(answers[2]*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
+    //Q4
+    res=res+answers[3]*60*7*2.4*((100-57.5)/100)*52;
+    //Q5
+    if(answers[4]==0){
+        res=res+60*2;
+    }else{
+        res=res+60/answers[4];
+    }
+    //Q6
+    res=res+answers[5]*0;
+    return res;
+}
+
 web::json::value handle_data(const std::string &endpoint, web::json::value request_body, bool write_data)
 {
 DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + request_body.serialize());
@@ -13,18 +36,24 @@ DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + req
             auto title = request_body.at("title").as_string();
             auto userID = request_body.at("userID").as_string();
             web::json::value tmp = request_body.at("answers");
+           
             std::vector<std::string> answers;
             answers.push_back(userID);
             auto it = tmp.as_object().begin();
             std::advance(it, 1);
+            //Det er lige nu lavet til at spørgsmålene altid returnere Ints, hvis noget ændres skal dette omskrives.
+            std::vector<int> ansMath;
             for (auto &answer : tmp.as_object())
             {
+                ansMath.push_back(answer.second.as_integer());
                 answers.push_back(answer.second.as_string());
+
             }
             dataBaseStart db;
             db.insert("InitialSurvey",answers);
             //automate this
-            auto carbonScore = 0;
+            //if this does not work, outcomment line below, and make it 0 instead.
+            int carbonScore = calculateCarbonScore(ansMath);
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
             return response;

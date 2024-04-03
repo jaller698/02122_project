@@ -2,32 +2,32 @@
     "questions": [
     {
         "id": "Q1",
-        "question": "Question 1",
+        "question": "How much time do you spend on airplanes, on average, per year?(In hours)",
         "Type": "int"
     },
     {
         "id": "Q2",
-        "question": "Question 2",
-        "Type": "string"
+        "question": "How many times a week do you eat beef?",
+        "Type": "int"
     },
     {
         "id": "Q3",
-        "question": "Question 3",
+        "question": "How much do you drive per week? (hours)",
         "Type": "int"
     },
     {
         "id": "Q4",
-        "question": "Question 4",
+        "question": "How much do you take public transportation per week?",
         "Type": "int"
     },
     {
         "id": "Q5",
-        "question": "Question 5",
+        "question": "How long do you usually keep a new phone?(In years)",
         "Type": "int"
     },
     {
         "id": "Q6",
-        "question": "Question 6",
+        "question": "Do you like avocadoes? 0 for no and 1 for yes. Non binary for other.",
         "Type": "int"
     }
     ]

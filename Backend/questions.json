@@ -8,7 +8,7 @@
     {
         "id": "Q2",
         "question": "Question 2",
-        "Type": "string"
+        "Type": "int"
     },
     {
         "id": "Q3",

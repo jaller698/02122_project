@@ -53,19 +53,28 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
         std::string endpoint = request.relative_uri().to_string();
         DEBUG_PRINT("Received a GET request, on endpoint: " + endpoint);
         auto request_body = request.extract_json().get();
-        if (request_body.is_null() && endpoint == "/") {
-            request.reply(status_codes::OK, U("No data supplied"));
+        if (request_body.is_null()) {
+            if (endpoint == "/") {
+                request.reply(status_codes::OK, U("No data supplied"));
+                return;
+            } else if (endpoint != "/questions") {
+                request.reply(status_codes::BadRequest, U("Please provide a body"));
+                return;
+            }
+        }
+        struct Response response = handle_data(endpoint, request_body, false);
+        auto status_code = response.status;
+        if (status_code != status_codes::OK) {
+            request.reply(status_code);
             return;
         }
-        json::value response_body;
-        response_body = handle_data(endpoint, request_body, false);
-        if (response_body.has_field("Fail")){
-            request.reply(status_codes::Unauthorized);
-            return;
-        }
-        if (!response_body.is_null())
-            DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
+        json::value response_body = response.response;
 
+        if (!response_body.is_null()){
+            DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
+        } else {
+            DEBUG_PRINT("response is empty");
+        }
         request.reply(status_codes::OK, response_body);
     } catch (std::exception &e) {
         ERROR("Error in GET: ", e);
@@ -107,7 +116,13 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
             request.reply(status_codes::BadRequest);
             return;
         }
-        json::value response_body = handle_data(endpoint, request_body, true);
+        Response response = handle_data(endpoint, request_body, true);
+        auto status_code = response.status;
+        if (status_code != status_codes::OK) {
+            request.reply(status_code);
+            return;
+        }
+        json::value response_body = response.response;
         if (!response_body.is_null())
             DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
         request.reply(status_codes::Created, response_body);
@@ -143,11 +158,17 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
             return;
         }
         DEBUG_PRINT("Received JSON data: " + request_body.serialize());
-        json::value response_body;
-        response_body = handle_data(endpoint, request_body, true);
+        Response response = handle_data(endpoint, request_body, true);
+        auto status_code = response.status;
+        if (status_code != status_codes::OK && status_code != status_codes::Created) {
+            request.reply(status_code);
+            return;
+        }
+        json::value response_body = response.response;
+
         if (!response_body.is_null())
             DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
-        request.reply(status_codes::Created, response_body);
+        request.reply(response.status, response_body);
     } catch (std::exception &e) {
             ERROR("Error in POST: ", e);
             request.reply(status_codes::InternalError, e.what());

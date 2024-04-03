@@ -16,7 +16,7 @@
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
 #include <filesystem>
-
+#include <utility>
 
 // Our headers
 #include "logic/logic.h"
@@ -42,3 +42,9 @@
         std::cerr << "\033[31mERROR: In file " << location.file_name() << "(" << location.line()  << ':' << location.column() << "): " << location.function_name() << ": " << error_message.str() << "\033[0m" << std::endl;
 #define INFO(msg) std::cout << "\033[32mINFO: \033[0m" << msg << std::endl
 #define CRITICAL(msg) std::cerr << "\033[31mCRITICAL: " << msg << "\033[0m"  << std::endl
+
+
+struct Response {
+    web::http::status_code status;
+    web::json::value response;
+};

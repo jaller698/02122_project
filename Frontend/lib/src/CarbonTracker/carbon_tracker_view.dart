@@ -9,21 +9,31 @@ class CarbonTrackerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        semanticChildCount: 2,
         slivers: <Widget>[
           const SliverAppBar(
             title: Text('Today'),
           ),
-          SliverList.builder(
-            itemCount: 8,
-            itemBuilder: (context, index) {
-              ListTile(
-                title: const Text('Car'),
-                subtitle: Text(
-                    'At 15:38 - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}'),
-                trailing: const Text('42g'),
-              );
-            },
-          )
+          SliverList(
+            delegate: SliverChildListDelegate(
+              <Widget>[
+                Placeholder(
+                  fallbackHeight: 150,
+                ),
+              ],
+            ),
+          ),
+          // SliverList.builder(
+          //   itemCount: 8,
+          //   itemBuilder: (context, index) {
+          //     ListTile(
+          //       title: const Text('Car'),
+          //       subtitle: Text(
+          //           'At 15:38 - ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}'),
+          //       trailing: const Text('42g'),
+          //     );
+          //   },
+          // )
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

@@ -49,32 +49,33 @@ void RestAPIEndpoint::handle_head_request(http_request request) {
 *  Requests using GET should only be used to request data (they shouldn't include data)
 */
 void RestAPIEndpoint::handle_get_request(http_request request) {
-    //if (!is_request_valid(request)) {
-    //    return;
-    //}
-    std::string endpoint = request.relative_uri().to_string();
-    DEBUG_PRINT("Received a GET request, on endpoint: " + endpoint);
-
-    auto request_body = request.extract_json().get();
-    if (request_body.is_null() && endpoint == "/") {
-        request.reply(status_codes::OK, U("No data supplied"));
-        return;
-    }
-    json::value response_body;
     try {
+        std::string endpoint = request.relative_uri().to_string();
+        DEBUG_PRINT("Received a GET request, on endpoint: " + endpoint);
+        auto request_body = request.extract_json().get();
+        if (request_body.is_null() && endpoint == "/") {
+            request.reply(status_codes::OK, U("No data supplied"));
+            return;
+        }
+        json::value response_body;
         response_body = handle_data(endpoint, request_body, false);
         if (response_body.has_field("Fail")){
             request.reply(status_codes::Unauthorized);
             return;
         }
+        if (!response_body.is_null())
+            DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
+
+        request.reply(status_codes::OK, response_body);
     } catch (std::exception &e) {
         ERROR("Error in GET: ", e);
+        request.reply(status_codes::InternalError, e.what());
+        return;
+    } catch (...) {
+        CRITICAL("Unregonized error in GET");
         request.reply(status_codes::InternalError);
         return;
     }
-    DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
-
-    request.reply(status_codes::OK, response_body);
 }
 
 /*
@@ -83,37 +84,40 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
 *  PUT does not have any effect if invoked twice on the same resource. 
 */
 void RestAPIEndpoint::handle_put_request(http_request request) {
-    auto client_address = request.remote_address();
-    // ensure no PUT request is handled twice
-    for (const auto &_request : last_requests) {
-        if (_request.to_string() == request.to_string()) {
-            INFO("Request already handled");
-            request.reply(status_codes::NotModified);
-            return;
-        }
-    }
-    last_requests.push_back(request);
-    if (!is_request_valid(request, true)) {
-        request.reply(status_codes::BadRequest);
-        return;
-    }
-    std::string endpoint = request.relative_uri().to_string();
-    DEBUG_PRINT("Received a PUT request, on endpoint: " + endpoint);
-
     try {
-        request.extract_json().then([=](json::value request_body) {
-            DEBUG_PRINT("Recieved JSON data: " + request_body.serialize());
-            if (request_body.is_null()) {
-                request.reply(status_codes::BadRequest);
+        auto client_address = request.remote_address();
+        // ensure no PUT request is handled twice
+        for (const auto &_request : last_requests) {
+            if (_request.to_string() == request.to_string()) {
+                INFO("Request already handled");
+                request.reply(status_codes::NotModified);
                 return;
             }
-            json::value response_body = handle_data(endpoint, request_body, true);
+        }
+        last_requests.push_back(request);
+        if (!is_request_valid(request, true)) {
+            request.reply(status_codes::BadRequest);
+            return;
+        }
+        std::string endpoint = request.relative_uri().to_string();
+        DEBUG_PRINT("Received a PUT request, on endpoint: " + endpoint);
+        auto request_body = request.extract_json().get();
+        DEBUG_PRINT("Recieved JSON data: " + request_body.serialize());
+        if (request_body.is_null()) {
+            request.reply(status_codes::BadRequest);
+            return;
+        }
+        json::value response_body = handle_data(endpoint, request_body, true);
+        if (!response_body.is_null())
             DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
-            request.reply(status_codes::Created, response_body);
-        });
+        request.reply(status_codes::Created, response_body);
     } catch (const std::exception &e) {
         ERROR("Error in PUT: ", e);
         request.reply(status_codes::InternalError, e.what());
+    } catch (...) {
+        CRITICAL("Unregonized error in PUT");
+        request.reply(status_codes::InternalError);
+        return;
     }
 }
 
@@ -123,17 +127,16 @@ void RestAPIEndpoint::handle_put_request(http_request request) {
 * POST will have side effects if invoked multiple times on the same resource.
 */
 void RestAPIEndpoint::handle_post_request(http_request request) {
-    if (!is_request_valid(request, true)) {
-        request.reply(status_codes::BadRequest);
-        return;
-    }
+    try {
+        if (!is_request_valid(request, true)) {
+            request.reply(status_codes::BadRequest);
+            return;
+        }
 
-    std::string endpoint = request.relative_uri().to_string();
-
-    // Extract the JSON data from the request body
-    DEBUG_PRINT("Received a POST request, on endpoint: " + endpoint);
-
-    request.extract_json().then([=](json::value request_body) {
+        std::string endpoint = request.relative_uri().to_string();
+        // Extract the JSON data from the request body
+        DEBUG_PRINT("Received a POST request, on endpoint: " + endpoint);
+        auto request_body = request.extract_json().get();
         // Process the JSON data
         if (request_body.is_null()) {
             request.reply(status_codes::BadRequest);
@@ -141,16 +144,19 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
         }
         DEBUG_PRINT("Received JSON data: " + request_body.serialize());
         json::value response_body;
-        try {
-            response_body = handle_data(endpoint, request_body, true);
-        } catch (std::exception &e) {
+        response_body = handle_data(endpoint, request_body, true);
+        if (!response_body.is_null())
+            DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
+        request.reply(status_codes::Created, response_body);
+    } catch (std::exception &e) {
             ERROR("Error in POST: ", e);
             request.reply(status_codes::InternalError, e.what());
             return;
-        }
-        DEBUG_PRINT("Sends JSON data: " + response_body.serialize());
-        request.reply(status_codes::Created, response_body);
-    });
+    } catch (...) {
+        CRITICAL("Unregonized error in POST");
+        request.reply(status_codes::InternalError);
+        return;
+    }
 }
 
 bool RestAPIEndpoint::is_request_valid(const http_request &request, bool json_required, bool content_length_required) {

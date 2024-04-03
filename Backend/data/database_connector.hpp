@@ -3,8 +3,8 @@
 
 class dataBaseStart{
     private:
-        sql::mysql::MySQL_Driver *mysql_driver;
-        sql::Connection *connection;
+        sql::mysql::MySQL_Driver *mysql_driver = sql::mysql::get_mysql_driver_instance();
+        sql::Connection *connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
         sql::Statement *statement;
         sql::ResultSet *result_set;
         std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 6);

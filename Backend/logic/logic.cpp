@@ -15,6 +15,29 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/comparison", handle_comparison}
 };
 
+int calculateCarbonScore (std::vector<int> answers)
+{
+    //some of the questions in weeks, but we measure in years, so we time them with 52
+    int res=0;
+    //Q1
+    res=res+answers[0]*90;
+    //Q2
+    res=res+answers[1]*31*52;
+    //Q3
+    res=res+(answers[2]*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
+    //Q4
+    res=res+answers[3]*60*7*2.4*((100-57.5)/100)*52;
+    //Q5
+    if(answers[4]==0){
+        res=res+60*2;
+    }else{
+        res=res+60/answers[4];
+    }
+    //Q6
+    res=res+answers[5]*0;
+    return res;
+}
+
 // Function which based on the endpoint, sends the data to the correct handler
 struct Response handle_data(const std::string &endpoint, web::json::value request_body, bool write_data)
 {
@@ -43,23 +66,29 @@ struct Response handle_data(const std::string &endpoint, web::json::value reques
 struct Response handle_questions_write(const web::json::value &request_body)
 {
     try {
-        auto title = request_body.at("title").as_string();
-        auto userID = request_body.at("userID").as_string();
-        web::json::value tmp = request_body.at("answers");
-        std::vector<std::string> answers;
-        answers.push_back(userID);
-        auto it = tmp.as_object().begin();
-        std::advance(it, 1);
-        for (auto &answer : tmp.as_object())
-        {
-            answers.push_back(answer.second.as_string());
-        }
-        dataBaseStart db;
-        db.insert("InitialSurvey", answers);
-        auto carbonScore = -1; // TODO calculate carbon score
-        web::json::value response = web::json::value::object();
-        response["response"]["carbonScore"] = web::json::value::number(carbonScore);
-        return Response(http::status_codes::OK, response);
+            auto title = request_body.at("title").as_string();
+            auto userID = request_body.at("userID").as_string();
+            web::json::value tmp = request_body.at("answers");
+           
+            std::vector<std::string> answers;
+            answers.push_back(userID);
+            auto it = tmp.as_object().begin();
+            std::advance(it, 1);
+            //Det er lige nu lavet til at spørgsmålene altid returnere Ints, hvis noget ændres skal dette omskrives.
+            std::vector<int> ansMath;
+            for (auto &answer : tmp.as_object())
+            {
+                ansMath.push_back(answer.second.as_integer());
+                answers.push_back(answer.second.as_string());
+
+            }
+            dataBaseStart db;
+            db.insert("InitialSurvey",answers);
+            int carbonScore = calculateCarbonScore(ansMath);
+            web::json::value response = web::json::value::object();
+            response["response"]["carbonScore"] = web::json::value::number(carbonScore);
+            db.updateUserScore(userID, carbonScore);
+            return Response(http::status_codes::OK, response);
     } catch (const std::exception &e) {
         ERROR("Error in handling writing questions: ", e);
         return Response(http::status_codes::InternalError, web::json::value::null());

@@ -11,7 +11,7 @@ class CarbonTrackerView extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           const SliverAppBar(
-            title: Text('date'),
+            title: Text('Today'),
           ),
           SliverList.builder(
             itemCount: 8,
@@ -27,7 +27,7 @@ class CarbonTrackerView extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Add task'),
+        label: const Text('Record action'),
         icon: const Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet<void>(

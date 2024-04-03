@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 
@@ -35,9 +36,9 @@ class DashboardView extends StatelessWidget {
           ),
         ),
         const Divider(),
-        const Row(
+        Row(
           children: [
-            Expanded(
+            const Expanded(
               flex: 2,
               child: Placeholder(
                 fallbackHeight: 150,
@@ -45,8 +46,18 @@ class DashboardView extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: Placeholder(
-                fallbackHeight: 150,
+              child: Card.outlined(
+                child: InkWell(
+                  child: const SizedBox(
+                    height: 150,
+                    child: Icon(
+                      Icons.settings_rounded,
+                      size: 125,
+                    ),
+                  ),
+                  onTapUp: (_) => Navigator.restorablePushNamed(
+                      context, SettingsView.routeName),
+                ),
               ),
             ),
           ],

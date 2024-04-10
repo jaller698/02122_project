@@ -3,6 +3,11 @@
 
 using namespace std;
 
+dataBaseStart::~dataBaseStart()
+{
+    delete connection;
+}
+
 void dataBaseStart::init()
 {
 
@@ -88,6 +93,20 @@ void dataBaseStart::init()
         DEBUG_PRINT("Table 'Questions' created successfully.");
         delete statement;
 
+        // Create default account for 'guests user', if not already present
+        if (
+            statement = connection->createStatement(), 
+            statement->execute("SELECT * FROM CarbonFootprint.Users WHERE Username='guest'"), 
+            result_set = statement->getResultSet(), 
+            result_set->next())
+        {
+            DEBUG_PRINT("Guest user already exists");
+        } else {
+            DEBUG_PRINT("Creating guest user");
+            statement = connection->createStatement();
+            statement->execute("INSERT INTO CarbonFootprint.Users (Username,Password,CarbonScore) \
+	                            VALUES ('guest','password',-1);");
+        }
         updateQuestions();
         
     }
@@ -151,9 +170,7 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
         connection->setSchema("CarbonFootprint");
         if (table == "Users")
         {
-            /* code */
             // set all the variables to the input answers
-            //UPDATE THIS FOR WHEN WE IMPLEMENT PASSWORDS/CARBONSCORE
             statement = connection->createStatement();
             std::string command = "INSERT into " + table + " VALUES('" + input[0] + "', '" + input[1] + "', '" + input[2] + "')";
             DEBUG_PRINT(command);
@@ -196,6 +213,8 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
 
 void dataBaseStart::updateUserScore(std::string username, int score){
     connection->setSchema("CarbonFootprint");
+    if (username == "guest")
+        return;
     std::string command = "UPDATE Users SET CarbonScore = " + std::to_string(score) + " WHERE Username = '" + username + "'";
     statement = connection->createStatement();
     statement->execute(command);
@@ -265,3 +284,21 @@ void dataBaseStart::updateQuestions()
         ERROR("Error in updateQuestions: ", e);
     }
 }
+
+#if defined DEBUG || defined TEST
+void dataBaseStart::reset()
+{
+    try {
+        connection->setSchema("CarbonFootprint");
+        statement = connection->createStatement();
+        statement->execute("DROP DATABASE CarbonFootprint");
+        delete statement;
+        init();
+    } catch (sql::SQLException &e) {
+        ERROR("Error in reset: ", e);
+    }
+}
+#endif
+
+
+

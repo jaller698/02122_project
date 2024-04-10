@@ -104,7 +104,24 @@ class _SignUpDialogState extends State<SignUpDialog> {
                                 _formKey.currentState!.value['password']
                                     as String);
                             futureSession.then((value) {
-                              Navigator.pop(context, true);
+                              if (value) {
+                                Navigator.pop(context, true);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Sign up failed'),
+                                    content: const Text(
+                                        'User already exists'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             });
                           }
                         },

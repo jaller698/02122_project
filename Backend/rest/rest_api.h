@@ -7,6 +7,7 @@ using namespace web::http::experimental::listener;
 
 class RestAPIEndpoint {
 public:
+    ~RestAPIEndpoint();
     RestAPIEndpoint();
     void listen();
 

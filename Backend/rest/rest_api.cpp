@@ -7,6 +7,10 @@ RestAPIEndpoint::RestAPIEndpoint() : listener_("http://0.0.0.0:8080") {
     listener_.support(methods::HEAD, std::bind(&RestAPIEndpoint::handle_head_request, this, std::placeholders::_1));
 }
 
+RestAPIEndpoint::~RestAPIEndpoint() {
+    listener_.close().wait();
+}
+
 void RestAPIEndpoint::listen() {
     DEBUG_PRINT("Listening on " + listener_.uri().to_string());
     try {
@@ -16,8 +20,10 @@ void RestAPIEndpoint::listen() {
                 INFO("Server is ready & listening...");
             })
             .wait();
-        std::cin.get();
-        listener_.close().wait();
+        listener_.open().wait();
+        while(true){
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
     }
     catch (const std::exception &e) {
         ERROR("We should not have any exceptions here, but got one Error: ", e);

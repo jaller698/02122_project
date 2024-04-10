@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/utils/utils.dart';
 
-class CarbonTrackerController {
+class CarbonTrackerController with ChangeNotifier {
   // singleton
   CarbonTrackerController._hiddenConstructor();
   static final CarbonTrackerController _singleton =
       CarbonTrackerController._hiddenConstructor();
   factory CarbonTrackerController() => _singleton;
 
-  static List<CarbonTrackerItem>? _carbonTrackerItems;
-  static Future<List<CarbonTrackerItem>> get carbonTrackerItems {
+  List<CarbonTrackerItem>? _carbonTrackerItems;
+  Future<List<CarbonTrackerItem>> get carbonTrackerItems {
     if (_carbonTrackerItems == null) {
       return loadTrackerItems();
     }
@@ -22,13 +23,13 @@ class CarbonTrackerController {
 
   static late Future<Database> _database;
 
-  static Future<List<CarbonTrackerItem>> loadTrackerItems() async {
+  Future<List<CarbonTrackerItem>> loadTrackerItems() async {
     print('opendatabase');
     _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE carbon(id INTEGER PRIMARY KEY, name TEXT, type BLOB, score INTEGER, date TEXT)',
+          'CREATE TABLE carbon(id INTEGER PRIMARY KEY, name TEXT, type TEXT, score INTEGER, date TEXT)',
         );
       },
       version: 1,
@@ -41,20 +42,23 @@ class CarbonTrackerController {
       for (final {
             'id': id as int,
             'name': name as String,
-            'type': type as CarbonTackerType,
+            'type': type as String,
             'score': carbonScore as int,
             'date': dateAdded as String,
           } in carbonItemsMaps)
-        CarbonTrackerItem(id, name, type, carbonScore,
-            DateTime.tryParse(dateAdded) ?? DateTime(0)),
+        CarbonTrackerItem(name, CarbonTackerType.values.byName(type),
+            carbonScore, DateTime.tryParse(dateAdded) ?? DateTime(0),
+            id: id),
     ];
 
     _carbonTrackerItems = items;
 
+    notifyListeners();
+
     return items;
   }
 
-  static Future<void> updateTrackerItems(CarbonTrackerItem item) async {
+  Future<void> updateTrackerItems(CarbonTrackerItem item) async {
     final db = await _database;
 
     await db.update(
@@ -67,19 +71,23 @@ class CarbonTrackerController {
     await loadTrackerItems();
   }
 
-  static Future<void> addTrackerItem(CarbonTrackerItem item) async {
+  Future<void> addTrackerItem(CarbonTrackerItem item) async {
     final db = await _database;
+
+    var itemMap = item.toMap();
+
+    itemMap['id'] = _carbonTrackerItems?.length ?? 0;
 
     await db.insert(
       'carbon',
-      item.toMap(),
+      itemMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
     await loadTrackerItems();
   }
 
-  static Future<void> removeTrackerItem(int id) async {
+  Future<void> removeTrackerItem(int id) async {
     final db = await _database;
 
     await db.delete(
@@ -93,27 +101,27 @@ class CarbonTrackerController {
 }
 
 class CarbonTrackerItem {
-  final int id;
+  final int? id;
   final String name;
   final CarbonTackerType type;
   final int carbonScore;
   final DateTime dateAdded;
 
   CarbonTrackerItem(
-    this.id,
     this.name,
     this.type,
     this.carbonScore,
-    this.dateAdded,
-  );
+    this.dateAdded, {
+    this.id,
+  });
 
   Map<String, Object?> toMap() {
     return {
       'id': id,
       'name': name,
-      'type': type,
+      'type': type.name,
       'score': carbonScore,
-      'date': dateAdded,
+      'date': dateAdded.toString(),
     };
   }
 

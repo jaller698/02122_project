@@ -1,6 +1,6 @@
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'package:carbon_footprint/src/Views/main_view.dart';
+import 'package:carbon_footprint/src/main_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

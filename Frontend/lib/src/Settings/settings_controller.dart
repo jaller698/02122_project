@@ -35,9 +35,9 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
     await _settingsService.updateThemeMode(newThemeMode);
   }
-  
+
   Future<void> logout() async {
     //this likely isnt enough, but hey lets see :)
-    UserController().username="";
+    UserController().username = "";
   }
 }

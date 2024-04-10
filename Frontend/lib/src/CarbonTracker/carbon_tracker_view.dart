@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
 
-  CarbonTrackerController control = CarbonTrackerController();
+  final CarbonTrackerController control = CarbonTrackerController();
 
   @override
   Widget build(BuildContext context) {

@@ -9,9 +9,8 @@ Future<CarbonForm> fetchCarbonForm() async {
       await jsonDecode(await rootBundle.loadString('assets/carbon_form.json'))
           as Map<String, dynamic>);
   */
-  final response = await http
-      .get(Uri.parse('${SettingsController.address}/questions'))
-      .timeout(const Duration(seconds: 5));
+  final response =
+      await http.get(Uri.parse('${SettingsController.address}/questions'));
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

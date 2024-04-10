@@ -132,6 +132,13 @@ struct Response handle_signup(const web::json::value &request_body)
     userInfo.push_back(password);
     userInfo.push_back(score);
     dataBaseStart db;
+
+    // check if user already exists
+    if (!db.get("Users", username).has_field("Fail"))
+    {
+        return Response(http::status_codes::Conflict, web::json::value::null());
+    }
+
     db.insert("Users", userInfo);
     web::json::value response = web::json::value::object();
     response["response"] = web::json::value::string("User created");
@@ -151,8 +158,15 @@ struct Response handle_login(const web::json::value &request_body)
         auto db_response = db.get("Users", Name);
 
         // compare the two passwords
+        struct Response response;
+        if (db_response.has_field("Fail"))
+        {
+            DEBUG_PRINT("User not found");
+            response.response = web::json::value::null();
+            response.status = web::http::status_codes::Unauthorized;
+            return response;
+        }
         DEBUG_PRINT("Comparing passwords: " + db_response.at("Pass").serialize() + " with " + request_body.at("Password").serialize());
-        struct Response response; 
         if (db_response.at("Pass").as_string() == request_body.at("Password").as_string())
         {
             DEBUG_PRINT("Passwords matched");

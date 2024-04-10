@@ -7,7 +7,7 @@ class UserController {
   // user account data
   String? _username;
   String get username {
-    return _username ?? 'account';
+    return _username ?? 'guest';
   }
   set username(String v) {
     _username=v;

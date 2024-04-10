@@ -69,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
                       child: FilledButton(
                           onPressed: () {
                             if (_formKey.currentState?.saveAndValidate() ??
-                                false) {
+                                false) {    
                               Future<bool> futureSession = getUserSession(
                                   _formKey.currentState!.value['username']
                                       as String,
@@ -80,8 +80,20 @@ class _LoginViewState extends State<LoginView> {
                                   Navigator.popAndPushNamed(
                                       context, MainView.routeName);
                                 } else {
-                                  // TODO fail to login
-                                }
+                                      showDialog( 
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: const Text('Login failed'),
+                                          content: const Text('Invalid username or password'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context),
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                      )
+                                    );
+                                  }
                               });
                             }
                           },

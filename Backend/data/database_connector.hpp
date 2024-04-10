@@ -10,12 +10,14 @@ class dataBaseStart{
         std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 6);
         web::json::value readQuestions();
         void updateQuestions();
+        void reset();
     public:
         void insert(std::string table, std::vector<std::string> input);
         web::json::value get(std::string table, std::string key);
         void updateUserScore(std::string username, int score);
         void updateUserScore(std::string username, double score);
         void init();
+        ~dataBaseStart();
 
 
 };

@@ -28,7 +28,7 @@ class CarbonForm {
         List<CarbonQuestion>.empty(growable: true);
     for (MapEntry element in questions.entries) {
       questions0.add(CarbonQuestion(
-          title: element.key,
+          title: element.key.toString().split('_').last,
           type: CarbonQuestionType.values
               .firstWhere((e) => e.name == element.value)));
     }

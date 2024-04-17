@@ -144,7 +144,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         output = statement->executeQuery(command);
         web::json::value questions = web::json::value::object();
         while (output->next()) {
-            questions[output->getString("Question")] = web::json::value::string(output->getString("Type"));
+            questions[output->getString("ID") + "_" + output->getString("Question")] = web::json::value::string(output->getString("Type"));
         }
 
         return questions;

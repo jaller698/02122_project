@@ -10,7 +10,7 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(CarbonFormAnswer.toJson(answer)),
+    body: jsonEncode(CarbonFormAnswer.toMap(answer)),
   );
 
   if (response.statusCode == 201) {

@@ -9,7 +9,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 class CarbonFormQuestionnaire extends StatefulWidget {
   CarbonFormQuestionnaire({super.key, required carbonForm})
-      : _carbonForm = CarbonForm.fromJson(carbonForm);
+      : _carbonForm = CarbonForm.fromMap(carbonForm);
 
   static const routeName = 'carbonform/questionnaire';
 
@@ -38,6 +38,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
             var _question = widget._carbonForm.questions[index];
 
             switch (_question.type) {
+              // TODO - fix hint wraping
               case CarbonQuestionType.int:
                 return FormBuilderTextField(
                   name: _question.title,

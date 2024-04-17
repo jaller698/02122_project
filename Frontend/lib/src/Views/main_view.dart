@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import '../CarbonTracker/carbon_tracker_view.dart';
 import '../Dashboard/dashboard_view.dart';
+import '../CarbonStats/Carbon_stat_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -50,8 +51,10 @@ class _MainViewState extends State<MainView> {
               )
             ],
           ),
+          const CarbonStatView(),
           const Placeholder(
-              child: Center(child: Card(child: Text('Column BARS, todo')))),
+              child: Center(child: Card(child: Text('Column BARS, todo')))
+              ),
         ][_currentPageIndex],
       ),
 

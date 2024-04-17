@@ -1,4 +1,6 @@
+import 'package:carbon_footprint/src/CarbonForm/carbon_form_questionnaire.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
+import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_view.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:carbon_footprint/src/main_view.dart';
 import 'package:flutter/foundation.dart';
@@ -32,8 +34,8 @@ class MyApp extends StatelessWidget {
                   if (kIsWeb) {
                     // web page routes
                     switch (routeSettings.name) {
-                      case CarbonFormView.routeName:
-                        return CarbonFormView(
+                      case CarbonFormQuestionnaire.routeName:
+                        return CarbonFormQuestionnaire(
                             carbonForm: routeSettings.arguments);
                       case MainView.routeName:
                       default:
@@ -43,12 +45,16 @@ class MyApp extends StatelessWidget {
                     // app page routes
                     switch (routeSettings.name) {
                       case CarbonFormView.routeName:
-                        return CarbonFormView(
+                        return const CarbonFormView();
+                      case CarbonFormQuestionnaire.routeName:
+                        return CarbonFormQuestionnaire(
                             carbonForm: routeSettings.arguments);
                       case SettingsView.routeName:
                         return const SettingsView();
                       case MainView.routeName:
                         return const MainView();
+                      case CarbonTrackerView.routeName:
+                        return CarbonTrackerView();
                       default:
                         return const LoginView();
                     }

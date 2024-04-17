@@ -19,6 +19,7 @@
 #include <utility>
 
 // Our headers
+#include "logic/calculate_score.h"
 #include "logic/logic.h"
 #include "data/database_connector.hpp"
 #include "rest/rest_api.h"

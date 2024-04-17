@@ -3,6 +3,7 @@ import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'CarbonForm/carbon_form_view.dart';
 import 'CarbonTracker/carbon_tracker_view.dart';
 import 'Dashboard/dashboard_view.dart';
 import 'CarbonStats/Carbon_stat_view.dart';
@@ -22,37 +23,14 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // list of widgets to switch between depending on the current page index
-      body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
-          double xPos = details.delta.dx;
-
-          print(xPos);
-
-          // swipe right
-          if (xPos > 0) {
-            setState(() => _currentPageIndex++);
-          }
-
-          // swipe left
-          if (xPos < 0) {
-            setState(() => _currentPageIndex--);
-          }
-        },
-        child: <Widget>[
-          const DashboardView(),
-          CarbonTrackerView(),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CarbonFormButton(),
-            ],
-          ),
-          const CarbonStatView(),
-          const Placeholder(
-              child: Center(child: Card(child: Text('Column BARS, todo')))
-              ),
-        ][_currentPageIndex],
-      ),
+      body: <Widget>[
+        const DashboardView(),
+        CarbonTrackerView(),
+        const CarbonFormView(),
+        const CarbonStatView(),
+        const Placeholder(
+            child: Center(child: Card(child: Text('Column BARS, todo')))),
+      ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[

@@ -20,6 +20,6 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to create album.' + response.statusCode.toString());
+    throw Exception('Failed to create form.' + response.statusCode.toString());
   }
 }

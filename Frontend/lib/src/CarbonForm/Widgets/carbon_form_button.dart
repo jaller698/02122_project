@@ -1,6 +1,6 @@
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/CarbonForm/Widgets/snackbar_catch_error.dart';
-import 'package:carbon_footprint/src/CarbonForm/carbon_form_view.dart';
+import 'package:carbon_footprint/src/CarbonForm/carbon_form_questionnaire.dart';
 import 'package:flutter/material.dart';
 
 import '../http/carbon_form_fetch.dart';
@@ -19,9 +19,8 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: [
-      ElevatedButton(
+    return [
+      FloatingActionButton(
         onPressed: () {
           // request form data from server
           Future<CarbonForm> futureCarbonForm = fetchCarbonForm();
@@ -34,7 +33,8 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
           futureCarbonForm.then((value) {
             setState(() => awatingData = false);
 
-            Navigator.restorablePushNamed(context, CarbonFormView.routeName,
+            Navigator.restorablePushNamed(
+                context, CarbonFormQuestionnaire.routeName,
                 arguments: CarbonForm.toJson(value));
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
           }).catchError((error) {
@@ -43,9 +43,12 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
             SnackBarCatchError(context, error);
           });
         },
-        child: const Text("request form"),
+        child: const Icon(Icons.cloud_download),
       ),
-      const CircularProgressIndicator.adaptive(),
-    ][awatingData ? 1 : 0]);
+      FloatingActionButton(
+        onPressed: () {},
+        child: const CircularProgressIndicator.adaptive(),
+      ),
+    ][awatingData ? 1 : 0];
   }
 }

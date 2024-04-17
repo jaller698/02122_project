@@ -6,6 +6,8 @@ import 'package:carbon_footprint/src/user_controller.dart';
 class CarbonStatView extends StatelessWidget {
   const CarbonStatView({super.key});
 
+  static const routeName = '/carbonstats';
+
   static final CarbonStatController _carbonController = CarbonStatController();
 
   @override

@@ -1,13 +1,15 @@
 class CarbonForm {
+  final int id;
   final String title;
   final List<CarbonQuestion> questions;
 
   const CarbonForm({
+    this.id = -1,
     required this.title,
     required this.questions,
   });
 
-  factory CarbonForm.fromJson(Map<String, dynamic> json) {
+  factory CarbonForm.fromMap(Map<String, dynamic> json) {
     print(json);
     return switch (json) {
       {
@@ -16,13 +18,13 @@ class CarbonForm {
       } =>
         CarbonForm(
           title: title,
-          questions: convertQuestionsFromJson(questions),
+          questions: convertQuestionsFromMap(questions),
         ),
       _ => throw const FormatException('Failed to decode carbon form'),
     };
   }
 
-  static List<CarbonQuestion> convertQuestionsFromJson(
+  static List<CarbonQuestion> convertQuestionsFromMap(
       Map<String, dynamic> questions) {
     List<CarbonQuestion> questions0 =
         List<CarbonQuestion>.empty(growable: true);
@@ -36,16 +38,16 @@ class CarbonForm {
     return questions0;
   }
 
-  static Map<String, dynamic> toJson(CarbonForm form) {
+  static Map<String, dynamic> toMap(CarbonForm form) {
     Map<String, dynamic> m = <String, dynamic>{};
 
     m['title'] = form.title;
-    m['questions'] = convertQuestionsToJson(form.questions);
+    m['questions'] = convertQuestionsToMap(form.questions);
 
     return m;
   }
 
-  static Map<String, dynamic> convertQuestionsToJson(
+  static Map<String, dynamic> convertQuestionsToMap(
       List<CarbonQuestion> questions) {
     Map<String, dynamic> m = <String, dynamic>{};
 

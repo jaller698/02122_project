@@ -14,7 +14,7 @@ Future<CarbonForm> fetchCarbonForm() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return CarbonForm.fromJson(
+    return CarbonForm.fromMap(
         jsonDecode(response.body) as Map<String, dynamic>);
   } else {
     // If the server did not return a 200 OK response,

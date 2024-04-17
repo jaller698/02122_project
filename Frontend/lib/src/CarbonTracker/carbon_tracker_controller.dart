@@ -22,7 +22,6 @@ class CarbonTrackerController with ChangeNotifier {
   static late Future<Database> _database;
 
   Future<List<CarbonTrackerItem>> loadTrackerItems() async {
-    print('opendatabase');
     _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {

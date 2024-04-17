@@ -9,7 +9,7 @@ class CarbonFormAnswer {
     required this.anwsers,
   });
 
-  factory CarbonFormAnswer.fromJson(Map<String, dynamic> json) {
+  factory CarbonFormAnswer.fromMap(Map<String, dynamic> json) {
     return switch (json) {
       {
         'title': String title,
@@ -25,7 +25,7 @@ class CarbonFormAnswer {
     };
   }
 
-  static Map<String, dynamic> toJson(CarbonFormAnswer form) {
+  static Map<String, dynamic> toMap(CarbonFormAnswer form) {
     Map<String, dynamic> m = <String, dynamic>{};
 
     m['title'] = form.title;

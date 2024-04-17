@@ -23,31 +23,14 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // list of widgets to switch between depending on the current page index
-      body: GestureDetector(
-        onHorizontalDragUpdate: (details) {
-          double xPos = details.delta.dx;
-
-          print(xPos);
-
-          // swipe right
-          if (xPos > 0) {
-            setState(() => _currentPageIndex++);
-          }
-
-          // swipe left
-          if (xPos < 0) {
-            setState(() => _currentPageIndex--);
-          }
-        },
-        child: <Widget>[
-          const DashboardView(),
-          CarbonTrackerView(),
-          const CarbonFormView(),
-          const CarbonStatView(),
-          const Placeholder(
-              child: Center(child: Card(child: Text('Column BARS, todo')))),
-        ][_currentPageIndex],
-      ),
+      body: <Widget>[
+        const DashboardView(),
+        CarbonTrackerView(),
+        const CarbonFormView(),
+        const CarbonStatView(),
+        const Placeholder(
+            child: Center(child: Card(child: Text('Column BARS, todo')))),
+      ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[

@@ -164,6 +164,16 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
     return web::json::value::null();
 }
 
+void dataBaseStart::insert(std::string table, std::vector<int> input)
+{
+    std::vector<std::string> inputStr;
+    for (auto &i : input)
+    {
+        inputStr.push_back(std::to_string(i));
+    }
+    insert(table, inputStr);
+}
+
 void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 {
     try {
@@ -285,7 +295,6 @@ void dataBaseStart::updateQuestions()
     }
 }
 
-#if defined DEBUG || defined TEST
 void dataBaseStart::reset()
 {
     try {
@@ -298,7 +307,6 @@ void dataBaseStart::reset()
         ERROR("Error in reset: ", e);
     }
 }
-#endif
 
 
 

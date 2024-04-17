@@ -9,13 +9,21 @@ class RestAPIEndpointTest : public ::testing::Test {
 protected:
     void SetUp() override {
         // Set up any necessary resources before each test
-        createTableAndShowContents();
-        std::thread rest_api_thread([&]() {
-            RestAPIEndpoint rest_api_endpoint;
-            rest_api_endpoint.listen();
-        });
+        try {
+            dataBaseStart db;
+            db.init();
+            //RestAPIEndpoint rest_api_endpoint;
+            //rest_api_endpoint.listen();
+        
+        } catch (const std::exception& e) {
+            ERROR("Error in top-level of test setup ", e);
+        } catch (...) {
+            ERROR("Unknown error in top-level of program", std::runtime_error("Unknown error"));
+        }
     }
     void TearDown() override {
+        dataBaseStart db;
+        db.reset();
         // Clean up any resources after each test
     }
 
@@ -52,7 +60,7 @@ protected:
 TEST_F(RestAPIEndpointTest, ValidGetRequest) {
 
     // Send a valid GET request
-    auto response = sendGetRequest("/users");
+    auto response = sendGetRequest("");
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 

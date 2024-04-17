@@ -3,9 +3,9 @@ import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../CarbonTracker/carbon_tracker_view.dart';
-import '../Dashboard/dashboard_view.dart';
-import '../CarbonStats/Carbon_stat_view.dart';
+import 'CarbonTracker/carbon_tracker_view.dart';
+import 'Dashboard/dashboard_view.dart';
+import 'CarbonStats/Carbon_stat_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -40,15 +40,11 @@ class _MainViewState extends State<MainView> {
         },
         child: <Widget>[
           const DashboardView(),
-          const CarbonTrackerView(),
-          Column(
+          CarbonTrackerView(),
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CarbonFormButton(),
-              FilledButton(
-                child: const Text('settings'),
-                onPressed: () => showLicensePage(context: context),
-              )
+              CarbonFormButton(),
             ],
           ),
           const CarbonStatView(),

@@ -44,14 +44,14 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               OutlinedButton(
-                    onPressed: () {
-                      _settingsController.logout();
-                      Navigator.popAndPushNamed(context, LoginView.routeName);
-                    },
-                    child: const Text('Sign Out')
-              ),
-              
-
+                  onPressed: () {
+                    _settingsController.logout();
+                    Navigator.popAndPushNamed(context, LoginView.routeName);
+                  },
+                  child: const Text('Sign Out')),
+              OutlinedButton(
+                  onPressed: () => showLicensePage(context: context),
+                  child: const Text('Licenses')),
             ],
           ),
         ),

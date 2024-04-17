@@ -15,36 +15,6 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/comparison", handle_comparison}
 };
 
-double calculateCarbonScore (std::vector<int> answers)
-{
-    try {
-        //some of the questions in weeks, but we measure in years, so we time them with 52
-        DEBUG_PRINT("Calculating carbon score")
-        double res=0;
-        //Q1
-        res+=answers.at(0)*90;
-        //Q2
-        res+=answers.at(1)*31*52;
-        //Q3
-        res+=(answers.at(2)*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
-        //Q4
-        res += (answers.at(3))*60*7*2.4*((100-57.5)/100)*52;
-        //Q5
-        if(answers.at(4) == 0){
-            res += 60*2;
-        }else{
-            res += 60/(answers.at(4));
-        }
-        //Q6
-        res += answers.at(5)*0;
-        DEBUG_PRINT("Got a carbon score of: " + std::to_string(res));
-        return res;
-    } catch (const std::exception &e) {
-        ERROR("Error in calculating carbon score: ", e);
-        throw e;
-    }
-}
-
 // Function which based on the endpoint, sends the data to the correct handler
 struct Response handle_data(const std::string &endpoint, web::json::value request_body, bool write_data)
 {
@@ -81,15 +51,18 @@ struct Response handle_questions_write(const web::json::value &request_body)
             answers.push_back(userID);
             auto it = tmp.as_object().begin();
             std::advance(it, 1);
-            std::vector<int> ansMath;
             for (auto &answer : tmp.as_object())
             {
-                ansMath.push_back(stoi(answer.second.as_string()));
-                answers.push_back(answer.second.as_string());
+                if (answer.second.is_string())
+                {
+                    answers.push_back(answer.second.as_string());
+                    continue;
+                } else {
+                    answers.push_back(std::to_string(answer.second.as_integer()));
+                }
             }
             dataBaseStart db;
-            db.insert("InitialSurvey",answers);
-            double carbonScore = (double) calculateCarbonScore(ansMath);
+            double carbonScore = (double) calculateCarbonScore(answers);
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
             DEBUG_PRINT("updating carbon score to: " + std::to_string(carbonScore));
@@ -132,6 +105,13 @@ struct Response handle_signup(const web::json::value &request_body)
     userInfo.push_back(password);
     userInfo.push_back(score);
     dataBaseStart db;
+
+    // check if user already exists
+    if (!db.get("Users", username).has_field("Fail"))
+    {
+        return Response(http::status_codes::Conflict, web::json::value::null());
+    }
+
     db.insert("Users", userInfo);
     web::json::value response = web::json::value::object();
     response["response"] = web::json::value::string("User created");
@@ -151,8 +131,15 @@ struct Response handle_login(const web::json::value &request_body)
         auto db_response = db.get("Users", Name);
 
         // compare the two passwords
+        struct Response response;
+        if (db_response.has_field("Fail"))
+        {
+            DEBUG_PRINT("User not found");
+            response.response = web::json::value::null();
+            response.status = web::http::status_codes::Unauthorized;
+            return response;
+        }
         DEBUG_PRINT("Comparing passwords: " + db_response.at("Pass").serialize() + " with " + request_body.at("Password").serialize());
-        struct Response response; 
         if (db_response.at("Pass").as_string() == request_body.at("Password").as_string())
         {
             DEBUG_PRINT("Passwords matched");

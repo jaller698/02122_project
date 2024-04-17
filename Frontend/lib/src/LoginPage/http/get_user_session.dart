@@ -23,7 +23,6 @@ Future<bool> getUserSession(String username, String password) async {
     UserController().username = username;
     return true;
   } else if (response.statusCode == 401) {
-    // todo
     return false;
   } else {
     throw Exception('Failed to login user.');

@@ -7,10 +7,11 @@ class UserController {
   // user account data
   String? _username;
   String get username {
-    return _username ?? 'account';
+    return _username ?? 'guest';
   }
+
   set username(String v) {
-    _username=v;
+    _username = v;
   }
 
   String? _sessionID;
@@ -21,6 +22,7 @@ class UserController {
 
 class _UserData {
   final String username;
+  int carbonScore;
 
-  _UserData(this.username);
+  _UserData(this.username, {this.carbonScore = 0});
 }

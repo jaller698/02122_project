@@ -1,6 +1,8 @@
 import 'package:carbon_footprint/src/Settings/settings_service.dart';
 import 'package:flutter/material.dart';
 
+import 'package:carbon_footprint/src/user_controller.dart';
+
 class SettingsController with ChangeNotifier {
   // singleton
   SettingsController._hiddenConstructor();
@@ -32,5 +34,10 @@ class SettingsController with ChangeNotifier {
     // Important! Inform listeners a change has occurred.
     notifyListeners();
     await _settingsService.updateThemeMode(newThemeMode);
+  }
+
+  Future<void> logout() async {
+    //this likely isnt enough, but hey lets see :)
+    UserController().username = "";
   }
 }

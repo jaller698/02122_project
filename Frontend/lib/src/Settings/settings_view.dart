@@ -2,6 +2,8 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../LoginPage/login_view.dart';
+
 class SettingsView extends StatefulWidget {
   const SettingsView({
     super.key,
@@ -40,7 +42,16 @@ class _SettingsViewState extends State<SettingsView> {
                       ? _settingsController.updateThemeMode(ThemeMode.dark)
                       : _settingsController.updateThemeMode(ThemeMode.light);
                 },
-              )
+              ),
+              OutlinedButton(
+                  onPressed: () {
+                    _settingsController.logout();
+                    Navigator.popAndPushNamed(context, LoginView.routeName);
+                  },
+                  child: const Text('Sign Out')),
+              OutlinedButton(
+                  onPressed: () => showLicensePage(context: context),
+                  child: const Text('Licenses')),
             ],
           ),
         ),

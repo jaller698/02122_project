@@ -1,5 +1,5 @@
 import 'package:carbon_footprint/src/LoginPage/http/get_user_session.dart';
-import 'package:carbon_footprint/src/Views/main_view.dart';
+import 'package:carbon_footprint/src/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -11,6 +11,7 @@ class LoginView extends StatefulWidget {
     super.key,
   });
 
+  static const routeName = '/LoginPage';
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -79,7 +80,20 @@ class _LoginViewState extends State<LoginView> {
                                   Navigator.popAndPushNamed(
                                       context, MainView.routeName);
                                 } else {
-                                  // TODO fail to login
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: const Text('Login failed'),
+                                            content: const Text(
+                                                'Invalid username or password'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ));
                                 }
                               });
                             }

@@ -1,3 +1,5 @@
+#define TEST_ENVIROMENT
+
 #include <gtest/gtest.h>
 #include "common.h"
 #include <cmath>
@@ -10,6 +12,10 @@ double squareRoot(double n) {
 
 int main(int argc, char** argv) {
     INFO("Running main_test.cpp");
+    std::thread rest_api_thread = std::thread([]() {
+        RestAPIEndpoint rest_api_endpoint;
+        rest_api_endpoint.listen();
+    });
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

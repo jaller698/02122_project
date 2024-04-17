@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
 
+  static const routeName = '/carbontracker';
+
   final CarbonTrackerController control = CarbonTrackerController();
 
   @override
@@ -23,8 +25,10 @@ class CarbonTrackerView extends StatelessWidget {
                     final item = snapshot.data![count - index];
                     return ListTile(
                       leading: Icon(item.type.icon),
-                      title: Text(item.name),
-                      subtitle: Text(item.type.text),
+                      title: Text(item.type.text),
+                      subtitle: Text(
+                          '${item.dateAdded.hour}:${item.dateAdded.second}'),
+                      trailing: Text(item.carbonScore.toString()),
                       onTap: () {
                         control.removeTrackerItem(item.id!);
                       },
@@ -61,41 +65,56 @@ class CarbonTrackerView extends StatelessWidget {
                         leading: Icon(category.icon),
                         title: Text(category.name),
                         onTap: () {
-                          showModalBottomSheet(
-                            constraints: const BoxConstraints(maxHeight: 400),
-                            context: context,
-                            showDragHandle: true,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 500,
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.all(8.0),
-                                  itemCount: category.types.length,
-                                  itemBuilder: (context, index) {
-                                    final type = category.types[index];
-                                    return Card(
-                                      child: ListTile(
-                                        style: ListTileStyle.list,
-                                        leading: Icon(type.icon),
-                                        title: Text(type.text),
-                                        onTap: () {
-                                          control.addTrackerItem(
-                                            CarbonTrackerItem(
-                                              type.name,
-                                              type,
-                                              4000,
-                                              DateTime.now(),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          );
+                          // if single item
+                          if (category.types.length == 1) {
+                            control.addTrackerItem(
+                              CarbonTrackerItem(
+                                category.types[0].name,
+                                category.types[0],
+                                4000,
+                                DateTime.now(),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          } else if (category.types.isNotEmpty) {
+                            showModalBottomSheet(
+                              constraints: const BoxConstraints(maxHeight: 400),
+                              context: context,
+                              showDragHandle: true,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 500,
+                                  child: ListView.builder(
+                                    padding: const EdgeInsets.all(8.0),
+                                    itemCount: category.types.length,
+                                    itemBuilder: (context, index) {
+                                      final type = category.types[index];
+                                      return Card(
+                                        child: ListTile(
+                                          style: ListTileStyle.list,
+                                          leading: Icon(type.icon),
+                                          title: Text(type.text),
+                                          onTap: () {
+                                            control.addTrackerItem(
+                                              CarbonTrackerItem(
+                                                type.name,
+                                                type,
+                                                4000,
+                                                DateTime.now(),
+                                              ),
+                                            );
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
                       ),
                     );
@@ -109,8 +128,6 @@ class CarbonTrackerView extends StatelessWidget {
     );
   }
 }
-
-class CarbonTrackItem {}
 
 // to track
 //  travel

@@ -11,7 +11,7 @@ class CarbonFormQuestionnaire extends StatefulWidget {
   CarbonFormQuestionnaire({super.key, required carbonForm})
       : _carbonForm = CarbonForm.fromJson(carbonForm);
 
-  static const routeName = '/Carbon_Form';
+  static const routeName = 'carbonform/questionnaire';
 
   final CarbonForm _carbonForm;
 

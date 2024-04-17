@@ -150,13 +150,13 @@ enum CarbonTrackerCategory {
 
 enum CarbonTackerType {
   // transport
-  walking(Icons.directions_walk, 'by foot'),
-  cycling(Icons.directions_bike, 'by bicycle'),
-  car(Icons.directions_car, 'by car'),
-  bus(Icons.directions_bus, 'by bus'),
-  train(Icons.directions_train, 'by train'),
-  boat(Icons.directions_boat, 'by boat'),
-  flight(Icons.flight, 'by plane'),
+  walking(Icons.directions_walk, 'walk'),
+  cycling(Icons.directions_bike, 'bicycle trip'),
+  car(Icons.directions_car, 'car trip'),
+  bus(Icons.directions_bus, 'bus trip'),
+  train(Icons.directions_train, 'train trip'),
+  boat(Icons.directions_boat, 'boat trip'),
+  flight(Icons.flight, 'plane trip'),
 
   // food
 

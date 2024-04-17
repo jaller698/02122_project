@@ -6,13 +6,23 @@ class CarbonFormView extends StatelessWidget {
     super.key,
   });
 
+  static const routeName = '/carbonform';
+
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CarbonFormButton(),
-      ],
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: 8,
+        itemBuilder: (context, index) {
+          return const Card(
+            child: ListTile(),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.request_page),
+        onPressed: () {},
+      ),
     );
   }
 }

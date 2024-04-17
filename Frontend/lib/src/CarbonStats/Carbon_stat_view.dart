@@ -43,10 +43,8 @@ class CarbonStatView extends StatelessWidget {
                 );
               });
         } else if (snapshot.hasError) {
-          print("2");
           return Center(child: Text('error: ${snapshot.error.toString()}'));
         } else {
-          print("3");
           return const CircularProgressIndicator();
         }
       },

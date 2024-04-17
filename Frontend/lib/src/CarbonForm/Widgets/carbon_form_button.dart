@@ -19,9 +19,8 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: [
-      ElevatedButton(
+    return [
+      FloatingActionButton(
         onPressed: () {
           // request form data from server
           Future<CarbonForm> futureCarbonForm = fetchCarbonForm();
@@ -44,9 +43,12 @@ class _CarbonFormButtonState extends State<CarbonFormButton> {
             SnackBarCatchError(context, error);
           });
         },
-        child: const Text("request form"),
+        child: const Icon(Icons.cloud_download),
       ),
-      const CircularProgressIndicator.adaptive(),
-    ][awatingData ? 1 : 0]);
+      FloatingActionButton(
+        onPressed: () {},
+        child: const CircularProgressIndicator.adaptive(),
+      ),
+    ][awatingData ? 1 : 0];
   }
 }

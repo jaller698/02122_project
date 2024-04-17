@@ -19,10 +19,7 @@ class CarbonFormView extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.request_page),
-        onPressed: () {},
-      ),
+      floatingActionButton: const CarbonFormButton(),
     );
   }
 }

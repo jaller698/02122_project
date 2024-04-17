@@ -3,6 +3,7 @@ import 'package:carbon_footprint/src/CarbonForm/Widgets/carbon_form_button.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'CarbonForm/carbon_form_view.dart';
 import 'CarbonTracker/carbon_tracker_view.dart';
 import 'Dashboard/dashboard_view.dart';
 import 'CarbonStats/Carbon_stat_view.dart';
@@ -41,16 +42,10 @@ class _MainViewState extends State<MainView> {
         child: <Widget>[
           const DashboardView(),
           CarbonTrackerView(),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CarbonFormButton(),
-            ],
-          ),
+          const CarbonFormView(),
           const CarbonStatView(),
           const Placeholder(
-              child: Center(child: Card(child: Text('Column BARS, todo')))
-              ),
+              child: Center(child: Card(child: Text('Column BARS, todo')))),
         ][_currentPageIndex],
       ),
 

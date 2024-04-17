@@ -7,8 +7,8 @@ class dataBaseStart{
         sql::Connection *connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
         sql::Statement *statement;
         sql::ResultSet *result_set;
-        std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 6);
-        web::json::value readQuestions();
+        std::string createStatement(std::vector<std::string> input, std::string table, int tableSize = 0);
+        std::vector<std::pair<std::string,std::string>> readQuestions();
         void updateQuestions();
     public:
         void insert(std::string table, std::vector<int> input);

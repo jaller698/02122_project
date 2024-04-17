@@ -13,7 +13,7 @@ void dataBaseStart::init()
 
     try
     {
-
+        std::vector<std::pair<std::string,std::string>> questions = readQuestions();
         /* Connect to the MySQL database */
         connection->setSchema("mysql");
 
@@ -31,57 +31,51 @@ void dataBaseStart::init()
         delete statement;
 
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(30), \
-            AnswerQ1 INT,\
-            AnswerQ2 INT,\
-            AnswerQ3 INT,\
-            AnswerQ4 INT,\
-            AnswerQ5 INT,\
-            AnswerQ6 INT,\
-            FOREIGN KEY(Username) REFERENCES Users(Username));");
+        std::string inputstr = "CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(30), ";
+        for (auto& question : questions)
+        {
+            inputstr += "Answer" + question.first + " INT, ";
+        }
+        inputstr += "FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
         DEBUG_PRINT("Table 'InitialSurvey' created successfully.");
         delete statement;
-
+        
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS GoalsSurvey(\
-                Username VARCHAR(30),\
-                AnswerQ1 INT,\
-                AnswerQ2 INT,\
-                AnswerQ3 INT,\
-                AnswerQ4 INT,\
-                AnswerQ5 INT,\
-                AnswerQ6 INT,\
-                FOREIGN KEY(Username) REFERENCES Users(Username)\
-            );");
+        
+        inputstr = "CREATE TABLE IF NOT EXISTS GoalsSurvey(Username VARCHAR(30), ";
+        for (auto& question : questions)
+        {
+            inputstr += "Answer" + question.first + " INT, ";
+        }
+        inputstr += "FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
         DEBUG_PRINT("Table 'GoalsSurvey' created successfully.");
+
+        statement = connection->createStatement();
+        inputstr = "CREATE TABLE IF NOT EXISTS UpdatedSurvey(Username VARCHAR(30), SurveyNR INT PRIMARY KEY,";
+        for (auto& question : questions)
+        {
+            inputstr += "Answer" + question.first + " INT, ";
+        }
+        inputstr += "FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
         delete statement;
 
         statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS UpdatedSurvey(\
-                Username VARCHAR(30),\
-                SurveyNR INT PRIMARY KEY,\
-                AnswerQ1 INT,\
-                AnswerQ2 INT,\
-                AnswerQ3 INT,\
-                AnswerQ4 INT,\
-                AnswerQ5 INT,\
-                AnswerQ6 INT,\
-                FOREIGN KEY(Username) REFERENCES Users(Username)\
-            );");
-        DEBUG_PRINT("Table 'UpdatedSurvey' created successfully.");
-        delete statement;
-
-        statement = connection->createStatement();
-        statement->execute("CREATE TABLE IF NOT EXISTS ComparisonData (\
-                ComparisonType VARCHAR(50) PRIMARY KEY,\
-                AnswerQ1 INT,\
-                AnswerQ2 INT,\
-                AnswerQ3 INT,\
-                AnswerQ4 INT,\
-                AnswerQ5 INT,\
-                AnswerQ6 INT\
-            );");
-        DEBUG_PRINT("Table 'ComparisonData' created successfully.");
+        inputstr = "CREATE TABLE IF NOT EXISTS ComparisonData(ComparisonType VARCHAR(50) PRIMARY KEY, ";
+        for (auto& question : questions)
+        {
+            inputstr += "Answer" + question.first + " INT, ";
+        }
+        inputstr.pop_back();
+        inputstr.pop_back();
+        inputstr += ");";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
         delete statement;
 
         statement = connection->createStatement();
@@ -108,7 +102,6 @@ void dataBaseStart::init()
 	                            VALUES ('guest','password',-1);");
         }
         updateQuestions();
-        
     }
     catch (sql::SQLException &e)
     {
@@ -206,6 +199,8 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
 
 std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)
 {
+    if (tableSize == 0) // if value is still it's default update to the size of the questions
+        tableSize = readQuestions().size();
     std::string output = "INSERT INTO " + table + " VALUES('" + input[0] + "'";
     if (input.size() != tableSize+1)
     {
@@ -239,7 +234,9 @@ void dataBaseStart::updateUserScore(std::string username, double score){
     delete statement;
 }
 
-web::json::value dataBaseStart::readQuestions(){
+
+std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
+{
     web::json::value questions = web::json::value::object();
     try {
         std::ifstream f("questions.json");
@@ -248,8 +245,13 @@ web::json::value dataBaseStart::readQuestions(){
         f.close(); 
         questions = web::json::value::parse(strStream);
         DEBUG_PRINT(questions.serialize());
-        return questions;
-
+        std::vector<std::pair<std::string,std::string>> output;
+        for (auto &question : questions.at("questions").as_array())
+        {
+            DEBUG_PRINT("Question: " + question.at("question").as_string());
+            output.push_back({question.at("id").as_string(), question.at("Type").as_string()});
+        }
+        return output;
     } catch (std::exception &e) {
         ERROR("Error in getQuestions: ", e);
     }
@@ -261,7 +263,16 @@ void dataBaseStart::updateQuestions()
         connection->setSchema("CarbonFootprint");
 
         // Compare the input to the questions in the database
-        web::json::value questions = readQuestions();
+        web::json::value questions;
+        try {
+            std::ifstream f("questions.json");
+            std::stringstream strStream;
+            strStream << f.rdbuf();
+            f.close(); 
+            questions = web::json::value::parse(strStream);
+        } catch (std::exception &e) {
+            ERROR("Error in updateQuestions: ", e);
+        }
         web::json::array inputQuestions = questions.at("questions").as_array();
 
         for (auto &question : inputQuestions)

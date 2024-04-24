@@ -234,6 +234,19 @@ void dataBaseStart::updateUserScore(std::string username, double score){
     delete statement;
 }
 
+double dataBaseStart::getAverage()
+{
+    connection->setSchema("CarbonFootprint");
+    double output = -1;
+    statement = connection->createStatement();
+    result_set = statement->executeQuery("SELECT AVG(CarbonScore) FROM Users");
+    if (result_set->next())
+    {
+        output = result_set->getDouble(1);
+    }
+    return output >= 0 ? output : NULL;
+}
+
 
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {

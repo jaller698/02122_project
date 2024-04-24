@@ -18,6 +18,7 @@ class dataBaseStart{
         void updateUserScore(std::string username, double score);
         void init();
         void reset();
+        double getAverage();
         ~dataBaseStart();
 
 

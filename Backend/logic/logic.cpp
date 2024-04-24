@@ -12,7 +12,8 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/questions", handle_questions_read},
     {"/users", handle_login},
     {"/userScore", handle_user_score_read},
-    {"/comparison", handle_comparison}
+    {"/comparison", handle_comparison},
+    {"/average", handle_average}
 };
 
 // Function which based on the endpoint, sends the data to the correct handler
@@ -188,6 +189,21 @@ struct Response handle_user_score_write(const web::json::value &request_body)
     }
 }
 
+struct Response handle_average(const web::json::value &request_body) 
+{
+    try {
+        dataBaseStart db;
+        web::json::value average = web::json::value::number(0);
+        average = db.getAverage();
+        if (average.is_null()) {
+            return Response(http::status_codes::OK, web::json::value::number(0));
+        }
+        return Response(http::status_codes::OK, average);
+    } catch (const std::exception &e) {
+        ERROR("Error in handling average: ", e);
+        return Response(http::status_codes::InternalError, web::json::value::null());
+    }
+}
 
 // Handle comparison request
 struct Response handle_comparison(const web::json::value &request_body)

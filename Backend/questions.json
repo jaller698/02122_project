@@ -27,7 +27,22 @@
     },
     {
         "id": "Q6",
-        "question": "Do you like avocadoes? 0 for no and 1 for yes. Non binary for other.",
+        "question": "How many times a week do you shower",
+        "Type": "int"
+    },
+    {
+        "id": "Q7",
+        "question": "Do you turn off lights when you leave a room? (1: always, 2: sometimes 3: never)",
+        "Type": "int"
+    },
+    {
+        "id": "Q8",
+        "question": "Do you bring your own bags when shopping(1: yes, 2:no)",
+        "Type": "int"
+    },
+    {
+        "id": "Q9",
+        "question": "How many times do you promt an AI pr day",
         "Type": "int"
     }
     ]

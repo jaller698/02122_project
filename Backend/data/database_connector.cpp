@@ -78,6 +78,29 @@ void dataBaseStart::init()
         statement->execute(inputstr);
         delete statement;
 
+        // check if the table exists, if not create it
+        statement = connection->createStatement();
+        inputstr = "SHOW TABLES LIKE 'WorldComparisonData';";
+        result_set = statement->executeQuery(inputstr);
+        if (result_set->rowsCount() == 0)
+        {
+            inputstr = "CREATE TABLE IF NOT EXISTS WorldComparisonData(IsoCode VARCHAR(50) PRIMARY KEY, \
+                        Country VARCHAR(50), \
+                        CarbonScore DOUBLE)";
+            DEBUG_PRINT("SQL Command: " + inputstr);
+            statement->execute(inputstr);
+            auto country_data = query_comparison_data();
+
+            for (const auto& country : country_data)
+            {
+                std::string name, code, value;
+                std::tie(code, name, value) = country;
+                inputstr = "INSERT INTO WorldComparisonData VALUES('" + code + "', \"" + name + "\", " + value + ")";
+                DEBUG_PRINT("SQL Command: " + inputstr);
+                statement->execute(inputstr);
+            }
+        }
+
         statement = connection->createStatement();
         statement->execute("CREATE TABLE IF NOT EXISTS Questions(\
                 ID VARCHAR(100) PRIMARY KEY,\

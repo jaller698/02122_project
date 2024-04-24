@@ -8,6 +8,7 @@
 #include <string_view>
 #include <cpprest/json.h>
 #include <cpprest/http_listener.h>
+#include <cpprest/http_client.h>
 #include <iostream>
 #include <mysql_connection.h>
 #include <mysql_driver.h>
@@ -22,6 +23,7 @@
 #include "logic/calculate_score.h"
 #include "logic/logic.h"
 #include "data/database_connector.hpp"
+#include "data/query_comparison_data.h"
 #include "rest/rest_api.h"
 
 // Logging
@@ -49,3 +51,4 @@ struct Response {
     web::http::status_code status;
     web::json::value response;
 };
+

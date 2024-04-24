@@ -44,124 +44,127 @@ class CarbonTrackerView extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Record action'),
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          showModalBottomSheet<void>(
-            constraints: const BoxConstraints(maxHeight: 400),
-            context: context,
-            showDragHandle: true,
-            builder: (context) {
-              return SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemCount: CarbonTrackerCategory.values.length,
-                  itemBuilder: (context, index) {
-                    final category = CarbonTrackerCategory.values[index];
-                    return Card(
-                      child: ListTile(
-                        style: ListTileStyle.drawer,
-                        leading: Icon(category.icon),
-                        title: Text(category.name),
-                        onTap: () {
-                          // if single item
-                          if (category.types.length == 1) {
-                            control.addTrackerItem(
-                              CarbonTrackerItem(
-                                category.types[0].name,
-                                category.types[0],
-                                4000,
-                                DateTime.now(),
-                              ),
-                            );
-                            Navigator.pop(context);
-                          } else if (category.types.isNotEmpty) {
-                            showModalBottomSheet(
-                              constraints: const BoxConstraints(maxHeight: 400),
-                              context: context,
-                              showDragHandle: true,
-                              isScrollControlled: true,
-                              builder: (context) {
-                                return SizedBox(
-                                  height: 500,
-                                  child: ListView.builder(
-                                    padding: const EdgeInsets.all(8.0),
-                                    itemCount: category.types.length,
-                                    itemBuilder: (context, index) {
-                                      final type = category.types[index];
-                                      return Card(
-                                        child: ListTile(
-                                          style: ListTileStyle.list,
-                                          leading: Icon(type.icon),
-                                          title: Text(type.text),
-                                          onTap: () {
-                                            control.addTrackerItem(
-                                              CarbonTrackerItem(
-                                                type.name,
-                                                type,
-                                                4000,
-                                                DateTime.now(),
-                                              ),
-                                            );
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          );
+      floatingActionButton: InkWell(
+        onLongPress: () {
+          // long press to select multiple items
+          bool singleAction = false;
+          showAddCarbonItem(context, singleAction);
         },
+        child: FloatingActionButton.extended(
+          label: const Text('Record action'),
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            // for single items
+            bool singleAction = true;
+            showAddCarbonItem(context, singleAction);
+          },
+        ),
       ),
     );
   }
+
+  Future<void> showAddCarbonItem(BuildContext context, bool singleAction) {
+    return showModalBottomSheet<void>(
+      constraints: const BoxConstraints(maxHeight: 400),
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Long press to add multiple',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                itemCount: CarbonTrackerCategory.values.length,
+                itemBuilder: (context, index) {
+                  final category = CarbonTrackerCategory.values[index];
+                  return Card(
+                    child: ListTile(
+                      style: ListTileStyle.drawer,
+                      leading: Icon(category.icon),
+                      title: Text(category.name),
+                      onTap: () {
+                        // if single item
+                        if (category.types.length == 1) {
+                          control.addTrackerItem(
+                            CarbonTrackerItem(
+                              category.types[0].name,
+                              category.types[0],
+                              4000,
+                              DateTime.now(),
+                            ),
+                          );
+                          if (singleAction) {
+                            Navigator.pop(context);
+                          }
+                        } else if (category.types.isNotEmpty) {
+                          showModalBottomSheet(
+                            constraints: const BoxConstraints(maxHeight: 400),
+                            context: context,
+                            showDragHandle: true,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    'Long press for additional options',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.italic),
+                                  ),
+                                  SizedBox(
+                                    height: 335,
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.all(8.0),
+                                      itemCount: category.types.length,
+                                      itemBuilder: (context, index) {
+                                        final type = category.types[index];
+                                        return Card(
+                                          child: ListTile(
+                                            style: ListTileStyle.list,
+                                            leading: Icon(type.icon),
+                                            title: Text(type.text),
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (context) {
+                                                  return SizedBox(
+                                                    height: 200,
+                                                  );
+                                                },
+                                              );
+
+                                              //control.addTrackerItem(CarbonTrackerItem(type.name,type,4000,DateTime.now(),),);
+                                              if (singleAction) {
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                            onLongPress: () {},
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-// to track
-//  travel
-//    by foot
-//    car
-//      electric
-//        hybrid
-//      petrol
-//      diesel
-//    bus
-//    train
-//    plane
-//      distance (choose in settings?)
-//      time
-//  food
-//    meat
-//      fish
-//      meat (low to high)
-//    dairy
-//    vegan
-//  shopping
-//    clothes
-//      fast fashion
-//    electronics (large to small)
-//  energy consumption 
-//    region
-//      coal
-//      natrual gas
-//      wind
-//      solar
-//      hydro
-//      nuclear
-//    by month?
-
-
-// form creater on website
-//    creation from ymal or json file

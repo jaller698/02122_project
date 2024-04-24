@@ -46,6 +46,8 @@ dependencies:
   crypto: ^3.0.3
   sqflite: ^2.3.3
   path: ^1.9.0
+  flutter_material_pickers: ^3.6.0
+  numberpicker: ^2.1.2
 
 dev_dependencies:
   flutter_test:

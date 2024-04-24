@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -138,8 +139,16 @@ enum CarbonTrackerCategory {
     CarbonTackerType.boat,
     CarbonTackerType.flight,
   ]),
-  food(Icons.restaurant, []),
-  custom(Icons.tune, [CarbonTackerType.custom]);
+  food(Icons.restaurant, [
+    CarbonTackerType.lowMeat,
+    CarbonTackerType.highMeat,
+    CarbonTackerType.grain,
+    CarbonTackerType.dairy,
+    CarbonTackerType.fish,
+  ]),
+  custom(Icons.tune, [
+    CarbonTackerType.custom,
+  ]);
 
   final IconData icon;
   final List<CarbonTackerType> types;
@@ -149,21 +158,71 @@ enum CarbonTrackerCategory {
 
 enum CarbonTackerType {
   // transport
-  walking(Icons.directions_walk, 'walk'),
-  cycling(Icons.directions_bike, 'bicycle trip'),
-  car(Icons.directions_car, 'car trip'),
-  bus(Icons.directions_bus, 'bus trip'),
-  train(Icons.directions_train, 'train trip'),
-  boat(Icons.directions_boat, 'boat trip'),
-  flight(Icons.flight, 'plane trip'),
+  walking(Icons.directions_walk, 'walk', CarbonTrackInputTypes.time),
+  cycling(Icons.directions_bike, 'bicycle trip', CarbonTrackInputTypes.time),
+  car(Icons.directions_car, 'car trip', CarbonTrackInputTypes.time),
+  bus(Icons.directions_bus, 'bus trip', CarbonTrackInputTypes.time),
+  train(Icons.directions_train, 'train trip', CarbonTrackInputTypes.time),
+  boat(Icons.directions_boat, 'boat trip', CarbonTrackInputTypes.time),
+  flight(Icons.flight, 'plane trip', CarbonTrackInputTypes.time),
 
   // food
+  lowMeat(Icons.brunch_dining, 'Low meat meal', CarbonTrackInputTypes.single),
+  highMeat(Icons.lunch_dining, 'High meat meal', CarbonTrackInputTypes.single),
+  grain(Icons.bakery_dining, 'Grain based meal', CarbonTrackInputTypes.single),
+  dairy(Icons.calendar_today_rounded, 'Dairy based meal',
+      CarbonTrackInputTypes.single),
+  fish(Icons.set_meal, 'Fish based meal', CarbonTrackInputTypes.single),
+
+  // shopping
+  // TODO design a better system, best if the user is also able to add custom items to track...
 
   // custom
-  custom(Icons.tune, '');
+  custom(Icons.tune, '', CarbonTrackInputTypes.custom);
 
   final IconData icon;
   final String text;
 
-  const CarbonTackerType(this.icon, this.text);
+  final CarbonTrackInputTypes type;
+
+  const CarbonTackerType(this.icon, this.text, this.type);
 }
+
+enum CarbonTrackInputTypes { single, time, distance, custom }
+
+// to track
+//  travel
+//    by foot
+//    car
+//      electric
+//        hybrid
+//      petrol
+//      diesel
+//    bus
+//    train
+//    plane
+//      distance (choose in settings?)
+//      time
+//  food
+//    meat
+//      fish
+//      meat (low to high)
+//    dairy
+//    vegan
+//  shopping
+//    clothes
+//      fast fashion
+//    electronics (large to small)
+//  energy consumption 
+//    region
+//      coal
+//      natrual gas
+//      wind
+//      solar
+//      hydro
+//      nuclear
+//    by month?
+
+
+// form creater on website
+//    creation from ymal or json file

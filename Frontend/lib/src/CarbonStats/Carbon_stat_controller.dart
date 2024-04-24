@@ -33,22 +33,37 @@ class CarbonStatController {
     });
 
     var response = await request.send();
-    var thing= await response.stream.transform(utf8.decoder).first;
-
+    var thing = await response.stream.transform(utf8.decoder).first;
 
     //RESPONSE BURDE INDEHOLDE DATA'EN under "Score", but i dont know how to extract it
-    
+
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.""
       //response[0];
-   
-       return thing;
+
+      return thing;
       //fromJson(jsonDecode() as Map<String, dynamic>);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load form');
+    }
+  }
+
+  Future<String> fetchAverage() async {
+    http.Request request =
+        http.Request("GET", Uri.parse('${SettingsController.address}/average'));
+    request.body = jsonEncode(<String, String>{}); // empty body
+    request.headers.addAll(<String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+    var response = await request.send();
+    var result = await response.stream.transform(utf8.decoder).first;
+    if (response.statusCode == 200) {
+      return result;
+    } else {
+      throw Exception('Failed to load average score');
     }
   }
 }

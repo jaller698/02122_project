@@ -14,7 +14,10 @@ class CarbonStatView extends StatelessWidget {
   static final CarbonStatController _carbonController = CarbonStatController();
 
   Future<List<String>> toList(String Comp) async {
-    Future<List<String>> fut = Future(()async => [await _carbonController.fetchStats(UserController().username),await _carbonController.fetchStats(Comp)] );
+    Future<List<String>> fut = Future(() async => [
+          await _carbonController.fetchStats(UserController().username),
+          await _carbonController.fetchAverage()
+        ]);
     return fut;
   }
 

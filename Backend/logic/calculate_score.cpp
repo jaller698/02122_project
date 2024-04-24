@@ -8,21 +8,21 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         //some of the questions in weeks, but we measure in years, so we time them with 52
         DEBUG_PRINT("Calculating carbon score")
         double res=0;
-        //Q1
-        res+=answers.at(0)*90;
-        //Q2
+        //Q1 How much time do you spend on airplanes, on average, per year?(In hours)
+        res+=answers.at(0)*90; 
+        //Q2 How many times a week do you eat beef?
         res+=answers.at(1)*31*52;
-        //Q3
+        //Q3 How much do you drive per week? (hours)
         res+=(answers.at(2)*60*7*2.4)*52; //the middle number is incorrect, it is L/km but we dont know it.
-        //Q4
+        //Q4 How much do you take public transportation per week?
         res += (answers.at(3))*60*7*2.4*((100-57.5)/100)*52;
-        //Q5
+        //Q5 How long do you usually keep a new phone?(In years)
         if(answers.at(4) == 0){
             res += 60*2;
         }else{
             res += 60/(answers.at(4));
         }
-        //Q6
+        //Q6 Do you like avocadoes? 0 for no and 1 for yes. Non binary for other.
         res += answers.at(5)*0;
         std::vector<std::string> db_answers;
         db_answers.push_back(userID);

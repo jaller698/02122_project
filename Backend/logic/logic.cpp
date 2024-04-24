@@ -47,23 +47,24 @@ struct Response handle_questions_write(const web::json::value &request_body)
             auto title = request_body.at("title").as_string();
             auto userID = request_body.at("userID").as_string();
             web::json::value tmp = request_body.at("answers");
-           
+            dataBaseStart db;
+            auto questions = db.get("Questions", "");
             std::vector<std::string> answers;
             answers.push_back(userID);
-            auto it = tmp.as_object().begin();
-            std::advance(it, 1);
-            for (auto &answer : tmp.as_object())
+            auto it = questions.as_object().begin();
+            for (auto question : questions.as_object())
             {
-                if (answer.second.is_string())
+                auto question_trimmed = question.first.substr(question.first.find("_")+1, question.first.size() - 1);
+                auto answer = tmp.at(question_trimmed);
+                if (answer.is_string())
                 {
-                    answers.push_back(answer.second.as_string());
+                    answers.push_back(answer.as_string());
                     continue;
                 } else {
-                    answers.push_back(std::to_string(answer.second.as_integer()));
+                    answers.push_back(std::to_string(answer.as_integer()));
                 }
             }
-            dataBaseStart db;
-            double carbonScore = (double) calculateCarbonScore(answers);
+            double carbonScore = calculateCarbonScore(answers);
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
             DEBUG_PRINT("updating carbon score to: " + std::to_string(carbonScore));

@@ -1,9 +1,11 @@
 class CarbonFormAnswer {
+  final int id;
   final String title;
   final String user;
   final Map<String, dynamic> anwsers;
 
   const CarbonFormAnswer({
+    this.id = -1,
     required this.title,
     required this.user,
     required this.anwsers,

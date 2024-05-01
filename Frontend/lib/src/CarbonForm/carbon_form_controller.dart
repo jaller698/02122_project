@@ -1,8 +1,9 @@
+import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'Modals/carbon_form.dart';
+import 'Modals/carbon_form_answer.dart';
 
 class CarbonFormController with ChangeNotifier {
   // singleton
@@ -11,8 +12,8 @@ class CarbonFormController with ChangeNotifier {
       CarbonFormController._hiddenConstructor();
   factory CarbonFormController() => _singleton;
 
-  List<CarbonForm>? _carbonTrackerItems;
-  Future<List<CarbonForm>> get carbonTrackerItems {
+  List<CarbonFormAnswer>? _carbonTrackerItems;
+  Future<List<CarbonFormAnswer>> get carbonTrackerItems {
     if (_carbonTrackerItems == null) {
       return loadTrackerItems();
     }
@@ -21,12 +22,12 @@ class CarbonFormController with ChangeNotifier {
 
   static late Future<Database> _database;
 
-  Future<List<CarbonForm>> loadTrackerItems() async {
+  Future<List<CarbonFormAnswer>> loadTrackerItems() async {
     _database = openDatabase(
       join(await getDatabasesPath(), 'form_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE carbon(id INTEGER PRIMARY KEY, title TEXT)',
+          'CREATE TABLE form(id INTEGER PRIMARY KEY, title TEXT)',
         );
       },
       version: 1,
@@ -36,15 +37,8 @@ class CarbonFormController with ChangeNotifier {
         await (await _database).query('form');
 
     final items = [
-      for (final {
-            'id': id as int,
-            'name': title as String,
-          } in carbonItemsMaps)
-        CarbonForm(
-          id: id,
-          title: title,
-          questions: [],
-        ),
+      for (final Map<String, dynamic> map in carbonItemsMaps)
+        CarbonFormAnswer.fromMap(map),
     ];
 
     _carbonTrackerItems = items;
@@ -54,12 +48,12 @@ class CarbonFormController with ChangeNotifier {
     return items;
   }
 
-  Future<void> updateTrackerItems(CarbonForm item) async {
+  Future<void> updateTrackerItems(CarbonFormAnswer item) async {
     final db = await _database;
 
     await db.update(
-      'carbon',
-      CarbonForm.toMap(item),
+      'form',
+      CarbonFormAnswer.toMap(item),
       where: 'id = ?',
       whereArgs: [item.id],
     );
@@ -67,15 +61,15 @@ class CarbonFormController with ChangeNotifier {
     await loadTrackerItems();
   }
 
-  Future<void> addTrackerItem(CarbonForm item) async {
+  Future<void> addTrackerItem(CarbonFormAnswer item) async {
     final db = await _database;
 
-    var itemMap = CarbonForm.toMap(item);
+    var itemMap = CarbonFormAnswer.toMap(item);
 
     itemMap['id'] = _carbonTrackerItems?.length ?? 0;
 
     await db.insert(
-      'carbon',
+      'form',
       itemMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -87,7 +81,7 @@ class CarbonFormController with ChangeNotifier {
     final db = await _database;
 
     await db.delete(
-      'carbon',
+      'form',
       where: 'id = ?',
       whereArgs: [id],
     );

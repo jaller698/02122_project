@@ -342,6 +342,7 @@ void dataBaseStart::updateQuestions()
     }
 }
 
+#ifdef DEBUG
 void dataBaseStart::reset()
 {
     try {
@@ -354,6 +355,12 @@ void dataBaseStart::reset()
         ERROR("Error in reset: ", e);
     }
 }
+#else
+void dataBaseStart::reset()
+{
+    WARNING("Reset is only allowed in debug mode");
+}
+#endif
 
 
 

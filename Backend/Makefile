@@ -3,7 +3,9 @@
 
 CXX := g++
 CXXFLAGS := -I . -std=c++20 -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
-CXXFLAGS += $(if $(DEBUG),-DDEBUG)
+ifdef DEBUG
+	CXXFLAGS += -DDEBUG
+endif
 TEST_FLAGS := $(CXXFLAGS) -lgtest -DTEST_ENVIROMENT
 
 DEPS := database_connector.hpp rest_api.h logic.h calculate_score.h query_comparison_data.h

@@ -21,20 +21,60 @@ class CarbonTrackerView extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final count = snapshot.data!.length - 1;
+                int offset = 0;
                 return ListView.builder(
-                  itemCount: count + 1,
                   itemBuilder: (context, index) {
-                    final item = snapshot.data![count - index];
-                    return ListTile(
-                      leading: Icon(item.type.icon),
-                      title: Text(item.type.text),
-                      subtitle: Text(
-                          '${item.dateAdded.hour}:${item.dateAdded.second} - ${item.dateAdded.day}/${item.dateAdded.month}/${item.dateAdded.year}'),
-                      trailing: Text(item.carbonScore.toString()),
-                      onTap: () {
-                        control.removeTrackerItem(item.id!);
-                      },
-                    );
+                    if (count - index - offset < 0) {
+                      return null;
+                    }
+
+                    final curItem = snapshot.data![count - index - offset];
+                    final lastItem = snapshot.data![count == index
+                        ? count - index + 1 - offset
+                        : count - index - offset];
+
+                    if (curItem.dateAdded.month == lastItem.dateAdded.month &&
+                        curItem.dateAdded.year == lastItem.dateAdded.year) {
+                      return Column(
+                        children: [
+                          Text(
+                              '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              if (count - index - offset < 0) {
+                                return null;
+                              }
+                              final curItem =
+                                  snapshot.data![count - index - offset];
+                              final lastItem = snapshot.data![count == index
+                                  ? count - index + 1 - offset
+                                  : count - index - offset];
+                              if (curItem.dateAdded.month ==
+                                      lastItem.dateAdded.month &&
+                                  curItem.dateAdded.year ==
+                                      lastItem.dateAdded.year) {
+                                offset++;
+                                return ListTile(
+                                  leading: Icon(curItem.type.icon),
+                                  title: Text(curItem.type.text),
+                                  subtitle: Text(
+                                      '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
+                                  trailing:
+                                      Text(curItem.carbonScore.toString()),
+                                  onTap: () {
+                                    control.removeTrackerItem(curItem.id!);
+                                  },
+                                );
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                    return null;
                   },
                 );
               } else if (snapshot.hasError) {

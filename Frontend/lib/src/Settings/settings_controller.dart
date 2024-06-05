@@ -12,7 +12,7 @@ class SettingsController with ChangeNotifier {
 
   static final SettingsService _settingsService = SettingsService();
 
-  static const String address = 'http://10.209.240.130:8080';
+  static const String address = 'https://gcx8clkd-9999.euw.devtunnels.ms';
 
   late ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;

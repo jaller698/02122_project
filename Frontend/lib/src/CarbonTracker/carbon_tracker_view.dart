@@ -22,6 +22,8 @@ class CarbonTrackerView extends StatelessWidget {
               if (snapshot.hasData) {
                 final count = snapshot.data!.length - 1;
                 int offset = 0;
+                int indexOffset = 0;
+
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     if (count - index - offset < 0) {
@@ -29,51 +31,48 @@ class CarbonTrackerView extends StatelessWidget {
                     }
 
                     final curItem = snapshot.data![count - index - offset];
-                    final lastItem = snapshot.data![count == index
-                        ? count - index + 1 - offset
-                        : count - index - offset];
 
-                    if (curItem.dateAdded.month == lastItem.dateAdded.month &&
-                        curItem.dateAdded.year == lastItem.dateAdded.year) {
-                      return Column(
-                        children: [
-                          Text(
-                              '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              if (count - index - offset < 0) {
-                                return null;
-                              }
-                              final curItem =
-                                  snapshot.data![count - index - offset];
-                              final lastItem = snapshot.data![count == index
-                                  ? count - index + 1 - offset
-                                  : count - index - offset];
-                              if (curItem.dateAdded.month ==
-                                      lastItem.dateAdded.month &&
-                                  curItem.dateAdded.year ==
-                                      lastItem.dateAdded.year) {
-                                offset++;
-                                return ListTile(
-                                  leading: Icon(curItem.type.icon),
-                                  title: Text(curItem.type.text),
-                                  subtitle: Text(
-                                      '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
-                                  trailing:
-                                      Text(curItem.carbonScore.toString()),
-                                  onTap: () {
-                                    control.removeTrackerItem(curItem.id!);
-                                  },
-                                );
-                              }
+                    indexOffset = offset;
+                    return Column(
+                      children: [
+                        Text(
+                            '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            index += indexOffset;
+                            if (count - index < 0) {
                               return null;
-                            },
-                          ),
-                        ],
-                      );
-                    }
+                            }
+                            final curItem = snapshot.data![count - index];
+                            print('curItem ${curItem.id}');
+                            final lastItem = snapshot.data![
+                                index == 0 ? count - index : count - index + 1];
+                            print('lastItem ${lastItem.id}');
+                            print('count $count, index $index');
+                            if (curItem.dateAdded.month ==
+                                    lastItem.dateAdded.month &&
+                                curItem.dateAdded.year ==
+                                    lastItem.dateAdded.year) {
+                              offset++;
+                              return ListTile(
+                                leading: Icon(curItem.type.icon),
+                                title: Text(curItem.type.text),
+                                subtitle: Text(
+                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')} - ${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                                trailing: Text(curItem.carbonScore.toString()),
+                                onTap: () {
+                                  control.removeTrackerItem(curItem.id!);
+                                },
+                              );
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    );
+
                     return null;
                   },
                 );

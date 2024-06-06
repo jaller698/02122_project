@@ -186,7 +186,7 @@ struct Response handle_user_score_write(const web::json::value &request_body)
         return Response(http::status_codes::OK, web::json::value::string("Score updated"));
     } catch (const std::exception &e) {
         ERROR("Error in handling writing user score: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
 
@@ -202,7 +202,7 @@ struct Response handle_average(const web::json::value &request_body)
         return Response(http::status_codes::OK, average);
     } catch (const std::exception &e) {
         ERROR("Error in handling average: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
 
@@ -210,14 +210,13 @@ struct Response handle_average(const web::json::value &request_body)
 struct Response handle_comparison(const web::json::value &request_body)
 {
     try {
-    // TODO
     web::json::value comparison = web::json::value::object();
     web::json::array landcodes = request_body.at("landcodes").as_array();
     comparison["data"] = web::json::value::array();
     comparison["data"][0] = web::json::value::number(2000);
-    return Response(http::status_codes::NotImplemented, comparison);
+    return Response(http::status_codes::OK, comparison);
     } catch (const std::exception &e) {
         ERROR("Error in handling comparison: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }

@@ -58,7 +58,7 @@ class CarbonStatView extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
             String sm = "58";
-            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0].substring(1, snapshot.data![0].length-1)), double.parse(snapshot.data![1]));
+            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0]), double.parse(snapshot.data![1]));
             final items = [
               barGroup1,
               /*  barGroup2,

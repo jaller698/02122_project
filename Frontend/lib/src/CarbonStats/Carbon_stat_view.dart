@@ -14,10 +14,10 @@ class CarbonStatView extends StatelessWidget {
   static final CarbonStatController _carbonController = CarbonStatController();
 
   Future<List<String>> toList(String Comp) async {
-    Future<List<String>> fut = Future(() async => [
+    Future<List<String>> fut = Future(() async => [ 
           await _carbonController.fetchStats(UserController().username),
           await _carbonController.fetchAverage()
-        ]);
+        ]+[(await _carbonController.fetchCountries())]   );
     return fut;
   }
 
@@ -57,12 +57,13 @@ class CarbonStatView extends StatelessWidget {
       future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-            String sm = "58";
-            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0]), double.parse(snapshot.data![1]));
+            
+            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0]), double.parse(snapshot.data![2]));
+            //final barGroup2 = makeGroupData(0,double.parse(snapshot.data![2]), 0);
             final items = [
               barGroup1,
-              /*  barGroup2,
-              barGroup3,
+              /* barGroup2,
+               barGroup3,
               barGroup4,
               barGroup5,
               barGroup6,

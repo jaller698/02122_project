@@ -3,6 +3,7 @@ import 'package:carbon_footprint/src/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:carbon_footprint/src/user_controller.dart';
 
 import 'sign_up_dialog.dart';
 
@@ -103,8 +104,10 @@ class _LoginViewState extends State<LoginView> {
                   ],
                 ),
                 TextButton(
-                    onPressed: () =>
-                        Navigator.popAndPushNamed(context, MainView.routeName),
+                    onPressed: () => {
+                        UserController().username = "guest",
+                        Navigator.popAndPushNamed(context, MainView.routeName)
+                    },
                     child: const Text('Continue as guest'))
               ],
             ),

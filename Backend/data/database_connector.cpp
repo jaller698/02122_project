@@ -149,7 +149,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         if (output->next()) {
             User["User"] = web::json::value::string(output->getString(1));
             User["Pass"] = web::json::value::string(output->getString(2));
-            User["Score"] = web::json::value::string(output->getString(3));
+            User["Score"] = web::json::value::number(output->getInt(3));
         }else{
             User["Fail"] = web::json::value::string("User does not exists");
         }

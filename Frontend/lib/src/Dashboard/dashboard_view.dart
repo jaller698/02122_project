@@ -7,6 +7,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'week_summary_bar_chart.dart';
+
 class DashboardView extends StatefulWidget {
   const DashboardView({
     super.key,
@@ -132,12 +134,9 @@ class _DashboardViewState extends State<DashboardView> {
         const Divider(),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: Placeholder(
-                fallbackHeight: 150,
-                child: Text('last 7 days of carbon usage'),
-              ),
+              child: WeekSummaryBarChart(),
             ),
             Expanded(
               flex: 1,

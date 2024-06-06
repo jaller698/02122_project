@@ -33,17 +33,7 @@ class CarbonStatView extends StatelessWidget {
 
     late List<BarChartGroupData> rawBarGroups;
     late List<BarChartGroupData> showingBarGroups;
-    final barGroup1 = makeGroupData(0, 5, 12);
-    final items = [
-      barGroup1,
-      /*  barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,*/
-    ];
-    rawBarGroups = items;
+   
     const colorIndicators = Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -62,28 +52,41 @@ class CarbonStatView extends StatelessWidget {
               size: 40,
               textColor: Colors.black)
         ]);
-    final barChart = BarChart(BarChartData(
-      maxY: 20,
-      //barGroups: showingBarGroups,
-      barGroups: List.of(rawBarGroups),
-      gridData: const FlGridData(show: false),
-      titlesData: const FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: bottomTitles,
-            reservedSize: 42,
-          ),
-        ),
-      ),
-      //swapAnimationDuration: Duration(milliseconds: 150), // Optional
-      //swapAnimationCurve: Curves.linear, // Optional
-    ));
+  
     return FutureBuilder(
       future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+            String sm = "58";
+            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0].substring(1, snapshot.data![0].length-1)), double.parse(snapshot.data![1]));
+            final items = [
+              barGroup1,
+              /*  barGroup2,
+              barGroup3,
+              barGroup4,
+              barGroup5,
+              barGroup6,
+              barGroup7,*/
+            ];
+            rawBarGroups = items;
+           final barChart = BarChart(BarChartData(
+            maxY: 20,
+            //barGroups: showingBarGroups,
+            barGroups: List.of(rawBarGroups),
+            gridData: const FlGridData(show: false),
+            titlesData: const FlTitlesData(
+              show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: bottomTitles,
+                  reservedSize: 42,
+                ),
+              ),
+            ),
+            //swapAnimationDuration: Duration(milliseconds: 150), // Optional
+            //swapAnimationCurve: Curves.linear, // Optional
+          ));
           return ListView(
               //itemCount: 2,
               //itemBuilder: (context, index) {

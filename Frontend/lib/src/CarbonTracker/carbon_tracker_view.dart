@@ -39,18 +39,20 @@ class CarbonTrackerView extends StatelessWidget {
                             '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
                         ListView.builder(
                           shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
+                          physics: const ClampingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            index += indexOffset;
-                            if (count - index < 0) {
+                            int indexAddivtive = index + indexOffset;
+                            if (count - indexAddivtive < 0) {
                               return null;
                             }
-                            final curItem = snapshot.data![count - index];
+                            final curItem =
+                                snapshot.data![count - indexAddivtive];
                             print('curItem ${curItem.id}');
-                            final lastItem = snapshot.data![
-                                index == 0 ? count - index : count - index + 1];
+                            final lastItem = snapshot.data![index == 0
+                                ? count - indexAddivtive
+                                : count - indexAddivtive + 1];
                             print('lastItem ${lastItem.id}');
-                            print('count $count, index $index');
+                            print('count $count, index $indexAddivtive');
                             if (curItem.dateAdded.month ==
                                     lastItem.dateAdded.month &&
                                 curItem.dateAdded.year ==

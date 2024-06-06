@@ -47,12 +47,9 @@ class CarbonTrackerView extends StatelessWidget {
                             }
                             final curItem =
                                 snapshot.data![count - indexAdditive];
-                            print('curItem ${curItem.id}');
                             final lastItem = snapshot.data![index == 0
                                 ? count - indexAdditive
                                 : count - indexAdditive + 1];
-                            print('lastItem ${lastItem.id}');
-                            print('count $count, index $indexAdditive');
                             if (curItem.dateAdded.month ==
                                     lastItem.dateAdded.month &&
                                 curItem.dateAdded.year ==
@@ -62,7 +59,7 @@ class CarbonTrackerView extends StatelessWidget {
                                 leading: Icon(curItem.type.icon),
                                 title: Text(curItem.type.text),
                                 subtitle: Text(
-                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')} - ${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
                                 trailing: Text(curItem.carbonScore.toString()),
                                 onTap: () {
                                   control.removeTrackerItem(curItem.id!);

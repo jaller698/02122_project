@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,6 +21,17 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.restorablePushNamed(context, SettingsView.routeName),
+            icon: const Icon(
+              Icons.settings_rounded,
+            ),
+          ),
+        ],
+      ),
       // list of widgets to switch between depending on the current page index
       body: <Widget>[
         const DashboardView(),

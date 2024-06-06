@@ -138,24 +138,15 @@ class _DashboardViewState extends State<DashboardView> {
               flex: 2,
               child: WeekSummaryBarChart(),
             ),
-            Expanded(
+            const Expanded(
               flex: 1,
-              child: Card.outlined(
-                child: InkWell(
-                  child: const SizedBox(
-                    height: 150,
-                    child: Icon(
-                      Icons.settings_rounded,
-                      size: 125,
-                    ),
-                  ),
-                  onTapUp: (_) => Navigator.restorablePushNamed(
-                      context, SettingsView.routeName),
-                ),
+              child: Placeholder(
+                child: Text('TIPS'),
               ),
             ),
           ],
         ),
+        const Divider(),
         const Row(
           children: [
             Expanded(

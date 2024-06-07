@@ -38,8 +38,6 @@ class _MainViewState extends State<MainView> {
         CarbonTrackerView(),
         const CarbonFormView(),
         const CarbonStatView(),
-        const Placeholder(
-            child: Center(child: Card(child: Text('Column BARS, todo')))),
       ][_currentPageIndex],
 
       bottomNavigationBar: NavigationBar(

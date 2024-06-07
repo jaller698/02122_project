@@ -14,10 +14,12 @@ class CarbonStatView extends StatelessWidget {
   static final CarbonStatController _carbonController = CarbonStatController();
 
   Future<List<String>> toList(String Comp) async {
-    Future<List<String>> fut = Future(() async => [ 
+    Future<List<String>> fut = Future(() async =>
+        [
           await _carbonController.fetchStats(UserController().username),
           await _carbonController.fetchAverage()
-        ]+[(await _carbonController.fetchCountries())]   );
+        ] +
+        [(await _carbonController.fetchCountries())]);
     return fut;
   }
 
@@ -33,7 +35,6 @@ class CarbonStatView extends StatelessWidget {
 
     late List<BarChartGroupData> rawBarGroups;
     late List<BarChartGroupData> showingBarGroups;
-   
 
     // Make the names dynamic, except the first 2.
     //also this has to wait until the return types for the countries are made into maps.
@@ -61,25 +62,25 @@ class CarbonStatView extends StatelessWidget {
               size: 40,
               textColor: Colors.black)
         ]);
-  
+
     return FutureBuilder(
       future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-            List<double> vals=[];
-            for (int i=0; i<snapshot.data!.length; i++){
-                vals=vals+[double.parse(snapshot.data![i])];
-            }
-            //there is 100% a better way to do this, however i cannot be bothered to figure out how to apply something to an entire list in dart.
-            final barchart1 = makeGroupData(0,vals);
-            final items = [
-              barchart1
-              /*
+          List<double> vals = [];
+          for (int i = 0; i < snapshot.data!.length; i++) {
+            vals = vals + [double.parse(snapshot.data![i])];
+          }
+          //there is 100% a better way to do this, however i cannot be bothered to figure out how to apply something to an entire list in dart.
+          final barchart1 = makeGroupData(0, vals);
+          final items = [
+            barchart1
+            /*
               insert more barcharts if needed.
               */
-            ];
-            rawBarGroups = items;
-           final barChart = BarChart(BarChartData(
+          ];
+          rawBarGroups = items;
+          final barChart = BarChart(BarChartData(
             maxY: 20,
             //barGroups: showingBarGroups,
             barGroups: List.of(rawBarGroups),
@@ -97,23 +98,23 @@ class CarbonStatView extends StatelessWidget {
             //swapAnimationDuration: Duration(milliseconds: 150), // Optional
             //swapAnimationCurve: Curves.linear, // Optional
           ));
-          return ListView(
-              children: <Widget>[
-                Container(
-                  height: 600,
-                  child: barChart,
-                ),
-                colorIndicators
-              ]);
+          return ListView(children: <Widget>[
+            Container(
+              height: 600,
+              child: barChart,
+            ),
+            colorIndicators
+          ]);
         } else if (snapshot.hasError) {
           return Center(child: Text('error: ${snapshot.error.toString()}'));
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
   }
 }
+
 /* 
 // this is now legacy code, but keep it in case we need to figure something out.
 BarChartGroupData makeGroupData(int x, double y1, double y2) {
@@ -142,18 +143,29 @@ BarChartGroupData makeGroupData(int x, List<double> y) {
     barRods: createBarchart(y),
   );
 }
-List<BarChartRodData> createBarchart(List<double> y){
+
+List<BarChartRodData> createBarchart(List<double> y) {
   List<BarChartRodData> res = [];
-  List<Color> col = [Colors.red, Colors.blue, Colors.purple, Colors.pink, Colors.orange];
-  for (int i=0; i<y.length; i++) {
-    res=res+[BarChartRodData(
-        toY: y[i],
-        color: col[i],
-        width: 10,
-      )];
+  List<Color> col = [
+    Colors.red,
+    Colors.blue,
+    Colors.purple,
+    Colors.pink,
+    Colors.orange
+  ];
+  for (int i = 0; i < y.length; i++) {
+    res = res +
+        [
+          BarChartRodData(
+            toY: y[i],
+            color: col[i],
+            width: 10,
+          )
+        ];
   }
   return res;
 }
+
 Widget bottomTitles(double value, TitleMeta meta) {
   final titles = <String>['Carbon score'];
 

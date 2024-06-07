@@ -81,7 +81,7 @@ class CarbonTrackerView extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Text('error: ${snapshot.error.toString()}');
               } else {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
             },
           );

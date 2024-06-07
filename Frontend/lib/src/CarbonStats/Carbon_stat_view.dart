@@ -34,6 +34,9 @@ class CarbonStatView extends StatelessWidget {
     late List<BarChartGroupData> rawBarGroups;
     late List<BarChartGroupData> showingBarGroups;
    
+
+    // Make the names dynamic, except the first 2.
+    //also this has to wait until the return types for the countries are made into maps.
     const colorIndicators = Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -50,6 +53,12 @@ class CarbonStatView extends StatelessWidget {
               text: "Average   ",
               isSquare: true,
               size: 40,
+              textColor: Colors.black),
+          Indicator(
+              color: Colors.purple,
+              text: "Denmark   ",
+              isSquare: true,
+              size: 40,
               textColor: Colors.black)
         ]);
   
@@ -57,17 +66,17 @@ class CarbonStatView extends StatelessWidget {
       future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-            
-            final barGroup1 = makeGroupData(0,double.parse(snapshot.data![0]), double.parse(snapshot.data![2]));
-            //final barGroup2 = makeGroupData(0,double.parse(snapshot.data![2]), 0);
+            List<double> vals=[];
+            for (int i=0; i<snapshot.data!.length; i++){
+                vals=vals+[double.parse(snapshot.data![i])];
+            }
+            //there is 100% a better way to do this, however i cannot be bothered to figure out how to apply something to an entire list in dart.
+            final barchart1 = makeGroupData(0,vals);
             final items = [
-              barGroup1,
-              /* barGroup2,
-               barGroup3,
-              barGroup4,
-              barGroup5,
-              barGroup6,
-              barGroup7,*/
+              barchart1
+              /*
+              insert more barcharts if needed.
+              */
             ];
             rawBarGroups = items;
            final barChart = BarChart(BarChartData(
@@ -89,10 +98,6 @@ class CarbonStatView extends StatelessWidget {
             //swapAnimationCurve: Curves.linear, // Optional
           ));
           return ListView(
-              //itemCount: 2,
-              //itemBuilder: (context, index) {
-              //String k = snapshot.data![0];
-              //String k2 = snapshot.data![1];
               children: <Widget>[
                 Container(
                   height: 600,
@@ -109,7 +114,8 @@ class CarbonStatView extends StatelessWidget {
     );
   }
 }
-
+/* 
+// this is now legacy code, but keep it in case we need to figure something out.
 BarChartGroupData makeGroupData(int x, double y1, double y2) {
   return BarChartGroupData(
     barsSpace: 4,
@@ -128,7 +134,26 @@ BarChartGroupData makeGroupData(int x, double y1, double y2) {
     ],
   );
 }
-
+*/
+BarChartGroupData makeGroupData(int x, List<double> y) {
+  return BarChartGroupData(
+    barsSpace: 4,
+    x: x,
+    barRods: createBarchart(y),
+  );
+}
+List<BarChartRodData> createBarchart(List<double> y){
+  List<BarChartRodData> res = [];
+  List<Color> col = [Colors.red, Colors.blue, Colors.purple, Colors.pink, Colors.orange];
+  for (int i=0; i<y.length; i++) {
+    res=res+[BarChartRodData(
+        toY: y[i],
+        color: col[i],
+        width: 10,
+      )];
+  }
+  return res;
+}
 Widget bottomTitles(double value, TitleMeta meta) {
   final titles = <String>['Carbon score'];
 

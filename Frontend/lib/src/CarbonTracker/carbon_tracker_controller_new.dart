@@ -7,12 +7,17 @@ class CarbonTrackerControllerNew {
 }
 
 class CarbonTrackerItem {
+  CarbonTrackerItem(this.type, this.usage);
+
   CarbonTrackerType type;
   int usage;
 }
 
 class CarbonTrackerType {
+  CarbonTrackerType(this.name, this.input);
+
   String name;
+  CarbonTrackInputTypes input;
 }
 
 enum CarbonTrackInputTypes {

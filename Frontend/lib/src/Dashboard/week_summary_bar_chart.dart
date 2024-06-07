@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -33,49 +34,62 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Card(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const Text(
-                  'Past 7 days',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+    return FutureBuilder(
+      future: CarbonTrackerController().last7days(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return AspectRatio(
+            aspectRatio: 1,
+            child: Card(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: InkWell(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        'Past 7 days',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: BarChart(
+                            isPlaying
+                                ? randomData()
+                                : mainBarData(snapshot.data!),
+                            swapAnimationDuration: animDuration,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: BarChart(
-                      isPlaying ? randomData() : mainBarData(),
-                      swapAnimationDuration: animDuration,
-                    ),
-                  ),
-                ),
-              ],
+                onDoubleTap: () {
+                  setState(() {
+                    isPlaying = !isPlaying;
+                    if (isPlaying) {
+                      refreshState();
+                    }
+                  });
+                },
+              ),
             ),
-          ),
-          onDoubleTap: () {
-            setState(() {
-              isPlaying = !isPlaying;
-              if (isPlaying) {
-                refreshState();
-              }
-            });
-          },
-        ),
-      ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('error: ${snapshot.error.toString()}');
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 
@@ -109,22 +123,23 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups(List<double> data) =>
+      List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, data[6], isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, data[5], isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, data[4], isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, data[3], isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(4, data[2], isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, data[1], isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, data[0], isTouched: i == touchedIndex);
           default:
             return throw Error();
         }
@@ -157,7 +172,7 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
     return weekDay;
   }
 
-  BarChartData mainBarData() {
+  BarChartData mainBarData(List<double> data) {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -248,7 +263,7 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(data),
       gridData: const FlGridData(show: false),
     );
   }

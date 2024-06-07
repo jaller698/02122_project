@@ -59,7 +59,7 @@ class CarbonTrackerView extends StatelessWidget {
                                 leading: Icon(curItem.type.icon),
                                 title: Text(curItem.type.text),
                                 subtitle: Text(
-                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
+                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')} - ${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
                                 trailing: Text(curItem.carbonScore.toString()),
                                 onTap: () {
                                   control.removeTrackerItem(curItem.id!);

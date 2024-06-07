@@ -106,7 +106,7 @@ class CarbonTrackerController with ChangeNotifier {
 
     for (var i = 0; i < items.length; i++) {
       var diff = date.difference(items[i].dateAdded);
-      if (diff.inDays <= 7 && diff.inDays > 0) {
+      if (diff.inDays <= 7 && diff.inDays >= 0) {
         list[diff.inDays] += items[i].carbonScore;
       }
     }

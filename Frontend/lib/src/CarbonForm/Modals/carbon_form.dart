@@ -10,7 +10,6 @@ class CarbonForm {
   });
 
   factory CarbonForm.fromMap(Map<String, dynamic> json) {
-    print(json);
     return switch (json) {
       {
         'title': String title,

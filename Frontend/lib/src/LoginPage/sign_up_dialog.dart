@@ -1,4 +1,5 @@
 import 'package:carbon_footprint/src/LoginPage/http/create_new_user.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -65,7 +66,9 @@ class _SignUpDialogState extends State<SignUpDialog> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               // TODO
-                              print('TODO show Terms of Service');
+                              if (kDebugMode) {
+                                print('TODO show Terms of Service');
+                              }
                             },
                         ),
                         TextSpan(text: ' and ', children: <TextSpan>[
@@ -76,7 +79,9 @@ class _SignUpDialogState extends State<SignUpDialog> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 // TODO
-                                print('TODO show Privacy Policy');
+                                if (kDebugMode) {
+                                  print('TODO show Privacy Policy');
+                                }
                               },
                           )
                         ])
@@ -111,8 +116,7 @@ class _SignUpDialogState extends State<SignUpDialog> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     title: const Text('Sign up failed'),
-                                    content: const Text(
-                                        'User already exists'),
+                                    content: const Text('User already exists'),
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () => Navigator.pop(context),

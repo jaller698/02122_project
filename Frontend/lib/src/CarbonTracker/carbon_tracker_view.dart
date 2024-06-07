@@ -50,8 +50,7 @@ class CarbonTrackerView extends StatelessWidget {
                             final lastItem = snapshot.data![index == 0
                                 ? count - indexAdditive
                                 : count - indexAdditive + 1];
-                            print(
-                                'count $index, cur ${curItem.dateAdded}, last ${lastItem.dateAdded}');
+
                             if (index == 0 ||
                                 (curItem.dateAdded.day ==
                                         lastItem.dateAdded.day &&

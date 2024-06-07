@@ -1,4 +1,3 @@
-import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

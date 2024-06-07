@@ -8,7 +8,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
-
 class CarbonTrackerController with ChangeNotifier {
   // singleton
   CarbonTrackerController._hiddenConstructor();
@@ -83,7 +82,21 @@ class CarbonTrackerController with ChangeNotifier {
 
     var itemMap = item.toMap();
 
-    itemMap['id'] = _carbonTrackerItems?.length ?? 0;
+    var itemList = await carbonTrackerItems;
+
+    for (var i = 0; i < itemList.length; i++) {
+      bool valid = true;
+      for (var item in itemList) {
+        if (item.id == i) valid = false;
+      }
+
+      if (valid) {
+        itemMap['id'] = i;
+        break;
+      }
+    }
+
+    print(itemMap);
 
     await db.insert(
       'carbon',
@@ -109,19 +122,18 @@ class CarbonTrackerController with ChangeNotifier {
 
     await loadTrackerItems();
   }
-  
+
   void sendToServer(CarbonTrackerItem item) {
     // send to server
     Map data = Map.from(item.toMap());
     data.addAll({'user': UserController().username});
-    http.post(
-      Uri.parse('${SettingsController.address}/actionTracker'), 
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(data));
+    http.post(Uri.parse('${SettingsController.address}/actionTracker'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data));
   }
-  
+
   void deleteFromServer(int id) {
     // delete from server
     // TODO is this needed?

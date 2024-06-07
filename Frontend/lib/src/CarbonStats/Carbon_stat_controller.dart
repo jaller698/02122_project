@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,14 +65,15 @@ class CarbonStatController {
       throw Exception('Failed to load average score');
     }
   }
-   Future<String> fetchCountries() async {
-    http.Request request =
-        http.Request("GET", Uri.parse('${SettingsController.address}/comparison'));
-    
-      request.body = jsonEncode(<String, List<String>>{
+
+  Future<String> fetchCountries() async {
+    http.Request request = http.Request(
+        "GET", Uri.parse('${SettingsController.address}/comparison'));
+
+    request.body = jsonEncode(<String, List<String>>{
       'landcodes': ["DK"],
     });
-    
+
     request.headers.addAll(<String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });

@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'CarbonForm/carbon_form_view.dart';
 import 'CarbonTracker/carbon_tracker_view.dart';
 import 'Dashboard/dashboard_view.dart';
-import 'CarbonStats/Carbon_stat_view.dart';
+import 'CarbonStats/carbon_stat_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});

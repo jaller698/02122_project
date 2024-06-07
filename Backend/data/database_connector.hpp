@@ -16,7 +16,9 @@ class dataBaseStart{
         web::json::value get(std::string table, std::string key);
         void updateUserScore(std::string username, int score);
         void updateUserScore(std::string username, double score);
-        void init();
+        void insertAction(std::string username, std::string action, std::string category, double carbonScoreChanged, std::string date);
+        void insertCategorizedScore(std::string username, double totalScore, double foodScore, double transportScore, double energyScore, double homeScore, double otherScore);
+        int init();
         void reset();
         double getAverage();
         web::json::value getComparison(web::json::array landcodes);

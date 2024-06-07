@@ -5,7 +5,8 @@ const std::unordered_map<std::string_view, HandlerFunction> write_handlers = {
     {"/questions", handle_questions_write},
     {"/users", handle_signup},
     {"/userScore", handle_user_score_write},
-    {"/comparison", handle_comparison}
+    {"/comparison", handle_comparison},
+    {"/actionTracker", handle_actionTracker}
 };
 
 const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
@@ -64,6 +65,7 @@ struct Response handle_questions_write(const web::json::value &request_body)
                     answers.push_back(std::to_string(answer.as_integer()));
                 }
             }
+
             double carbonScore = calculateCarbonScore(answers);
             web::json::value response = web::json::value::object();
             response["response"]["carbonScore"] = web::json::value::number(carbonScore);
@@ -179,8 +181,8 @@ struct Response handle_user_score_read(const web::json::value &request_body)
 struct Response handle_user_score_write(const web::json::value &request_body)
 {
     try {
-        auto username = request_body.at("User").as_string();
-        auto score = request_body.at("Score").as_integer();
+        std::string username = request_body.at("User").as_string();
+        int score = request_body.at("Score").as_integer();
         dataBaseStart db;
         db.updateUserScore(username, score);
         return Response(http::status_codes::OK, web::json::value::string("Score updated"));
@@ -217,6 +219,24 @@ struct Response handle_comparison(const web::json::value &request_body)
         return Response(http::status_codes::OK, comparison);
     } catch (const std::exception &e) {
         ERROR("Error in handling comparison: ", e);
+        return Response(http::status_codes::BadRequest, web::json::value::null());
+    }
+}
+
+// Handle action tracker request
+struct Response handle_actionTracker(const web::json::value &request_body)
+{
+    try {
+        dataBaseStart db;
+        auto action = request_body.at("name").as_string();
+        auto username = request_body.at("user").as_string();
+        auto category = request_body.at("type").as_string();
+        auto carbonScoreChanged = request_body.at("score").as_double();
+        auto date = request_body.at("date").as_string();
+        db.insertAction(username, action, category, carbonScoreChanged, date);
+        return Response(http::status_codes::OK, web::json::value::string("Action tracked"));
+    } catch (const std::exception &e) {
+        ERROR("Error in handling action tracker: ", e);
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }

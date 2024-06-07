@@ -12,9 +12,11 @@ class CarbonTrackerController with ChangeNotifier {
   factory CarbonTrackerController() => _singleton;
 
   List<CarbonTrackerItem>? _carbonTrackerItems;
-  Future<List<CarbonTrackerItem>> get carbonTrackerItems {
+  Future<List<CarbonTrackerItem>> get carbonTrackerItems async {
     if (_carbonTrackerItems == null) {
-      return loadTrackerItems();
+      var list = await loadTrackerItems();
+      list.sort((a, b) => a.dateAdded.compareTo(b.dateAdded));
+      return list;
     }
     return Future(() => _carbonTrackerItems!);
   }
@@ -22,6 +24,7 @@ class CarbonTrackerController with ChangeNotifier {
   static late Future<Database> _database;
 
   Future<List<CarbonTrackerItem>> loadTrackerItems() async {
+    // TODO - path not able to be found on windows, linux and web
     _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
@@ -94,6 +97,21 @@ class CarbonTrackerController with ChangeNotifier {
     );
 
     await loadTrackerItems();
+  }
+
+  Future<List<double>> last7days() async {
+    var items = await carbonTrackerItems;
+    var date = DateTime.now();
+    List<double> list = [0, 0, 0, 0, 0, 0, 0];
+
+    for (var i = 0; i < items.length; i++) {
+      var diff = date.difference(items[i].dateAdded);
+      if (diff.inDays <= 7 && diff.inDays > 0) {
+        list[diff.inDays] += items[i].carbonScore;
+      }
+    }
+
+    return list;
   }
 }
 

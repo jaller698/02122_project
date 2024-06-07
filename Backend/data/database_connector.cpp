@@ -171,8 +171,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
         }
 
         return questions;
-
-    }else {
+    } else {
         std::string command = "SELECT * FROM " + table + " WHERE Username='"+key+"'";
         statement = connection->createStatement();
         statement->execute(command);
@@ -268,6 +267,29 @@ double dataBaseStart::getAverage()
         output = result_set->getDouble(1);
     }
     return output >= 0 ? output : NULL;
+}
+
+web::json::value dataBaseStart::getComparison(web::json::array landcodes) 
+{
+    connection->setSchema("CarbonFootprint");
+    web::json::value output = web::json::value::array();
+    for (auto &landcode : landcodes)
+    {
+        std::string command = "SELECT * FROM WorldComparisonData WHERE IsoCode = '" + landcode.as_string() + "'";
+        DEBUG_PRINT("SQL Command: " + command);
+        statement = connection->createStatement();
+        result_set = statement->executeQuery(command);
+        if (result_set->next())
+        {
+            DEBUG_PRINT("Found country: " + result_set->getString(2));
+            web::json::value country = web::json::value::object();
+            country["Country"] = web::json::value::string(result_set->getString(2));
+            country["CarbonScore"] = web::json::value::number((double) result_set->getDouble(3));
+            output[output.size()] = country;
+        }
+    }
+    return output;
+
 }
 
 

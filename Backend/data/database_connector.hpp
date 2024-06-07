@@ -19,6 +19,7 @@ class dataBaseStart{
         void init();
         void reset();
         double getAverage();
+        web::json::value getComparison(web::json::array landcodes);
         ~dataBaseStart();
 
 

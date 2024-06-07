@@ -210,10 +210,11 @@ struct Response handle_average(const web::json::value &request_body)
 struct Response handle_comparison(const web::json::value &request_body)
 {
     try {
-    web::json::array landcodes = request_body.at("landcodes").as_array();
-    auto comparison = web::json::value::array();
-    comparison = web::json::value::number(2000);
-    return Response(http::status_codes::OK, comparison);
+        dataBaseStart db;
+        web::json::array landcodes = request_body.at("landcodes").as_array();
+        auto comparison = web::json::value::array();
+        comparison = db.getComparison(landcodes);
+        return Response(http::status_codes::OK, comparison);
     } catch (const std::exception &e) {
         ERROR("Error in handling comparison: ", e);
         return Response(http::status_codes::BadRequest, web::json::value::null());

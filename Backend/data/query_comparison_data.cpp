@@ -18,7 +18,7 @@ std::vector<std::tuple<std::string, std::string, std::string>> query_comparison_
         std::vector<std::tuple<std::string, std::string, std::string>> country_data;
         bool is_country_data_ready = false;
         for (auto &country : data.at(1).as_array()) {
-            // wait for afghanistan since that is the first country, before that is regions / classifications
+            // wait for afghanistan since that is the first country, before that it is regions / classifications
             if (country.at("countryiso3code").as_string() == "AFG") {
                 is_country_data_ready = true;
             } else if (!is_country_data_ready) {

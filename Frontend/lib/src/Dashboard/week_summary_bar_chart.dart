@@ -35,9 +35,10 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: Stack(
-        children: <Widget>[
-          Padding(
+      child: Card(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: InkWell(
+          child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -62,33 +63,18 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.green,
-                ),
-                onPressed: () {
-                  setState(() {
-                    isPlaying = !isPlaying;
-                    if (isPlaying) {
-                      refreshState();
-                    }
-                  });
-                },
-              ),
-            ),
-          )
-        ],
+          onDoubleTap: () {
+            setState(() {
+              isPlaying = !isPlaying;
+              if (isPlaying) {
+                refreshState();
+              }
+            });
+          },
+        ),
       ),
     );
   }
@@ -111,7 +97,7 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
           width: width,
           borderSide: isTouched
               ? BorderSide(color: widget.touchedBarColor)
-              : const BorderSide(color: Colors.white, width: 0),
+              : const BorderSide(color: Colors.black, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
             toY: 20,
@@ -144,6 +130,33 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
         }
       });
 
+  String getWeekDay(int week, {bool char = true}) {
+    if (week <= 0) week += 7;
+
+    String weekDay = '';
+    switch (week) {
+      case 1:
+        weekDay = 'Monday';
+      case 2:
+        weekDay = 'Tuesday';
+      case 3:
+        weekDay = 'Wednesday';
+      case 4:
+        weekDay = 'Thursday';
+      case 5:
+        weekDay = 'Friday';
+      case 6:
+        weekDay = 'Saturday';
+      case 7:
+        weekDay = 'Sunday';
+      default:
+        throw Error();
+    }
+    if (char) weekDay = weekDay[0];
+
+    return weekDay;
+  }
+
   BarChartData mainBarData() {
     return BarChartData(
       barTouchData: BarTouchData(
@@ -153,27 +166,28 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;
+            int day = DateTime.now().weekday;
             switch (group.x) {
               case 0:
-                weekDay = 'Monday';
+                weekDay = getWeekDay(day - 6, char: false);
                 break;
               case 1:
-                weekDay = 'Tuesday';
+                weekDay = getWeekDay(day - 5, char: false);
                 break;
               case 2:
-                weekDay = 'Wednesday';
+                weekDay = getWeekDay(day - 4, char: false);
                 break;
               case 3:
-                weekDay = 'Thursday';
+                weekDay = getWeekDay(day - 3, char: false);
                 break;
               case 4:
-                weekDay = 'Friday';
+                weekDay = getWeekDay(day - 2, char: false);
                 break;
               case 5:
-                weekDay = 'Saturday';
+                weekDay = getWeekDay(day - 1, char: false);
                 break;
               case 6:
-                weekDay = 'Sunday';
+                weekDay = getWeekDay(day, char: false);
                 break;
               default:
                 throw Error();
@@ -241,32 +255,33 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
 
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
     Widget text;
+    int day = DateTime.now().weekday;
     switch (value.toInt()) {
       case 0:
-        text = const Text('M', style: style);
+        text = Text(getWeekDay(day - 6), style: style);
         break;
       case 1:
-        text = const Text('T', style: style);
+        text = Text(getWeekDay(day - 5), style: style);
         break;
       case 2:
-        text = const Text('W', style: style);
+        text = Text(getWeekDay(day - 4), style: style);
         break;
       case 3:
-        text = const Text('T', style: style);
+        text = Text(getWeekDay(day - 3), style: style);
         break;
       case 4:
-        text = const Text('F', style: style);
+        text = Text(getWeekDay(day - 2), style: style);
         break;
       case 5:
-        text = const Text('S', style: style);
+        text = Text(getWeekDay(day - 1), style: style);
         break;
       case 6:
-        text = const Text('S', style: style);
+        text = Text(getWeekDay(day), style: style);
         break;
       default:
         text = const Text('', style: style);

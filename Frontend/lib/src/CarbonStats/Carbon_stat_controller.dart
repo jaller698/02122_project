@@ -66,4 +66,24 @@ class CarbonStatController {
       throw Exception('Failed to load average score');
     }
   }
+   Future<String> fetchCountries() async {
+    http.Request request =
+        http.Request("GET", Uri.parse('${SettingsController.address}/comparison'));
+    
+      request.body = jsonEncode(<String, List<String>>{
+      'landcodes': ["DK"],
+    });
+    
+    request.headers.addAll(<String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+    var response = await request.send();
+    //var res = await response.stream.
+    var result = await response.stream.transform(utf8.decoder).first;
+    if (response.statusCode == 200) {
+      return result;
+    } else {
+      throw Exception('Failed to load average score');
+    }
+  }
 }

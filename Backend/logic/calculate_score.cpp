@@ -1,5 +1,35 @@
 #include "calculate_score.h"
 
+double foodScore=0;
+double transportScore=0;
+double energyScore=0;
+double homeScore=0;
+double otherScore=0;
+
+double& findVar(std::string type)
+{
+    if (type == "food")
+    {
+        return foodScore;
+    }
+    else if (type == "transportation")
+    {
+        return transportScore;
+    }
+    else if (type == "energy")
+    {
+        return energyScore;
+    }
+    else if (type == "home")
+    {
+        return homeScore;
+    }
+    else
+    {
+        return otherScore;
+    }
+}
+
 double calculateCarbonScore (std::vector<int> &answers, std::string userID)
 {
     try {
@@ -7,39 +37,45 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
 
         //some of the questions in weeks, but we measure in years, so we time them with 52
         DEBUG_PRINT("Calculating carbon score")
-        double foodScore=0;
-        double transportScore=0;
-        double energyScore=0;
-        double homeScore=0;
-        double otherScore=0;
 
-        // TODO: The following calculations are not valid, please find correct numbers and adjust
-        // Q1: How much time do you spend on airplanes, on average, per year?(In hours)
-        transportScore += answers[0] * 53.04; // 53.04 kg CO2 per hour
+        web::json::value jsonConfig = web::json::value::object(); 
+        std::ifstream f("questions.json");
+        std::stringstream strStream;
+        strStream << f.rdbuf();
+        f.close(); 
+        jsonConfig = web::json::value::parse(strStream);
+        auto questions = jsonConfig.at("questions").as_array();
 
-        // Q2: How many times a week do you eat beef?
-        foodScore += answers[1] * 2.6; // 2.6 kg CO2 per meal
-
-        // Q3: How much do you drive per week? (hours)
-        transportScore += answers[2] * 0.2; // 0.2 kg CO2 per hour
-
-        // Q4: How much do you take public transportation per week?
-        transportScore += answers[3] * 0.1; // 0.1 kg CO2 per hour
-
-        // Q5: How long do you usually keep a new phone?(In years)
-        otherScore += answers[4] * 16; // 16 kg CO2 per phone
-
-        // Q6: How many times a week do you shower
-        homeScore += answers[5] * 0.5; // 0.5 kg CO2 per shower
-
-        // Q7: Do you turn off lights when you leave a room? (1: always, 2: sometimes 3: never)
-        homeScore += answers[6] * 0.1; // 0.1 kg CO2 per hour
-
-        // Q8: Do you bring your own bags when shopping(1: yes, 2:no)
-        otherScore += answers[7] * 0.1; // 0.1 kg CO2 per bag
-
-        // Q9: How many times do you promt an AI pr day
-        otherScore += answers[8] * 0.1; // 0.1 kg CO2 per prompt
+        for (int i = 0; i < answers.size(); i++)
+        {
+            DEBUG_PRINT("Answer: " + std::to_string(answers[i]));
+            // map from json["type"] to varibale score:
+            double& score = findVar(questions[i].at("category").as_string());
+            double imd_score = answers[i] * questions[i].at("estimated cost of KG CO2 per unit").as_double();
+            if (questions[i].at("unit").as_string() == "weeks" || questions[i].at("unit").as_string() == "times a week")
+            {
+                imd_score *= 52;
+            } 
+            else if (questions[i].at("unit").as_string() == "months" || questions[i].at("unit").as_string() == "times a month")
+            {
+                imd_score *= 12;
+            }
+            else if (questions[i].at("unit").as_string() == "hours") 
+            {
+                imd_score *= 12 * 52 * 24;
+            }
+            else if (questions[i].at("unit").as_string() == "days" || questions[i].at("unit").as_string() == "times a day" ) 
+            {
+                imd_score *= 365;
+            } else if (questions[i].at("unit").as_string() == "years" || questions[i].at("unit").as_string() == "times a year" || questions[i].at("unit").as_string() == "choice")
+            {
+                // do nothing
+            } else {
+                WARNING("Unknown unit: " + questions[i].at("unit").as_string());
+            }
+            score += imd_score;
+            DEBUG_PRINT(questions[i].at("category").as_string() + " score: " + std::to_string(score) + " imd_score: " + std::to_string(imd_score));
+        }
 
         double res = foodScore + transportScore + energyScore + homeScore + otherScore;
         

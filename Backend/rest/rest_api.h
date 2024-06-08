@@ -9,7 +9,7 @@ class RestAPIEndpoint {
 public:
     ~RestAPIEndpoint();
     RestAPIEndpoint();
-    void listen();
+    void listen(std::atomic<bool>& stop_flag);
 
 private:
     http_listener listener_;

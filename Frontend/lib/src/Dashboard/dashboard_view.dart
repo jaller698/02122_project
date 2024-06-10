@@ -69,6 +69,7 @@ class _DashboardViewState extends State<DashboardView> {
           
           const List<String> labels = ["Transport", "Home", "Food", "Other"];
                 List<Segment> segments = [
+                  //TODO: we need to change these index's to match waht we want
               Segment(value: vals[1], color: Colors.lightGreenAccent, label: Text(labels[0])),
               Segment(value: vals[1], color: Colors.orangeAccent, label: Text(labels[1])),
               Segment(value: vals[1], color: Colors.limeAccent, label: Text(labels[2])),

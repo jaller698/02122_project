@@ -1,14 +1,12 @@
 #include "database_connector.hpp"
 
 
-using namespace std;
-
 dataBaseStart::~dataBaseStart()
 {
     delete connection;
 }
 
-void dataBaseStart::init()
+int dataBaseStart::init()
 {
 
     try
@@ -31,7 +29,7 @@ void dataBaseStart::init()
         delete statement;
 
         statement = connection->createStatement();
-        std::string inputstr = "CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(30), ";
+        std::string inputstr = "CREATE TABLE IF NOT EXISTS InitialSurvey(Username VARCHAR(50), ";
         for (auto& question : questions)
         {
             inputstr += "Answer" + question.first + " INT, ";
@@ -41,10 +39,9 @@ void dataBaseStart::init()
         statement->execute(inputstr);
         DEBUG_PRINT("Table 'InitialSurvey' created successfully.");
         delete statement;
-        
         statement = connection->createStatement();
         
-        inputstr = "CREATE TABLE IF NOT EXISTS GoalsSurvey(Username VARCHAR(30), ";
+        inputstr = "CREATE TABLE IF NOT EXISTS GoalsSurvey(Username VARCHAR(50), ";
         for (auto& question : questions)
         {
             inputstr += "Answer" + question.first + " INT, ";
@@ -55,12 +52,30 @@ void dataBaseStart::init()
         DEBUG_PRINT("Table 'GoalsSurvey' created successfully.");
 
         statement = connection->createStatement();
-        inputstr = "CREATE TABLE IF NOT EXISTS UpdatedSurvey(Username VARCHAR(30), SurveyNR INT PRIMARY KEY,";
+        inputstr = "CREATE TABLE IF NOT EXISTS UpdatedSurvey(Username VARCHAR(50), SurveyNR INT PRIMARY KEY,";
         for (auto& question : questions)
         {
             inputstr += "Answer" + question.first + " INT, ";
         }
         inputstr += "FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
+        delete statement;
+
+        statement = connection->createStatement();
+        inputstr = "CREATE TABLE IF NOT EXISTS ActionTrackerData(Username VARCHAR(50), Action VARCHAR(100), Category VARCHAR(100), Date DATETIME, CarbonScoreChanged DOUBLE, FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
+        delete statement;
+
+        statement = connection->createStatement();
+        inputstr = "CREATE TABLE IF NOT EXISTS CarbonScoreHistory(Username VARCHAR(50), Date DATETIME, CarbonScore DOUBLE, FOREIGN KEY(Username) REFERENCES Users(Username));";
+        DEBUG_PRINT("SQL Command: " + inputstr);
+        statement->execute(inputstr);
+        delete statement;
+
+        statement = connection->createStatement();
+        inputstr = "CREATE TABLE IF NOT EXISTS CarbonScore(Username VARCHAR(50), totalScore DOUBLE, foodScore DOUBLE, transportScore DOUBLE, energyScore DOUBLE, homeScore DOUBLE, otherScore DOUBLE, FOREIGN KEY(Username) REFERENCES Users(Username));";
         DEBUG_PRINT("SQL Command: " + inputstr);
         statement->execute(inputstr);
         delete statement;
@@ -78,7 +93,7 @@ void dataBaseStart::init()
         statement->execute(inputstr);
         delete statement;
 
-        // check if the table exists, if not create it
+        // check if the table exists, if not create it and populate it
         statement = connection->createStatement();
         inputstr = "SHOW TABLES LIKE 'WorldComparisonData';";
         result_set = statement->executeQuery(inputstr);
@@ -125,10 +140,12 @@ void dataBaseStart::init()
 	                            VALUES ('guest','password',-1);");
         }
         updateQuestions();
+        return 0; // everything went well
     }
     catch (sql::SQLException &e)
     {
         ERROR("Error in init: ", e);
+        return 1; // notfiy main of error
     }
 }
 
@@ -227,7 +244,7 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
     if (input.size() != tableSize+1)
     {
         WARNING("input is not the presumed size, expected " + std::to_string(tableSize+1) + " but got " + std::to_string(input.size()) + " elements");
-        throw logic_error("input is not the presumed size");
+        throw std::logic_error("input is not the presumed size");
     }
     for (int i = 1; i <= tableSize; i++)
     {
@@ -239,18 +256,29 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
 }
 
 void dataBaseStart::updateUserScore(std::string username, int score){
-    connection->setSchema("CarbonFootprint");
     if (username == "guest")
         return;
+    updateUserScore(username, (double) score);
+}
+
+void dataBaseStart::updateUserScore(std::string username, double score){
+    connection->setSchema("CarbonFootprint");
+    // set current score to something
     std::string command = "UPDATE Users SET CarbonScore = " + std::to_string(score) + " WHERE Username = '" + username + "'";
+    statement = connection->createStatement();
+    statement->execute(command);
+    delete statement;
+    // also update the historic score:
+    command = "INSERT INTO CarbonScoreHistory VALUES('" + username + "', NOW(), " + std::to_string(score) + ")";
     statement = connection->createStatement();
     statement->execute(command);
     delete statement;
 }
 
-void dataBaseStart::updateUserScore(std::string username, double score){
+void dataBaseStart::insertAction(std::string username, std::string action, std::string category, double carbonScoreChanged, std::string date)
+{
     connection->setSchema("CarbonFootprint");
-    std::string command = "UPDATE Users SET CarbonScore = " + std::to_string(score) + " WHERE Username = '" + username + "'";
+    std::string command = "INSERT INTO ActionTrackerData VALUES('" + username + "', '" + action + "', '" + category + "', '" + date + "', " + std::to_string(carbonScoreChanged) + ")";
     statement = connection->createStatement();
     statement->execute(command);
     delete statement;
@@ -292,6 +320,14 @@ web::json::value dataBaseStart::getComparison(web::json::array landcodes)
 
 }
 
+void dataBaseStart::insertCategorizedScore(std::string username, double totalScore, double foodScore, double transportScore, double energyScore, double homeScore, double otherScore) 
+{
+    connection->setSchema("CarbonFootprint");
+    statement = connection->createStatement();
+    std::string command = "INSERT INTO CarbonScore VALUES ('" + username + "', " + std::to_string(totalScore) + ", " + std::to_string(foodScore) + ", " + std::to_string(transportScore) + ", " + std::to_string(energyScore) + ", " + std::to_string(homeScore) + ", " + std::to_string(otherScore) + ")";
+    statement->execute(command);
+    delete statement;
+}
 
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {

@@ -87,7 +87,7 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
         } else if (snapshot.hasError) {
           return Text('error: ${snapshot.error.toString()}');
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

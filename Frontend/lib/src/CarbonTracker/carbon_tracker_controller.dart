@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
+import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:http/http.dart' as http;
 
 class CarbonTrackerController with ChangeNotifier {
   // singleton
@@ -68,6 +72,8 @@ class CarbonTrackerController with ChangeNotifier {
       whereArgs: [item.id],
     );
 
+    //TODO, if this is used call updateServer()
+
     await loadTrackerItems();
   }
 
@@ -76,13 +82,29 @@ class CarbonTrackerController with ChangeNotifier {
 
     var itemMap = item.toMap();
 
-    itemMap['id'] = _carbonTrackerItems?.length ?? 0;
+    var itemList = await carbonTrackerItems;
+
+    for (var i = 0; i < itemList.length; i++) {
+      bool valid = true;
+      for (var item in itemList) {
+        if (item.id == i) valid = false;
+      }
+
+      if (valid) {
+        itemMap['id'] = i;
+        break;
+      }
+    }
+
+    print(itemMap);
 
     await db.insert(
       'carbon',
       itemMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+
+    sendToServer(item);
 
     await loadTrackerItems();
   }
@@ -96,7 +118,25 @@ class CarbonTrackerController with ChangeNotifier {
       whereArgs: [id],
     );
 
+    deleteFromServer(id);
+
     await loadTrackerItems();
+  }
+
+  void sendToServer(CarbonTrackerItem item) {
+    // send to server
+    Map data = Map.from(item.toMap());
+    data.addAll({'user': UserController().username});
+    http.post(Uri.parse('${SettingsController.address}/actionTracker'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data));
+  }
+
+  void deleteFromServer(int id) {
+    // delete from server
+    // TODO is this needed?
   }
 
   Future<List<double>> last7days() async {
@@ -106,7 +146,7 @@ class CarbonTrackerController with ChangeNotifier {
 
     for (var i = 0; i < items.length; i++) {
       var diff = date.difference(items[i].dateAdded);
-      if (diff.inDays <= 7 && diff.inDays > 0) {
+      if (diff.inDays <= 7 && diff.inDays >= 0) {
         list[diff.inDays] += items[i].carbonScore;
       }
     }

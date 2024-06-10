@@ -5,7 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
 
-import 'Carbon_stat_controller.dart';
+import 'carbon_stat_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 
 class CarbonStatView extends StatelessWidget {
@@ -110,7 +110,7 @@ class CarbonStatView extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('error: ${snapshot.error.toString()}'));
         } else {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

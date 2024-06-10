@@ -12,7 +12,7 @@
     },
     {
         "id": "Q3",
-        "question": "How much do you drive per week? (hours)",
+        "question": "How much do you drive in a car per week? (hours)",
         "Type": "int"
     },
     {
@@ -42,7 +42,7 @@
     },
     {
         "id": "Q9",
-        "question": "How many times do you promt an AI pr day",
+        "question": "How many times do you prompt an AI pr day",
         "Type": "int"
     }
     ]

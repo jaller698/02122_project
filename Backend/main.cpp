@@ -4,7 +4,10 @@ int main() {
     try
     {
        dataBaseStart db;
-       db.init();
+       if (db.init() != 0) {
+            WARNING("Something went wrong during the setup, exiting program");
+            std::terminate();
+       }
        RestAPIEndpoint rest_api_endpoint;
        rest_api_endpoint.listen();
     }

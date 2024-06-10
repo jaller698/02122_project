@@ -1,11 +1,8 @@
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'package:carbon_footprint/src/Settings/settings_service.dart';
-import 'package:carbon_footprint/src/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'week_summary_bar_chart.dart';
 
@@ -31,7 +28,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    final progressBar = PrimerProgressBar(segments: DashboardView.segments);
     final pieChart = PieChart(PieChartData(
       pieTouchData: PieTouchData(
         touchCallback: (FlTouchEvent event, pieTouchResponse) {

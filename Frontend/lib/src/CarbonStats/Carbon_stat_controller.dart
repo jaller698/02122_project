@@ -73,7 +73,7 @@ class CarbonStatController {
       request.body = jsonEncode(<String, List<String>>{
       'landcodes': countries,
     });
-    
+
     request.headers.addAll(<String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });

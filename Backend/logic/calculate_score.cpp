@@ -78,7 +78,7 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         }
 
         double res = foodScore + transportScore + energyScore + homeScore + otherScore;
-        
+
         db.insertCategorizedScore(userID, res, foodScore, transportScore, energyScore, homeScore, otherScore);
 
         std::vector<std::string> db_answers;
@@ -89,9 +89,21 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         }
         db.insert("InitialSurvey",db_answers);
         DEBUG_PRINT("Got a carbon score of: " + std::to_string(res));
+        // set all scores back to 0
+        foodScore = 0;
+        transportScore = 0;
+        energyScore = 0;
+        homeScore = 0;
+        otherScore = 0;
         return res;
     } catch (const std::exception &e) {
         ERROR("Error in calculating carbon score: ", e);
+        // set all scores back to 0
+        foodScore = 0;
+        transportScore = 0;
+        energyScore = 0;
+        homeScore = 0;
+        otherScore = 0;
         throw e;
     }
 }

@@ -81,3 +81,17 @@ TEST_F(logicTest, UpdateUserScoreWithNonExistingUser) {
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::InternalError, response->status_code());
 }
+
+
+TEST_F(logicTest, getCategorizedCarbonScore) {
+    web::json::value requestBody;
+    requestBody[U("User")] = web::json::value::string(U("guest"));
+
+    auto response = sendGetRequest("/carbonScoreCategories", requestBody);
+    ASSERT_NE(response, nullptr);
+    ASSERT_EQ(status_codes::OK, response->status_code());
+
+    // assert that the response is a map
+    auto responseJson = response->extract_json().get();
+    ASSERT_TRUE(responseJson.is_object());
+}

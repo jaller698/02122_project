@@ -9,7 +9,8 @@ int main() {
             std::terminate();
        }
        RestAPIEndpoint rest_api_endpoint;
-       rest_api_endpoint.listen();
+       std::atomic<bool> stop_flag{false};
+       rest_api_endpoint.listen(stop_flag);
     }
     catch(const std::exception& e)
     {

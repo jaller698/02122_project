@@ -11,7 +11,7 @@ RestAPIEndpoint::~RestAPIEndpoint() {
     listener_.close().wait();
 }
 
-void RestAPIEndpoint::listen() {
+void RestAPIEndpoint::listen(std::atomic<bool>& stop_flag) {
     DEBUG_PRINT("Listening on " + listener_.uri().to_string());
     try {
         listener_
@@ -21,7 +21,7 @@ void RestAPIEndpoint::listen() {
             })
             .wait();
         listener_.open().wait();
-        while(true){
+        while(!stop_flag.load()){
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
@@ -64,6 +64,7 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
                 request.reply(status_codes::OK, U("No data supplied"));
                 return;
             } else if (endpoint != "/questions") {
+                WARNING("Request does not contain JSON data, returning 400");
                 request.reply(status_codes::BadRequest, U("Please provide a body"));
                 return;
             }
@@ -71,6 +72,7 @@ void RestAPIEndpoint::handle_get_request(http_request request) {
         struct Response response = handle_data(endpoint, request_body, false);
         auto status_code = response.status;
         if (status_code != status_codes::OK) {
+            WARNING("Error in GET: " + status_code);
             request.reply(status_code);
             return;
         }
@@ -160,6 +162,7 @@ void RestAPIEndpoint::handle_post_request(http_request request) {
         auto request_body = request.extract_json().get();
         // Process the JSON data
         if (request_body.is_null()) {
+            WARNING("Request does not contain JSON data, returning 400");
             request.reply(status_codes::BadRequest);
             return;
         }

@@ -406,8 +406,23 @@ void dataBaseStart::reset()
     try {
         connection->setSchema("CarbonFootprint");
         statement = connection->createStatement();
-        statement->execute("DROP DATABASE CarbonFootprint");
+        result_set = statement->executeQuery("SHOW TABLES");
+        std::vector<std::string> tables;
+        while (result_set->next())
+        {
+            std::string table = result_set->getString(1);
+            if (table == "WorldComparisonData")
+                continue;
+            DEBUG_PRINT("Dropping table: " + table);
+            tables.push_back(table);
+        }
         delete statement;
+        for (auto &table : tables)
+        {
+            statement = connection->createStatement();
+            statement->execute("DROP TABLE " + table);
+            delete statement;
+        }
         init();
     } catch (sql::SQLException &e) {
         ERROR("Error in reset: ", e);

@@ -5,7 +5,6 @@ const std::unordered_map<std::string_view, HandlerFunction> write_handlers = {
     {"/questions", handle_questions_write},
     {"/users", handle_signup},
     {"/userScore", handle_user_score_write},
-    {"/comparison", handle_comparison},
     {"/actionTracker", handle_actionTracker}
 };
 
@@ -56,6 +55,7 @@ struct Response handle_questions_write(const web::json::value &request_body)
             for (auto question : questions.as_object())
             {
                 auto question_trimmed = question.first.substr(question.first.find("_")+1, question.first.size() - 1);
+                DEBUG_PRINT("Looking for answer for question: " + question_trimmed);
                 auto answer = tmp.at(question_trimmed);
                 if (answer.is_string())
                 {
@@ -74,7 +74,7 @@ struct Response handle_questions_write(const web::json::value &request_body)
             return Response(http::status_codes::Created, response);
     } catch (const std::exception &e) {
         ERROR("Error in handling writing questions: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
 
@@ -198,6 +198,7 @@ struct Response handle_average(const web::json::value &request_body)
         dataBaseStart db;
         web::json::value average = web::json::value::number(0);
         average = db.getAverage();
+        DEBUG_PRINT("Average: " + average.serialize());
         if (average.is_null()) {
             return Response(http::status_codes::OK, web::json::value::number(0));
         }
@@ -216,9 +217,12 @@ struct Response handle_comparison(const web::json::value &request_body)
         web::json::array landcodes = request_body.at("landcodes").as_array();
         auto comparison = web::json::value::array();
         comparison = db.getComparison(landcodes);
+        if (comparison.is_null() || comparison.size() == 0) {
+            return Response(http::status_codes::BadRequest, comparison);
+        }
         return Response(http::status_codes::OK, comparison);
     } catch (const std::exception &e) {
-        ERROR("Error in handling comparison: ", e);
+        ERROR("Error in handling comparison:", e);
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }

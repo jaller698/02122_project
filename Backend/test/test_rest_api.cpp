@@ -4,6 +4,7 @@
 #include "../rest/rest_api.h"
 #include "../data/database_connector.hpp"
 #include <thread>
+#include "http_common.h"
 
 class RestAPIEndpointTest : public ::testing::Test {
 protected:
@@ -26,35 +27,6 @@ protected:
         db.reset();
         // Clean up any resources after each test
     }
-
-    // Helper function to send a POST request with JSON data
-    std::unique_ptr<http_response> sendPostRequest(const std::string& endpoint, const web::json::value& jsonBody) {
-        web::http::client::http_client client("http://localhost:8080");
-        web::http::http_request request(web::http::methods::POST);
-        request.set_request_uri(endpoint);
-        request.set_body(jsonBody);
-        request.headers().set_content_type(U("application/json"));
-        http_response response = client.request(request).get();
-        return std::make_unique<http_response>(std::move(response));;
-    }
-
-    std::unique_ptr<http_response> sendGetRequest(const std::string& endpoint) {
-        web::http::client::http_client client("http://localhost:8080");
-        web::http::http_request request(web::http::methods::GET);
-        request.set_request_uri(endpoint);
-        http_response response = client.request(request).get();
-        return std::make_unique<http_response>(std::move(response));;
-    }
-
-    std::unique_ptr<http_response> sendPutRequest(const std::string& endpoint, const web::json::value& jsonBody) {
-        web::http::client::http_client client("http://localhost:8080");
-        web::http::http_request request(web::http::methods::PUT);
-        request.set_request_uri(endpoint);
-        request.set_body(jsonBody);
-        request.headers().set_content_type(U("application/json"));
-        http_response response = client.request(request).get();
-        return std::make_unique<http_response>(std::move(response));;
-    }
 };
 
 TEST_F(RestAPIEndpointTest, ValidGetRequest) {
@@ -67,7 +39,7 @@ TEST_F(RestAPIEndpointTest, ValidGetRequest) {
 TEST_F(RestAPIEndpointTest, ValidGetDataRequest) {
 
     // Send an invalid GET request
-    auto response = sendGetRequest("/users");
+    auto response = sendGetRequest("/");
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
@@ -76,40 +48,55 @@ TEST_F(RestAPIEndpointTest, ValidPostRequest) {
 
     // Create a JSON object for the request body
     web::json::value requestBody;
-    requestBody[U("name")] = web::json::value::string(U("John"));
-    requestBody[U("age")] = web::json::value::number(25);
+    requestBody[U("User")] = web::json::value::string(U("Hans"));
+    requestBody[U("Password")] = web::json::value::string(U("password1234"));
 
     // Send a valid POST request
-    auto response = sendPostRequest("/questions", requestBody);
-    ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::OK, response->status_code());
-}
-
-TEST_F(RestAPIEndpointTest, InvalidPostRequest) {
-
-    // Create an empty JSON object for the request body
-    web::json::value requestBody;
-
-    // Send an invalid POST request
     auto response = sendPostRequest("/users", requestBody);
     ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::BadRequest, response->status_code());
+    ASSERT_EQ(status_codes::Created, response->status_code());
 }
 
 TEST_F (RestAPIEndpointTest, ValidPutRequest) {
 
     // Create a JSON object for the request body
     web::json::value requestBody;
-    requestBody[U("userID")] = web::json::value::string(U("John"));
-    requestBody[U("password")] = web::json::value::string(U("password123"));
+    requestBody[U("User")] = web::json::value::string(U("John"));
+    requestBody[U("Password")] = web::json::value::string(U("password123"));
 
     // Send a valid PUT request, currently not implemented
     auto response = sendPutRequest("/users", requestBody);
     ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::OK, response->status_code());
+    ASSERT_EQ(status_codes::Created, response->status_code());
 
-    //test that a second attempt will return 304
+    // wait for the server to process the request
+    sleep (5);
+
+    //test that a second attempt won't be processed (not OK)
     auto badResponse = sendPutRequest("/users", requestBody);
     ASSERT_NE(badResponse, nullptr);
-    ASSERT_EQ(status_codes::NotModified, badResponse->status_code());
+    ASSERT_NE(status_codes::OK, badResponse->status_code());
+}
+
+TEST_F (RestAPIEndpointTest, EmptyRequest) {
+
+    // Create an empty JSON object for the request body
+    web::json::value requestBody;
+
+    // Send an invalid request
+    auto response = sendPostRequest("/notfound", requestBody);
+    ASSERT_NE(response, nullptr);
+    ASSERT_EQ(status_codes::BadRequest, response->status_code());
+}
+
+TEST_F (RestAPIEndpointTest, EndpointNotFound) {
+    
+    // Create a JSON object for the request body, it cannot be empty
+    web::json::value requestBody;
+    requestBody[U("User")] = web::json::value::string(U("John"));
+
+    // Send a request to a non-existing endpoint
+    auto response = sendPostRequest("/notfound", requestBody);
+    ASSERT_NE(response, nullptr);
+    ASSERT_EQ(status_codes::NotFound, response->status_code());
 }

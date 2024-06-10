@@ -3,47 +3,75 @@
     {
         "id": "Q1",
         "question": "How much time do you spend on airplanes, on average, per year?(In hours)",
-        "Type": "int"
+        "Type": "int",
+        "category": "transportation",
+        "unit": "years",
+        "estimated cost of KG CO2 per unit": 50
     },
     {
         "id": "Q2",
         "question": "How many times a week do you eat beef?",
-        "Type": "int"
+        "Type": "int",
+        "category": "food",
+        "unit": "times a week",
+        "estimated cost of KG CO2 per unit": 10
+
     },
     {
         "id": "Q3",
         "question": "How much do you drive in a car per week? (hours)",
-        "Type": "int"
+        "Type": "int",
+        "category": "transportation",
+        "unit": "hours",
+        "estimated cost of KG CO2 per unit": 50
     },
     {
         "id": "Q4",
         "question": "How much do you take public transportation per week?",
-        "Type": "int"
+        "Type": "int",
+        "category": "transportation",
+        "unit": "weeks",
+        "estimated cost of KG CO2 per unit": 5
     },
     {
         "id": "Q5",
         "question": "How long do you usually keep a new phone?(In years)",
-        "Type": "int"
+        "Type": "int",
+        "category": "other",
+        "unit": "years",
+        "estimated cost of KG CO2 per unit": 100
     },
     {
         "id": "Q6",
         "question": "How many times a week do you shower",
-        "Type": "int"
+        "Type": "int",
+        "category": "home",
+        "unit": "times a week",
+        "estimated cost of KG CO2 per unit": 5
     },
     {
         "id": "Q7",
         "question": "Do you turn off lights when you leave a room? (1: always, 2: sometimes 3: never)",
-        "Type": "int"
+        "Type": "int",
+        "category": "home",
+        "unit": "choice",
+        "estimated cost of KG CO2 per unit": 10
     },
     {
         "id": "Q8",
         "question": "Do you bring your own bags when shopping(1: yes, 2:no)",
-        "Type": "int"
+        "Type": "int",
+        "category": "home",
+        "unit": "choice",
+        "estimated cost of KG CO2 per unit": 5
     },
     {
         "id": "Q9",
         "question": "How many times do you prompt an AI pr day",
-        "Type": "int"
+        "Type": "int",
+        "category": "other",
+        "unit": "times a day",
+        "estimated cost of KG CO2 per unit": 5
     }
     ]
 }

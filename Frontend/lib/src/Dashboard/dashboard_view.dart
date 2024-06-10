@@ -1,22 +1,18 @@
+import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
+import 'package:carbon_footprint/src/user_controller.dart';
 
 import 'week_summary_bar_chart.dart';
-
+import 'dashboard_controller.dart';
 class DashboardView extends StatefulWidget {
   const DashboardView({
     super.key,
   });
-  static const List<String> labels = ["Transport", "Home", "Food", "Other"];
-  static List<Segment> segments = [
-    Segment(value: 34, color: Colors.lightGreenAccent, label: Text(labels[0])),
-    Segment(value: 20, color: Colors.orangeAccent, label: Text(labels[1])),
-    Segment(value: 18, color: Colors.limeAccent, label: Text(labels[2])),
-    Segment(value: 33, color: Colors.pinkAccent, label: Text(labels[3])),
-  ];
+
   static int touchedIndex = -1;
   //static ThemeMode tm = _settingsService.themeMode() as ThemeMode;
   @override
@@ -24,11 +20,64 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  
+  static final DashboardController _dashboardController= DashboardController();
+
   final SettingsController _settingsController = SettingsController();
+  
+  Future<Map<String, double>> toMappp() async{
+    print("HEEEEEEEEY NOTICE ME");
+
+
+      var res1 = Future(()async =>await _dashboardController.fetchCategories(UserController().username));
+ 
+      print("notice me 2");
+      print(res1);
+      return res1;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pieChart = PieChart(PieChartData(
+
+    var fut = toMappp();//Future(() async => await _dashboardController.fetchCategories(UserController().username)); 
+    print("hej");
+    return FutureBuilder(
+      future: fut, 
+      builder: (context, snapshot){
+        //placeholder data
+              const List<String> labels = ["Transport", "Home", "Food", "Other"];
+                List<Segment> segments = [
+              Segment(value: 37, color: Colors.lightGreenAccent, label: Text(labels[0])),
+              Segment(value: 20, color: Colors.orangeAccent, label: Text(labels[1])),
+              Segment(value: 18, color: Colors.limeAccent, label: Text(labels[2])),
+              Segment(value: 33, color: Colors.pinkAccent, label: Text(labels[3])),
+            ];
+          //print(snapshot.hasData);
+        if(snapshot.hasData) {
+           print("vals");
+          
+          List<int> vals = [];
+          for (int i = 0; i < snapshot.data!.values.toList().length; i++) {
+            vals = vals + [(snapshot.data!.values.toList()[i].toInt())];
+            
+          }
+           
+        //print("vals");
+        //print(snapshot.data!['foodScore']);
+          
+          const List<String> labels = ["Transport", "Home", "Food", "Other"];
+                List<Segment> segments = [
+              Segment(value: snapshot.data!['foodScore']!.toInt(), color: Colors.lightGreenAccent, label: Text(labels[0])),
+              Segment(value: vals[0], color: Colors.orangeAccent, label: Text(labels[1])),
+              Segment(value: vals[0], color: Colors.limeAccent, label: Text(labels[2])),
+              Segment(value: vals[0], color: Colors.pinkAccent, label: Text(labels[3])),
+            ];
+       }  /*else if (snapshot.hasError) {
+          return Center(child: Text('error: ${snapshot.error.toString()}'));
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        } */
+        final pieChart = PieChart(PieChartData(
       pieTouchData: PieTouchData(
         touchCallback: (FlTouchEvent event, pieTouchResponse) {
           setState(() {
@@ -51,9 +100,9 @@ class _DashboardViewState extends State<DashboardView> {
 
       sectionsSpace: 1,
       centerSpaceRadius: 40,
-      sections: showingSections(), // Optional
+      sections: showingSections(segments), // Optional
     ));
-    return ListView(
+        return ListView(
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1,
@@ -73,8 +122,8 @@ class _DashboardViewState extends State<DashboardView> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Indicator(
-                    color: DashboardView.segments[0].color,
-                    text: DashboardView.labels[0],
+                    color: segments[0].color,
+                    text: labels[0],
                     isSquare: false,
                     size: DashboardView.touchedIndex == 0 ? 40 : 40,
                     textColor: DashboardView.touchedIndex == 0
@@ -84,8 +133,8 @@ class _DashboardViewState extends State<DashboardView> {
                         : Colors.grey,
                   ),
                   Indicator(
-                    color: DashboardView.segments[1].color,
-                    text: DashboardView.labels[1],
+                    color: segments[1].color,
+                    text: labels[1],
                     isSquare: false,
                     size: DashboardView.touchedIndex == 1 ? 40 : 40,
                     textColor: DashboardView.touchedIndex == 1
@@ -95,8 +144,8 @@ class _DashboardViewState extends State<DashboardView> {
                         : Colors.grey,
                   ),
                   Indicator(
-                    color: DashboardView.segments[2].color,
-                    text: DashboardView.labels[2],
+                    color: segments[2].color,
+                    text: labels[2],
                     isSquare: false,
                     size: DashboardView.touchedIndex == 2 ? 40 : 40,
                     textColor: DashboardView.touchedIndex == 2
@@ -106,8 +155,8 @@ class _DashboardViewState extends State<DashboardView> {
                         : Colors.grey,
                   ),
                   Indicator(
-                    color: DashboardView.segments[3].color,
-                    text: DashboardView.labels[3],
+                    color: segments[3].color,
+                    text: labels[3],
                     isSquare: false,
                     size: DashboardView.touchedIndex == 3 ? 40 : 40,
                     textColor: DashboardView.touchedIndex == 3
@@ -173,22 +222,24 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ],
     );
+  });
   }
 
-  List<PieChartSectionData> showingSections() {
+  List<PieChartSectionData> showingSections(List<Segment> segments) {
+
     return List.generate(
       4,
       (i) {
         final isTouched = i == DashboardView.touchedIndex;
-        Color color0 = DashboardView.segments[0].color;
-        Color color1 = DashboardView.segments[1].color;
-        Color color2 = DashboardView.segments[2].color;
-        Color color3 = DashboardView.segments[3].color;
+        Color color0 = segments[0].color;
+        Color color1 = segments[1].color;
+        Color color2 = segments[2].color;
+        Color color3 = segments[3].color;
 
-        double? val0 = DashboardView.segments[0].value.toDouble();
-        double? val1 = DashboardView.segments[1].value.toDouble();
-        double? val2 = DashboardView.segments[2].value.toDouble();
-        double? val3 = DashboardView.segments[3].value.toDouble();
+        double? val0 = segments[0].value.toDouble();
+        double? val1 = segments[1].value.toDouble();
+        double? val2 = segments[2].value.toDouble();
+        double? val3 = segments[3].value.toDouble();
         double? total = val0 + val1 + val2 + val3;
 
         String? title0 = (val0 / total * 100).toStringAsFixed(1) + "%";

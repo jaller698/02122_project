@@ -23,6 +23,7 @@ class dataBaseStart{
         double getAverage();
         web::json::value getComparison(web::json::array landcodes);
         web::json::value getCategories(std::string username);
+        web::json::value getHistory(std::string username);
         ~dataBaseStart();
 
 

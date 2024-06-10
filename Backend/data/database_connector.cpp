@@ -358,6 +358,23 @@ web::json::value dataBaseStart::getCategories(std::string username)
     return output;
 }
 
+web::json::value dataBaseStart::getHistory(std::string username) 
+{
+    connection->setSchema("CarbonFootprint");
+    statement = connection->createStatement();
+    std::string command = "SELECT * FROM CarbonScoreHistory WHERE Username = '" + username + "' ORDER BY Date DESC LIMIT 7";
+    result_set = statement->executeQuery(command);
+    web::json::value output = web::json::value::array();
+    while (result_set->next())
+    {
+        web::json::value entry = web::json::value::object();
+        entry["Date"] = web::json::value::string(result_set->getString(2));
+        entry["CarbonScore"] = web::json::value::number((double) result_set->getDouble(3));
+        output[output.size()] = entry;
+    }
+    return output;
+}
+
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {
     web::json::value questions = web::json::value::object();

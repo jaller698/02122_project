@@ -1,11 +1,9 @@
-
 import 'dart:convert';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
 class DashboardController {
-  
-Future<String> fetchStats(String username) async {
+  Future<String> fetchStats(String username) async {
     //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
 
     http.Request request = http.Request(
@@ -35,11 +33,12 @@ Future<String> fetchStats(String username) async {
       throw Exception('Failed to load form');
     }
   }
-  Future<Map<String, double>> fetchCategories(String username) async {
+
+  Future<(List<String>, List<int>)> fetchCategories(String username) async {
     //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
 
-    http.Request request = http.Request(
-        "GET", Uri.parse('${SettingsController.address}/carbonScoreCategories'));
+    http.Request request = http.Request("GET",
+        Uri.parse('${SettingsController.address}/carbonScoreCategories'));
     request.body = jsonEncode(<String, String>{
       'User': username,
     });
@@ -48,29 +47,31 @@ Future<String> fetchStats(String username) async {
     });
 
     var response = await request.send();
-    
-    var result = await response.stream.transform(utf8.decoder).first;
-    var result2 =  jsonDecode(result);
-    print(result2['foodScore']);
 
+    var result = await response.stream.transform(utf8.decoder).first;
+    var result2 = jsonDecode(result);
+    print(result2['energyScore']);
+    print(result2['foodScore']);
+    print(result2['homeScore']);
+    print(result2['otherScore']);
+    print(result2['totalScore']);
+    print(result2['transportScore']);
+    print("end me0");
+    Map<String, int> res = {
+      "energyScore": result2['energyScore'],
+      "foodScore": result2['foodScore'],
+      "homeScore": result2['homeScore'],
+      "otherScore": result2['otherScore'],
+      "totalScore": result2['totalScore'],
+      "transportScore": result2['transportScore'],
+    };
+    print("end me1");
     if (response.statusCode == 200) {
-       print("end me");
-       print(result2);
-      return result2;
+      print("end me2");
+      print(res);
+      return (res.keys.toList(), res.values.toList());
     } else {
       throw Exception('Failed to load average score');
     }
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-

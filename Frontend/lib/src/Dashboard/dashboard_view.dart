@@ -25,7 +25,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   final SettingsController _settingsController = SettingsController();
   
-  Future<Map<String, double>> toMappp() async{
+  Future<(List<String>, List<int>)> toMappp() async{
     print("HEEEEEEEEY NOTICE ME");
 
 
@@ -45,40 +45,38 @@ class _DashboardViewState extends State<DashboardView> {
       future: fut, 
       builder: (context, snapshot){
         //placeholder data
-              const List<String> labels = ["Transport", "Home", "Food", "Other"];
+             /* const List<String> labels = ["Transport", "Home", "Food", "Other"];
                 List<Segment> segments = [
               Segment(value: 37, color: Colors.lightGreenAccent, label: Text(labels[0])),
               Segment(value: 20, color: Colors.orangeAccent, label: Text(labels[1])),
               Segment(value: 18, color: Colors.limeAccent, label: Text(labels[2])),
               Segment(value: 33, color: Colors.pinkAccent, label: Text(labels[3])),
-            ];
+            ];*/
           //print(snapshot.hasData);
+          print("vals1");
         if(snapshot.hasData) {
-           print("vals");
+           print("vals2");
           
-          List<int> vals = [];
-          for (int i = 0; i < snapshot.data!.values.toList().length; i++) {
-            vals = vals + [(snapshot.data!.values.toList()[i].toInt())];
-            
+           List<int> vals = [];
+          List<String> names = [];
+          for (int i = 0; i < snapshot.data!.$1.length ; i++) {
+            vals = vals + [snapshot.data!.$2[i].toInt()];
+            names = names + [snapshot.data!.$1[i]];
           }
-           
+           print(vals[2]);
         //print("vals");
         //print(snapshot.data!['foodScore']);
           
           const List<String> labels = ["Transport", "Home", "Food", "Other"];
                 List<Segment> segments = [
-              Segment(value: snapshot.data!['foodScore']!.toInt(), color: Colors.lightGreenAccent, label: Text(labels[0])),
-              Segment(value: vals[0], color: Colors.orangeAccent, label: Text(labels[1])),
-              Segment(value: vals[0], color: Colors.limeAccent, label: Text(labels[2])),
-              Segment(value: vals[0], color: Colors.pinkAccent, label: Text(labels[3])),
+              Segment(value: vals[1], color: Colors.lightGreenAccent, label: Text(labels[0])),
+              Segment(value: vals[1], color: Colors.orangeAccent, label: Text(labels[1])),
+              Segment(value: vals[1], color: Colors.limeAccent, label: Text(labels[2])),
+              Segment(value: vals[1], color: Colors.pinkAccent, label: Text(labels[3])),
             ];
-       }  /*else if (snapshot.hasError) {
-          return Center(child: Text('error: ${snapshot.error.toString()}'));
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        } */
-        final pieChart = PieChart(PieChartData(
-      pieTouchData: PieTouchData(
+      final pieChart = PieChart(
+        PieChartData(
+        pieTouchData: PieTouchData(
         touchCallback: (FlTouchEvent event, pieTouchResponse) {
           setState(() {
             if (!event.isInterestedForInteractions ||
@@ -101,8 +99,10 @@ class _DashboardViewState extends State<DashboardView> {
       sectionsSpace: 1,
       centerSpaceRadius: 40,
       sections: showingSections(segments), // Optional
-    ));
-        return ListView(
+    )
+    );
+       
+         return ListView(
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1,
@@ -222,6 +222,16 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ],
     );
+       
+       
+       
+       }  else if (snapshot.hasError) {
+          return Center(child: Text('error: ${snapshot.error.toString()}'));
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        } 
+       
+      
   });
   }
 

@@ -236,7 +236,7 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
     }
 }
 
-std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)
+std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, size_t tableSize)
 {
     if (tableSize == 0) // if value is still it's default update to the size of the questions
         tableSize = readQuestions().size();
@@ -246,7 +246,7 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
         WARNING("input is not the presumed size, expected " + std::to_string(tableSize+1) + " but got " + std::to_string(input.size()) + " elements");
         throw std::logic_error("input is not the presumed size");
     }
-    for (int i = 1; i <= tableSize; i++)
+    for (size_t i = 1; i <= tableSize; i++)
     {
         output += ", " + input[i];
     }
@@ -294,7 +294,7 @@ double dataBaseStart::getAverage()
     {
         output = result_set->getDouble(1);
     }
-    return output >= 0 ? output : NULL;
+    return output >= 0 ? output : 0;
 }
 
 web::json::value dataBaseStart::getComparison(web::json::array landcodes) 
@@ -361,6 +361,7 @@ web::json::value dataBaseStart::getCategories(std::string username)
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {
     web::json::value questions = web::json::value::object();
+    std::vector<std::pair<std::string,std::string>> output;
     try {
         std::ifstream f("questions.json");
         std::stringstream strStream;
@@ -368,16 +369,15 @@ std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
         f.close(); 
         questions = web::json::value::parse(strStream);
         DEBUG_PRINT(questions.serialize());
-        std::vector<std::pair<std::string,std::string>> output;
         for (auto &question : questions.at("questions").as_array())
         {
             DEBUG_PRINT("Question: " + question.at("question").as_string());
             output.push_back({question.at("id").as_string(), question.at("Type").as_string()});
         }
-        return output;
     } catch (std::exception &e) {
         ERROR("Error in getQuestions: ", e);
     }
+    return output;
 }
 
 void dataBaseStart::updateQuestions()

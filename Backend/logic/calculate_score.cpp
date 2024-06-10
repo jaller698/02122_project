@@ -46,7 +46,7 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         jsonConfig = web::json::value::parse(strStream);
         auto questions = jsonConfig.at("questions").as_array();
 
-        for (int i = 0; i < answers.size(); i++)
+        for (size_t i = 0; i < answers.size(); i++)
         {
             DEBUG_PRINT("Answer: " + std::to_string(answers[i]));
             // map from json["type"] to varibale score:
@@ -83,7 +83,7 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
 
         std::vector<std::string> db_answers;
         db_answers.push_back(userID);
-        for(int i = 0; i < answers.size(); i++)
+        for(size_t i = 0; i < answers.size(); i++)
         {
             db_answers.push_back(std::to_string(answers[i]));
         }
@@ -110,9 +110,8 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
 
 double calculateCarbonScore (const std::vector<std::string> &answers)
 {
-    double score = 0;
     std::vector<int> ansMath;
-    for(int i = 0; i < answers.size(); i++)
+    for(size_t i = 0; i < answers.size(); i++)
     {
         auto answer = answers[i];
 

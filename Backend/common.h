@@ -18,6 +18,7 @@
 #include <cppconn/statement.h>
 #include <filesystem>
 #include <utility>
+#include <stdio.h>
 
 // Our headers
 #include "logic/calculate_score.h"
@@ -27,25 +28,45 @@
 #include "rest/rest_api.h"
 
 // Logging
+inline std::string get_time() {
+    std::time_t now = std::time(nullptr);
+    std::tm* timeinfo = std::localtime(&now);
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
+    std::string str;
+    str.append("[");
+    str.append(buffer);
+    str.append("] ");
+    return str;
+}
+
 [[maybe_unused]] inline void _debug_print(std::string msg){
-#ifdef DEBUG
-    std::cout << "\033[33mDEBUG: \033[0m" << msg << std::endl;
+#ifdef TEST_ENVIROMENT
+    // pipe the output to a file:
+    std::ofstream logfile("backend_test.log", std::ios::app);
+    if (logfile.is_open()) {
+        logfile << get_time() << "DEBUG: " << msg << std::endl;
+        logfile.close();
+    } else {
+        std::cerr << "Failed to open log file" << std::endl;
+    }
+#elif defined DEBUG
+    std::cout << get_time() << "\033[33mDEBUG: \033[0m" << msg << std::endl;
 #else
     return;
 #endif
 }
 
-#define LOG(msg) std::cout << msg << std::endl
+#define LOG(msg) std::cout << get_time() << msg << std::endl
 #define DEBUG_PRINT(msg) _debug_print(msg);
-#define WARNING(msg) std::cout << "\033[93mWARNING: \033[0m" << msg << std::endl
+#define WARNING(msg) std::cout << get_time() << "\033[93mWARNING: \033[0m" << msg << std::endl
 #define ERROR(msg, exp) \
         const std::source_location location = std::source_location::current(); \
         std::stringstream error_message; \
         error_message << std::string(msg) << std::string(exp.what()); \
-        std::cerr << "\033[31mERROR: In file " << location.file_name() << "(" << location.line()  << ':' << location.column() << "): " << location.function_name() << ": " << error_message.str() << "\033[0m" << std::endl;
-#define INFO(msg) std::cout << "\033[32mINFO: \033[0m" << msg << std::endl
-#define CRITICAL(msg) std::cerr << "\033[31mCRITICAL: " << msg << "\033[0m"  << std::endl
-
+        std::cerr << get_time() << "\033[31mERROR: In file " << location.file_name() << "(" << location.line()  << ':' << location.column() << "): " << location.function_name() << ": " << error_message.str() << "\033[0m" << std::endl;
+#define INFO(msg) std::cout << get_time() << "\033[32mINFO: \033[0m" << msg << std::endl
+#define CRITICAL(msg) std::cerr << get_time() << "\033[31mCRITICAL: " << msg << "\033[0m"  << std::endl
 
 struct Response {
     web::http::status_code status;

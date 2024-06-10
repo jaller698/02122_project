@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,22 +64,33 @@ class CarbonStatController {
       throw Exception('Failed to load average score');
     }
   }
-   Future<String> fetchCountries() async {
+   Future<(List<String>,List<String>)> fetchCountries() async {
     http.Request request =
         http.Request("GET", Uri.parse('${SettingsController.address}/comparison'));
-    
+        //gotta make this dynamic.
+    var countries = ["DNK", "SWE"];
+
       request.body = jsonEncode(<String, List<String>>{
-      'landcodes': ["DK"],
+      'landcodes': countries,
     });
     
     request.headers.addAll(<String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
     var response = await request.send();
-    //var res = await response.stream.
+    
     var result = await response.stream.transform(utf8.decoder).first;
+    var result2 =  jsonDecode(result);
+    print(result2[0]['CarbonScore']);
+    Map<String, String> res = {};
+    for (int i=0; i<countries.length; i++){
+      res.addAll({result2[i]['Country'].toString(): result2[i]['CarbonScore'].toString()});
+    }
+    print(res.values.toList());
     if (response.statusCode == 200) {
-      return result;
+      print(result + " Youre a little bit just like me");
+
+      return (res.keys.toList(),res.values.toList());
     } else {
       throw Exception('Failed to load average score');
     }

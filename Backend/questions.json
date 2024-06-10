@@ -22,7 +22,7 @@
         "question": "How much do you drive in a car per week? (hours)",
         "Type": "int",
         "category": "transportation",
-        "unit": "hours",
+        "unit": "weeks",
         "estimated cost of KG CO2 per unit": 50
     },
     {

@@ -324,7 +324,17 @@ void dataBaseStart::insertCategorizedScore(std::string username, double totalSco
 {
     connection->setSchema("CarbonFootprint");
     statement = connection->createStatement();
-    std::string command = "INSERT INTO CarbonScore VALUES ('" + username + "', " + std::to_string(totalScore) + ", " + std::to_string(foodScore) + ", " + std::to_string(transportScore) + ", " + std::to_string(energyScore) + ", " + std::to_string(homeScore) + ", " + std::to_string(otherScore) + ")";
+    // check if the user already has a score, if so update it
+    std::string command = "SELECT * FROM CarbonScore WHERE Username = '" + username + "'";
+    result_set = statement->executeQuery(command);
+    if (result_set->next())
+    {
+        command = "UPDATE CarbonScore SET totalScore = " + std::to_string(totalScore) + ", foodScore = " + std::to_string(foodScore) + ", transportScore = " + std::to_string(transportScore) + ", energyScore = " + std::to_string(energyScore) + ", homeScore = " + std::to_string(homeScore) + ", otherScore = " + std::to_string(otherScore) + " WHERE Username = '" + username + "'";
+        statement->execute(command);
+        delete statement;
+        return;
+    }
+    command = "INSERT INTO CarbonScore VALUES ('" + username + "', " + std::to_string(totalScore) + ", " + std::to_string(foodScore) + ", " + std::to_string(transportScore) + ", " + std::to_string(energyScore) + ", " + std::to_string(homeScore) + ", " + std::to_string(otherScore) + ")";
     statement->execute(command);
     delete statement;
 }

@@ -82,7 +82,6 @@ TEST_F(logicTest, UpdateUserScoreWithNonExistingUser) {
     ASSERT_EQ(status_codes::InternalError, response->status_code());
 }
 
-
 TEST_F(logicTest, getCategorizedCarbonScore) {
     web::json::value requestBody;
     requestBody[U("User")] = web::json::value::string(U("guest"));

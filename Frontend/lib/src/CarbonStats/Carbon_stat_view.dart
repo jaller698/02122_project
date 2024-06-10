@@ -100,7 +100,7 @@ class CarbonStatView extends StatelessWidget {
           ));
           return ListView(children: <Widget>[
             Container(
-              height: 600,
+              height: 500,
               child: barChart,
             ),
             colorIndicators
@@ -124,7 +124,8 @@ List<Widget> createNames(List<String> names, List<Color> col) {
             color: col[i],
             text: "${names[i]}   ",
             isSquare: true,
-            size: 40,
+            size: 20,
+            textSize: 13,
             textColor: Colors.black,
           )
         ];

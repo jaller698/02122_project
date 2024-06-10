@@ -50,13 +50,7 @@ class DashboardController {
 
     var result = await response.stream.transform(utf8.decoder).first;
     var result2 = jsonDecode(result);
-    print(result2['energyScore']);
-    print(result2['foodScore']);
-    print(result2['homeScore']);
-    print(result2['otherScore']);
-    print(result2['totalScore']);
-    print(result2['transportScore']);
-    print("end me0");
+    
     Map<String, int> res = {
       "energyScore": result2['energyScore'],
       "foodScore": result2['foodScore'],
@@ -65,9 +59,7 @@ class DashboardController {
       "totalScore": result2['totalScore'],
       "transportScore": result2['transportScore'],
     };
-    print("end me1");
     if (response.statusCode == 200) {
-      print("end me2");
       print(res);
       return (res.keys.toList(), res.values.toList());
     } else {

@@ -13,7 +13,8 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/users", handle_login},
     {"/userScore", handle_user_score_read},
     {"/comparison", handle_comparison},
-    {"/average", handle_average}
+    {"/average", handle_average},
+    {"/carbonScoreCategories", handle_categories}
 };
 
 // Function which based on the endpoint, sends the data to the correct handler
@@ -241,6 +242,19 @@ struct Response handle_actionTracker(const web::json::value &request_body)
         return Response(http::status_codes::OK, web::json::value::string("Action tracked"));
     } catch (const std::exception &e) {
         ERROR("Error in handling action tracker: ", e);
+        return Response(http::status_codes::BadRequest, web::json::value::null());
+    }
+}
+
+struct Response handle_categories(const web::json::value &request_body)
+{
+    try {
+        dataBaseStart db;
+        auto username = request_body.at("User").as_string();
+        auto categories = db.getCategories(username);
+        return Response(http::status_codes::OK, categories);
+    } catch (const std::exception &e) {
+        ERROR("Error in handling categories: ", e);
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }

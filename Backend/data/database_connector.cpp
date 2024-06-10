@@ -329,6 +329,25 @@ void dataBaseStart::insertCategorizedScore(std::string username, double totalSco
     delete statement;
 }
 
+web::json::value dataBaseStart::getCategories(std::string username) 
+{
+    connection->setSchema("CarbonFootprint");
+    statement = connection->createStatement();
+    std::string command = "SELECT * FROM CarbonScore WHERE Username = '" + username + "'";
+    result_set = statement->executeQuery(command);
+    web::json::value output = web::json::value::object();
+    if (result_set->next())
+        {
+            output["totalScore"] = web::json::value::number((double) result_set->getDouble(2));
+            output["foodScore"] = web::json::value::number((double) result_set->getDouble(3));
+            output["transportScore"] = web::json::value::number((double) result_set->getDouble(4));
+            output["energyScore"] = web::json::value::number((double) result_set->getDouble(5));
+            output["homeScore"] = web::json::value::number((double) result_set->getDouble(6));
+            output["otherScore"] = web::json::value::number((double) result_set->getDouble(7));
+        }
+    return output;
+}
+
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {
     web::json::value questions = web::json::value::object();

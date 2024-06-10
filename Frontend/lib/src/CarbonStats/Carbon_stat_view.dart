@@ -1,8 +1,6 @@
-import 'dart:js_interop';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
 
 import 'carbon_stat_controller.dart';
@@ -22,8 +20,8 @@ class CarbonStatView extends StatelessWidget {
                 await _carbonController.fetchStats(UserController().username),
                 await _carbonController.fetchAverage()
               ] +
-              res.$1,
-          ["User", "Avr"] + res.$2
+              res.$2,
+          ["User", "Avr"] + res.$1
         ));
     return (fut2);
   }

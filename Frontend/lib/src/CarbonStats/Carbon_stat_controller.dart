@@ -88,7 +88,7 @@ class CarbonStatController {
     }
     print(res.values.toList());
     if (response.statusCode == 200) {
-      print(result + " Youre a little bit just like me");
+      print(res.keys.toList());
 
       return (res.keys.toList(),res.values.toList());
     } else {

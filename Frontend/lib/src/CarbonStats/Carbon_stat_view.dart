@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
-
+import 'dart:math';
 import 'Carbon_stat_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 
@@ -81,7 +81,7 @@ class CarbonStatView extends StatelessWidget {
           ];
           rawBarGroups = items;
           final barChart = BarChart(BarChartData(
-            maxY: 20,
+            maxY: vals.reduce(max)+100,
             //barGroups: showingBarGroups,
             barGroups: List.of(rawBarGroups),
             gridData: const FlGridData(show: false),

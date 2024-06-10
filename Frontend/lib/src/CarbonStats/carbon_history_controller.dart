@@ -36,6 +36,9 @@ class CarbonHistoryController {
       throw Exception('Failed to load form');
     }
 
+    // sort history by date
+    history.sort((a, b) => a.date.compareTo(b.date));
+
     return history;
   }
 

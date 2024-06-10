@@ -56,8 +56,8 @@ class DashboardController {
       "foodScore": result2['foodScore'],
       "homeScore": result2['homeScore'],
       "otherScore": result2['otherScore'],
-      "totalScore": result2['totalScore'],
       "transportScore": result2['transportScore'],
+      "totalScore": result2['totalScore'],
     };
     if (response.statusCode == 200) {
       print(res);

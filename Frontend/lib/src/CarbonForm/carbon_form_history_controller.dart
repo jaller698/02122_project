@@ -4,12 +4,12 @@ import 'package:sqflite/sqflite.dart';
 
 import 'Modals/carbon_form_answer.dart';
 
-class CarbonFormController with ChangeNotifier {
+class CarbonFormHistoryController with ChangeNotifier {
   // singleton
-  CarbonFormController._hiddenConstructor();
-  static final CarbonFormController _singleton =
-      CarbonFormController._hiddenConstructor();
-  factory CarbonFormController() => _singleton;
+  CarbonFormHistoryController._hiddenConstructor();
+  static final CarbonFormHistoryController _singleton =
+      CarbonFormHistoryController._hiddenConstructor();
+  factory CarbonFormHistoryController() => _singleton;
 
   List<CarbonFormAnswer>? _carbonForms;
   Future<List<CarbonFormAnswer>> get carbonForms {

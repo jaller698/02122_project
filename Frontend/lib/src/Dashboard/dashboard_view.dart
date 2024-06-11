@@ -26,13 +26,13 @@ class _DashboardViewState extends State<DashboardView> {
   final SettingsController _settingsController = SettingsController();
 
   Future<(List<String>, List<int>)> toMappp() async {
-    print("HEEEEEEEEY NOTICE ME");
+    //print("HEEEEEEEEY NOTICE ME");
 
     var res1 = Future(() async =>
         await _dashboardController.fetchCategories(UserController().username));
 
-    print("notice me 2");
-    print(res1);
+    //print("notice me 2");
+    //print(res1);
     return res1;
   }
 
@@ -64,7 +64,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     var fut =
         toMappp(); //Future(() async => await _dashboardController.fetchCategories(UserController().username));
-    print("hej");
+    //print("hej");
     return FutureBuilder(
         future: fut,
         builder: (context, snapshot) {
@@ -77,9 +77,9 @@ class _DashboardViewState extends State<DashboardView> {
               Segment(value: 33, color: Colors.pinkAccent, label: Text(labels[3])),
             ];*/
           //print(snapshot.hasData);
-          print("vals1");
+          //print("vals1");
           if (snapshot.hasData) {
-            print("vals2");
+            //print("vals2");
 
             List<int> vals = [];
             List<String> names = [];
@@ -87,7 +87,7 @@ class _DashboardViewState extends State<DashboardView> {
               vals = vals + [snapshot.data!.$2[i].toInt()];
               names = names + [snapshot.data!.$1[i]];
             }
-            print("energyscore:");
+            //print("energyscore:");
             //print("vals");
             //
             //print(snapshot.data!.$2[0]);

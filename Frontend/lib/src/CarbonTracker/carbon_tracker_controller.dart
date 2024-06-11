@@ -203,6 +203,11 @@ enum CarbonTrackerCategory {
     CarbonTackerType.dairy,
     CarbonTackerType.fish,
   ]),
+  carbonSaving(Icons.show_chart_rounded, [
+  CarbonTackerType.meatFreeDay,
+  CarbonTackerType.bikeToWork,
+
+  ]),
   custom(Icons.tune, [
     CarbonTackerType.custom,
   ]);
@@ -231,6 +236,8 @@ enum CarbonTackerType {
       CarbonTrackInputTypes.single),
   fish(Icons.set_meal, 'Fish based meal', CarbonTrackInputTypes.single),
 
+  meatFreeDay(Icons.emoji_food_beverage_rounded, 'Meat free day',CarbonTrackInputTypes.carbonSaving),
+  bikeToWork(Icons.bike_scooter, 'Biked to work instead of taking the car', CarbonTrackInputTypes.carbonSaving),
   // shopping
   // TODO design a better system, best if the user is also able to add custom items to track...
 
@@ -245,7 +252,7 @@ enum CarbonTackerType {
   const CarbonTackerType(this.icon, this.text, this.type);
 }
 
-enum CarbonTrackInputTypes { single, time, distance, custom }
+enum CarbonTrackInputTypes { single, time, distance, custom, carbonSaving }
 
 // save to json string
 class CarbonTrackerObjectType {

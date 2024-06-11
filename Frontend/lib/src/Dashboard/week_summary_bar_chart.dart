@@ -5,6 +5,12 @@ import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dar
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
+import 'dart:convert';
+import 'package:carbon_footprint/src/user_controller.dart';
+
+
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});
 
@@ -27,7 +33,54 @@ class WeekSummaryBarChart extends StatefulWidget {
 
 class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
+    Future<List<double>> last7days() async {
+      print("last7days has been called");
+      //var items = await carbonTrackerItems;
+ /*     http.Request request = http.Request(
+          "GET", Uri.parse('${SettingsController.address}/actionTracker'));
+      request.body = jsonEncode(<String, String>{
+        'User': UserController().username,
+      });
+      request.headers.addAll(<String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });*/
 
+      http.Request request2 = http.Request(
+          "GET", Uri.parse('${SettingsController.address}/userScore'));
+      request2.body = jsonEncode(<String, String>{
+        'User': UserController().username,
+      });
+      request2.headers.addAll(<String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
+      //var items = 
+      var response = await request2.send();
+
+      var baseYearly = await response.stream.transform(utf8.decoder).first;
+      var baseDaily = double.parse(baseYearly)/365;
+      print("BaseYearly/actual carbonscore:");
+      print(baseYearly);
+      print("BaseDaily:");
+      print(baseDaily);
+      var date = DateTime.now();
+      List<double> list = [0, 0, 0, 0, 0, 0, 0];
+      for (var i = 0; i < 7; i++) {
+
+          //list[diff.inDays] += items[i].carbonScore;
+          list[i] += baseDaily-i*2;
+        
+    }
+/*
+    for (var i = 0; i < items.length; i++) {
+      var diff = date.difference(items[i].dateAdded);
+      if (diff.inDays <= 7 && diff.inDays >= 0) {
+        //list[diff.inDays] += items[i].carbonScore;
+        list[diff.inDays] += baseDaily;
+      }
+    }
+*/
+      return list;
+  }
   int touchedIndex = -1;
 
   bool isPlaying = false;
@@ -35,7 +88,7 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: CarbonTrackerController().last7days(),
+      future: last7days(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AspectRatio(

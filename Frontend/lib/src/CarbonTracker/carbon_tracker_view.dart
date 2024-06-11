@@ -2,6 +2,12 @@ import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:http/http.dart' as http;
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
+import 'dart:convert';
+import 'package:carbon_footprint/src/user_controller.dart';
+
+
 
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
@@ -119,7 +125,7 @@ class CarbonTrackerView extends StatelessWidget {
               style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
             ),
             SizedBox(
-              height: 200,
+              height: 300,
               child: ListView.builder(
                 itemCount: CarbonTrackerCategory.values.length,
                 itemBuilder: (context, index) {
@@ -199,6 +205,9 @@ class CarbonTrackerView extends StatelessWidget {
                             },
                           );
                         case CarbonTrackInputTypes.single:
+                        case CarbonTrackInputTypes.custom:
+                        case CarbonTrackInputTypes.carbonSaving:
+                          addSavingItem(type, control);
                         default:
                           control.addTrackerItem(
                             CarbonTrackerItem(
@@ -212,7 +221,7 @@ class CarbonTrackerView extends StatelessWidget {
                             Navigator.pop(context);
                             Navigator.pop(context);
                           }
-                      }
+                       }
                     },
                   ),
                 );
@@ -220,6 +229,52 @@ class CarbonTrackerView extends StatelessWidget {
             ),
           );
         },
+      );
+    }
+  }
+  void addSavingItem (CarbonTackerType type, CarbonTrackerController control) {
+      
+    switch (type.name){
+    case 'meatFreeDay':
+           http.Request request = http.Request(
+            "PUT", Uri.parse('${SettingsController.address}/actionTracker'));
+          request.body = jsonEncode(<String, String>{
+            'name': type.name,
+            'user': UserController().username,
+            'type': 'carbonSaving',
+            'score': '-10',
+            'date': DateTime.now().toString(),
+          });
+    request.headers.addAll(<String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+      control.addTrackerItem(
+        CarbonTrackerItem(
+          type.name,
+          type,
+          -100,//random number, proof of concept for reduction of daily score. 
+          DateTime.now(),
+        ),
+      );
+
+    case 'bikeToWork':
+            control.addTrackerItem(
+        CarbonTrackerItem(
+          type.name,
+          type,
+          -50, //will be based on the carbon form data
+          DateTime.now(),
+        ),
+      );
+
+    default:
+      control.addTrackerItem(
+        CarbonTrackerItem(
+          type.name,
+          type,
+          1,
+          DateTime.now(),
+        ),
       );
     }
   }
@@ -286,4 +341,5 @@ class _TrackerInputDistanceState extends State<TrackerInputDistance> {
       ],
     );
   }
+  
 }

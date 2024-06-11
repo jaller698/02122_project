@@ -1,6 +1,6 @@
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form_answer.dart';
-import 'package:carbon_footprint/src/CarbonForm/Widgets/snackbar_catch_error.dart';
+import 'package:carbon_footprint/src/Widgets/snackbar_catch_error.dart';
 import 'package:carbon_footprint/src/CarbonForm/http/carbon_form_send.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/material.dart';

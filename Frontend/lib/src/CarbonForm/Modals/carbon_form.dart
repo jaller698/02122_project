@@ -1,21 +1,34 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+
 class CarbonForm {
-  final int id;
+  final String id;
   final String title;
   final List<CarbonQuestion> questions;
 
   const CarbonForm({
-    this.id = -1,
+    this.id = '-1',
     required this.title,
     required this.questions,
   });
 
   factory CarbonForm.fromMap(Map<String, dynamic> json) {
+    if (!json.containsKey('id')) {
+      json['id'] =
+          'HASH?${sha256.convert(utf8.encode(json.toString())).toString()}';
+    }
+
+    print(json);
+
     return switch (json) {
       {
+        'id': String id,
         'title': String title,
         'questions': Map<String, dynamic> questions,
       } =>
         CarbonForm(
+          id: id,
           title: title,
           questions: convertQuestionsFromMap(questions),
         ),
@@ -40,6 +53,7 @@ class CarbonForm {
   static Map<String, dynamic> toMap(CarbonForm form) {
     Map<String, dynamic> m = <String, dynamic>{};
 
+    m['id'] = form.id;
     m['title'] = form.title;
     m['questions'] = convertQuestionsToMap(form.questions);
 

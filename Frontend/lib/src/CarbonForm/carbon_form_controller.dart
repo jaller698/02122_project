@@ -11,17 +11,17 @@ class CarbonFormController with ChangeNotifier {
       CarbonFormController._hiddenConstructor();
   factory CarbonFormController() => _singleton;
 
-  List<CarbonFormAnswer>? _carbonTrackerItems;
-  Future<List<CarbonFormAnswer>> get carbonTrackerItems {
-    if (_carbonTrackerItems == null) {
-      return loadTrackerItems();
+  List<CarbonFormAnswer>? _carbonForms;
+  Future<List<CarbonFormAnswer>> get carbonForms {
+    if (_carbonForms == null) {
+      return loadForms();
     }
-    return Future(() => _carbonTrackerItems!);
+    return Future(() => _carbonForms!);
   }
 
   static late Future<Database> _database;
 
-  Future<List<CarbonFormAnswer>> loadTrackerItems() async {
+  Future<List<CarbonFormAnswer>> loadForms() async {
     _database = openDatabase(
       join(await getDatabasesPath(), 'form_database.db'),
       onCreate: (db, version) {
@@ -32,40 +32,27 @@ class CarbonFormController with ChangeNotifier {
       version: 1,
     );
 
-    final List<Map<String, Object?>> carbonItemsMaps =
+    final List<Map<String, Object?>> carbonFormMaps =
         await (await _database).query('form');
 
     final items = [
-      for (final Map<String, dynamic> map in carbonItemsMaps)
+      for (final Map<String, dynamic> map in carbonFormMaps)
         CarbonFormAnswer.fromMap(map),
     ];
 
-    _carbonTrackerItems = items;
+    _carbonForms = items;
 
     notifyListeners();
 
     return items;
   }
 
-  Future<void> updateTrackerItems(CarbonFormAnswer item) async {
-    final db = await _database;
-
-    await db.update(
-      'form',
-      CarbonFormAnswer.toMap(item),
-      where: 'id = ?',
-      whereArgs: [item.id],
-    );
-
-    await loadTrackerItems();
-  }
-
-  Future<void> addTrackerItem(CarbonFormAnswer item) async {
+  Future<void> addForm(CarbonFormAnswer item) async {
     final db = await _database;
 
     var itemMap = CarbonFormAnswer.toMap(item);
 
-    itemMap['id'] = _carbonTrackerItems?.length ?? 0;
+    itemMap['id'] = _carbonForms?.length ?? 0;
 
     await db.insert(
       'form',
@@ -73,10 +60,10 @@ class CarbonFormController with ChangeNotifier {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
-    await loadTrackerItems();
+    await loadForms();
   }
 
-  Future<void> removeTrackerItem(int id) async {
+  Future<void> removeForm(int id) async {
     final db = await _database;
 
     await db.delete(
@@ -85,6 +72,6 @@ class CarbonFormController with ChangeNotifier {
       whereArgs: [id],
     );
 
-    await loadTrackerItems();
+    await loadForms();
   }
 }

@@ -1,11 +1,11 @@
 class CarbonFormAnswer {
-  final int id;
+  final String id;
   final String title;
   final String user;
   final Map<String, dynamic> anwsers;
 
   const CarbonFormAnswer({
-    this.id = -1,
+    this.id = '-1',
     required this.title,
     required this.user,
     required this.anwsers,
@@ -14,11 +14,13 @@ class CarbonFormAnswer {
   factory CarbonFormAnswer.fromMap(Map<String, dynamic> json) {
     return switch (json) {
       {
+        'id': String id,
         'title': String title,
         'userID': String user,
         'questions': Map<String, dynamic> anwsers,
       } =>
         CarbonFormAnswer(
+          id: id,
           title: title,
           user: user,
           anwsers: anwsers,

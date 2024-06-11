@@ -35,14 +35,14 @@ class CarbonFormHistoryController with ChangeNotifier {
     final List<Map<String, Object?>> carbonFormMaps =
         await (await _database).query('form');
 
-    final items = [
+    final form = [
       for (final Map<String, dynamic> map in carbonFormMaps)
         CarbonFormAnswer.fromMap(map),
     ];
 
-    _carbonForms = items;
+    _carbonForms = form;
 
-    return items;
+    return form;
   }
 
   Future<void> addForm(CarbonFormAnswer item) async {

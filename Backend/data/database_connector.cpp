@@ -283,7 +283,25 @@ void dataBaseStart::insertAction(std::string username, std::string action, std::
     statement->execute(command);
     delete statement;
 }
+web::json::value dataBaseStart::getAction(std::string username)
+{
+    connection->setSchema("CarbonFootprint");
+    std::string command = "SELECT * FROM ActionTrackerData WHERE Username ='" + username + "'";
+    statement = connection->createStatement();
+    result_set = statement->executeQuery(command);
+      if (result_set->next())
+    {
+        web::json::value Action = web::json::value::object();
+        //Action["action"] = web::json::value::string(result_set->getString(2));
+        //Action["category"] = web::json::value::string(result_set->getString(3));
+        Action["date"] = web::json::value::string(result_set->getString(4));
+        Action["CarbonScore"] = web::json::value::number((double) result_set->getDouble(5));
+        output[output.size()] = Action;
+    }
 
+    return output;
+    
+}
 double dataBaseStart::getAverage()
 {
     connection->setSchema("CarbonFootprint");

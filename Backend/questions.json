@@ -68,7 +68,7 @@
         "id": "Q9",
         "question": "How many times do you prompt an AI pr day",
         "Type": "int",
-        "category": "other",
+        "category": "energy",
         "unit": "times a day",
         "estimated cost of KG CO2 per unit": 1
     }

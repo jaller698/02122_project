@@ -26,7 +26,7 @@ class CarbonFormHistoryController with ChangeNotifier {
       join(await getDatabasesPath(), 'form_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE form(id INTEGER PRIMARY KEY, title TEXT)',
+          'CREATE TABLE form(count INTEGER PRIMARY KEY, title TEXT)',
         );
       },
       version: 1,
@@ -42,8 +42,6 @@ class CarbonFormHistoryController with ChangeNotifier {
 
     _carbonForms = items;
 
-    notifyListeners();
-
     return items;
   }
 
@@ -52,7 +50,21 @@ class CarbonFormHistoryController with ChangeNotifier {
 
     var itemMap = CarbonFormAnswer.toMap(item);
 
-    itemMap['id'] = _carbonForms?.length ?? 0;
+    var itemList = await carbonForms;
+
+    for (var i = 0; i < itemList.length; i++) {
+      bool valid = true;
+      for (var item in itemList) {
+        if (item.id == i) valid = false;
+      }
+
+      if (valid) {
+        itemMap['count'] = i;
+        break;
+      }
+    }
+
+    print(itemMap);
 
     await db.insert(
       'form',
@@ -68,7 +80,7 @@ class CarbonFormHistoryController with ChangeNotifier {
 
     await db.delete(
       'form',
-      where: 'id = ?',
+      where: 'count = ?',
       whereArgs: [id],
     );
 

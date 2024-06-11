@@ -61,10 +61,14 @@ class CarbonFormView extends StatelessWidget {
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
-                      itemCount: 8,
+                      itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return const Card(
-                          child: Text('old forms'),
+                        return Card(
+                          child: ListTile(
+                            title: Text(snapshot.data![index].title),
+                            subtitle: Text(snapshot.data![index].id),
+                            leading: Text(index.toString()),
+                          ),
                         );
                       },
                     );

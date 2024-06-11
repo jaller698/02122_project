@@ -285,14 +285,18 @@ void dataBaseStart::insertAction(std::string username, std::string action, std::
 }
 web::json::value dataBaseStart::getAction(std::string username)
 {
+        //print("we dont know if there is anything");
+
     connection->setSchema("CarbonFootprint");
-    std::string command = "SELECT * FROM ActionTrackerData WHERE Username ='" + username + "'";
+    std::string command = "SELECT * FROM ActionTrackerData WHERE User ='" + username + "'";
     statement = connection->createStatement();
     result_set = statement->executeQuery(command);
     web::json::value output = web::json::value::array();
-
+DEBUG_PRINT("SQL Command: " + command);
       if (result_set->next())
     {
+        //print("hurray there is something");
+
         web::json::value Action = web::json::value::object();
         //Action["action"] = web::json::value::string(result_set->getString(2));
         //Action["category"] = web::json::value::string(result_set->getString(3));

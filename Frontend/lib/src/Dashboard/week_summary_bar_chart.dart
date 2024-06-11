@@ -36,15 +36,15 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
     Future<List<double>> last7days() async {
       print("last7days has been called");
       //var items = await carbonTrackerItems;
- /*     http.Request request = http.Request(
+      http.Request request = http.Request(
           "GET", Uri.parse('${SettingsController.address}/actionTracker'));
       request.body = jsonEncode(<String, String>{
         'User': UserController().username,
       });
       request.headers.addAll(<String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-      });*/
-
+      });
+      
       http.Request request2 = http.Request(
           "GET", Uri.parse('${SettingsController.address}/userScore'));
       request2.body = jsonEncode(<String, String>{
@@ -53,10 +53,16 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
       request2.headers.addAll(<String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       });
-      //var items = 
-      var response = await request2.send();
 
-      var baseYearly = await response.stream.transform(utf8.decoder).first;
+      var response = await request.send();
+  print("2nd thing work");
+      var items = await response.stream.transform(utf8.decoder).first;
+      print("3rd thing work");
+      var res = jsonDecode(items);
+      print(res);
+
+      var response2 = await request2.send();
+      var baseYearly = await response2.stream.transform(utf8.decoder).first;
       var baseDaily = double.parse(baseYearly)/365;
       print("BaseYearly/actual carbonscore:");
       print(baseYearly);
@@ -64,8 +70,8 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
       print(baseDaily);
       var date = DateTime.now();
       List<double> list = [0, 0, 0, 0, 0, 0, 0];
-      for (var i = 0; i < 7; i++) {
-
+      for (var i = 0; i < items.length; i++) {
+          print(items[i]);
           //list[diff.inDays] += items[i].carbonScore;
           list[i] += baseDaily-i*2;
         

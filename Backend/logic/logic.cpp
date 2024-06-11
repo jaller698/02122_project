@@ -275,7 +275,7 @@ struct Response handle_Tracking(const web::json::value &request_body)
     try {
         dataBaseStart db;
         auto username = request_body.at("User").as_string();
-        auto actions = db.getAction(username);
+        web::json::value actions = db.getAction(username);
         return Response(http::status_codes::OK, actions);
     } catch (const std::exception &e) {
         ERROR("Error in handling history: ", e);

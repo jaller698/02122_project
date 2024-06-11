@@ -38,4 +38,5 @@ std::vector<std::tuple<std::string, std::string, std::string>> query_comparison_
     } catch (const std::exception &e) {
         ERROR("Error in handling comparison: ", e);
     }
+    return {};
 }

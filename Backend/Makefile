@@ -2,7 +2,7 @@
 # To run in debug mode (with debug prints), run `make DEBUG=1 (run)` in the terminal.
 
 CXX := g++
-CXXFLAGS := -I . -std=c++20 -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto
+CXXFLAGS := -I . -std=c++20 -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto -Werror
 ifdef DEBUG
 	CXXFLAGS += -DDEBUG
 endif

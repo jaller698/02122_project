@@ -6,7 +6,7 @@
         "Type": "int",
         "category": "transportation",
         "unit": "years",
-        "estimated cost of KG CO2 per unit": 50
+        "estimated cost of KG CO2 per unit": 10
     },
     {
         "id": "Q2",
@@ -14,8 +14,7 @@
         "Type": "int",
         "category": "food",
         "unit": "times a week",
-        "estimated cost of KG CO2 per unit": 10
-
+        "estimated cost of KG CO2 per unit": 2
     },
     {
         "id": "Q3",
@@ -23,7 +22,7 @@
         "Type": "int",
         "category": "transportation",
         "unit": "weeks",
-        "estimated cost of KG CO2 per unit": 10
+        "estimated cost of KG CO2 per unit": 2
     },
     {
         "id": "Q4",
@@ -31,7 +30,7 @@
         "Type": "int",
         "category": "transportation",
         "unit": "weeks",
-        "estimated cost of KG CO2 per unit": 5
+        "estimated cost of KG CO2 per unit": 1
     },
     {
         "id": "Q5",
@@ -39,7 +38,7 @@
         "Type": "int",
         "category": "other",
         "unit": "years",
-        "estimated cost of KG CO2 per unit": 100
+        "estimated cost of KG CO2 per unit": 20
     },
     {
         "id": "Q6",
@@ -47,7 +46,7 @@
         "Type": "int",
         "category": "home",
         "unit": "times a week",
-        "estimated cost of KG CO2 per unit": 5
+        "estimated cost of KG CO2 per unit": 1
     },
     {
         "id": "Q7",
@@ -55,7 +54,7 @@
         "Type": "int",
         "category": "home",
         "unit": "choice",
-        "estimated cost of KG CO2 per unit": 10
+        "estimated cost of KG CO2 per unit": 2
     },
     {
         "id": "Q8",
@@ -63,7 +62,7 @@
         "Type": "int",
         "category": "home",
         "unit": "choice",
-        "estimated cost of KG CO2 per unit": 5
+        "estimated cost of KG CO2 per unit": 1
     },
     {
         "id": "Q9",
@@ -71,7 +70,7 @@
         "Type": "int",
         "category": "energy",
         "unit": "times a day",
-        "estimated cost of KG CO2 per unit": 5
+        "estimated cost of KG CO2 per unit": 1
     }
     ]
 }

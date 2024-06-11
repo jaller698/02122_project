@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
 import 'dart:math';
-import 'Carbon_stat_controller.dart';
+import 'Comparison_stat_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 
-class CarbonStatView extends StatelessWidget {
-  const CarbonStatView({super.key});
+class ComparisonStatView extends StatelessWidget {
+  const ComparisonStatView({super.key});
 
   static const routeName = '/carbonstats';
 
@@ -100,7 +100,7 @@ class CarbonStatView extends StatelessWidget {
           ));
           return ListView(children: <Widget>[
             Container(
-              height: 500,
+              height: 300,
               child: barChart,
             ),
             colorIndicators

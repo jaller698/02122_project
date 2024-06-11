@@ -46,7 +46,7 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         jsonConfig = web::json::value::parse(strStream);
         auto questions = jsonConfig.at("questions").as_array();
 
-        for (int i = 0; i < answers.size(); i++)
+        for (size_t i = 0; i < answers.size(); i++)
         {
             DEBUG_PRINT("Answer: " + std::to_string(answers[i]));
             // map from json["type"] to varibale score:
@@ -78,29 +78,40 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
         }
 
         double res = foodScore + transportScore + energyScore + homeScore + otherScore;
-        
+
         db.insertCategorizedScore(userID, res, foodScore, transportScore, energyScore, homeScore, otherScore);
 
         std::vector<std::string> db_answers;
         db_answers.push_back(userID);
-        for(int i = 0; i < answers.size(); i++)
+        for(size_t i = 0; i < answers.size(); i++)
         {
             db_answers.push_back(std::to_string(answers[i]));
         }
         db.insert("InitialSurvey",db_answers);
         DEBUG_PRINT("Got a carbon score of: " + std::to_string(res));
+        // set all scores back to 0
+        foodScore = 0;
+        transportScore = 0;
+        energyScore = 0;
+        homeScore = 0;
+        otherScore = 0;
         return res;
     } catch (const std::exception &e) {
         ERROR("Error in calculating carbon score: ", e);
+        // set all scores back to 0
+        foodScore = 0;
+        transportScore = 0;
+        energyScore = 0;
+        homeScore = 0;
+        otherScore = 0;
         throw e;
     }
 }
 
 double calculateCarbonScore (const std::vector<std::string> &answers)
 {
-    double score = 0;
     std::vector<int> ansMath;
-    for(int i = 0; i < answers.size(); i++)
+    for(size_t i = 0; i < answers.size(); i++)
     {
         auto answer = answers[i];
 

@@ -236,7 +236,7 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
     }
 }
 
-std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, int tableSize)
+std::string dataBaseStart::createStatement(std::vector<std::string> input, std::string table, size_t tableSize)
 {
     if (tableSize == 0) // if value is still it's default update to the size of the questions
         tableSize = readQuestions().size();
@@ -246,7 +246,7 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
         WARNING("input is not the presumed size, expected " + std::to_string(tableSize+1) + " but got " + std::to_string(input.size()) + " elements");
         throw std::logic_error("input is not the presumed size");
     }
-    for (int i = 1; i <= tableSize; i++)
+    for (size_t i = 1; i <= tableSize; i++)
     {
         output += ", " + input[i];
     }
@@ -294,7 +294,7 @@ double dataBaseStart::getAverage()
     {
         output = result_set->getDouble(1);
     }
-    return output >= 0 ? output : NULL;
+    return output >= 0 ? output : 0;
 }
 
 web::json::value dataBaseStart::getComparison(web::json::array landcodes) 
@@ -324,7 +324,17 @@ void dataBaseStart::insertCategorizedScore(std::string username, double totalSco
 {
     connection->setSchema("CarbonFootprint");
     statement = connection->createStatement();
-    std::string command = "INSERT INTO CarbonScore VALUES ('" + username + "', " + std::to_string(totalScore) + ", " + std::to_string(foodScore) + ", " + std::to_string(transportScore) + ", " + std::to_string(energyScore) + ", " + std::to_string(homeScore) + ", " + std::to_string(otherScore) + ")";
+    // check if the user already has a score, if so update it
+    std::string command = "SELECT * FROM CarbonScore WHERE Username = '" + username + "'";
+    result_set = statement->executeQuery(command);
+    if (result_set->next())
+    {
+        command = "UPDATE CarbonScore SET totalScore = " + std::to_string(totalScore) + ", foodScore = " + std::to_string(foodScore) + ", transportScore = " + std::to_string(transportScore) + ", energyScore = " + std::to_string(energyScore) + ", homeScore = " + std::to_string(homeScore) + ", otherScore = " + std::to_string(otherScore) + " WHERE Username = '" + username + "'";
+        statement->execute(command);
+        delete statement;
+        return;
+    }
+    command = "INSERT INTO CarbonScore VALUES ('" + username + "', " + std::to_string(totalScore) + ", " + std::to_string(foodScore) + ", " + std::to_string(transportScore) + ", " + std::to_string(energyScore) + ", " + std::to_string(homeScore) + ", " + std::to_string(otherScore) + ")";
     statement->execute(command);
     delete statement;
 }
@@ -348,9 +358,27 @@ web::json::value dataBaseStart::getCategories(std::string username)
     return output;
 }
 
+web::json::value dataBaseStart::getHistory(std::string username) 
+{
+    connection->setSchema("CarbonFootprint");
+    statement = connection->createStatement();
+    std::string command = "SELECT * FROM CarbonScoreHistory WHERE Username = '" + username + "' ORDER BY Date DESC LIMIT 7";
+    result_set = statement->executeQuery(command);
+    web::json::value output = web::json::value::array();
+    while (result_set->next())
+    {
+        web::json::value entry = web::json::value::object();
+        entry["Date"] = web::json::value::string(result_set->getString(2));
+        entry["CarbonScore"] = web::json::value::number((double) result_set->getDouble(3));
+        output[output.size()] = entry;
+    }
+    return output;
+}
+
 std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
 {
     web::json::value questions = web::json::value::object();
+    std::vector<std::pair<std::string,std::string>> output;
     try {
         std::ifstream f("questions.json");
         std::stringstream strStream;
@@ -358,16 +386,15 @@ std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
         f.close(); 
         questions = web::json::value::parse(strStream);
         DEBUG_PRINT(questions.serialize());
-        std::vector<std::pair<std::string,std::string>> output;
         for (auto &question : questions.at("questions").as_array())
         {
             DEBUG_PRINT("Question: " + question.at("question").as_string());
             output.push_back({question.at("id").as_string(), question.at("Type").as_string()});
         }
-        return output;
     } catch (std::exception &e) {
         ERROR("Error in getQuestions: ", e);
     }
+    return output;
 }
 
 void dataBaseStart::updateQuestions()

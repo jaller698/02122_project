@@ -14,7 +14,8 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/userScore", handle_user_score_read},
     {"/comparison", handle_comparison},
     {"/average", handle_average},
-    {"/carbonScoreCategories", handle_categories}
+    {"/carbonScoreCategories", handle_categories},
+    {"/carbonScoreHistory", handle_history}
 };
 
 // Function which based on the endpoint, sends the data to the correct handler
@@ -52,7 +53,6 @@ struct Response handle_questions_write(const web::json::value &request_body)
             auto questions = db.get("Questions", "");
             std::vector<std::string> answers;
             answers.push_back(userID);
-            auto it = questions.as_object().begin();
             for (auto question : questions.as_object())
             {
                 auto question_trimmed = question.first.substr(question.first.find("_")+1, question.first.size() - 1);
@@ -81,7 +81,7 @@ struct Response handle_questions_write(const web::json::value &request_body)
 
 // Handle reading the questions from the database
 // and sending them to the users
-struct Response handle_questions_read(const web::json::value &request_body)
+struct Response handle_questions_read([[maybe_unused]] const web::json::value &request_body)
 {
     try {
     dataBaseStart db;
@@ -193,16 +193,13 @@ struct Response handle_user_score_write(const web::json::value &request_body)
     }
 }
 
-struct Response handle_average(const web::json::value &request_body) 
+struct Response handle_average([[maybe_unused]] const web::json::value &request_body) 
 {
     try {
         dataBaseStart db;
         web::json::value average = web::json::value::number(0);
         average = db.getAverage();
         DEBUG_PRINT("Average: " + average.serialize());
-        if (average.is_null()) {
-            return Response(http::status_codes::OK, web::json::value::number(0));
-        }
         return Response(http::status_codes::OK, average);
     } catch (const std::exception &e) {
         ERROR("Error in handling average: ", e);
@@ -255,6 +252,19 @@ struct Response handle_categories(const web::json::value &request_body)
         return Response(http::status_codes::OK, categories);
     } catch (const std::exception &e) {
         ERROR("Error in handling categories: ", e);
+        return Response(http::status_codes::BadRequest, web::json::value::null());
+    }
+}
+
+struct Response handle_history(const web::json::value &request_body)
+{
+    try {
+        dataBaseStart db;
+        auto username = request_body.at("User").as_string();
+        auto history = db.getHistory(username);
+        return Response(http::status_codes::OK, history);
+    } catch (const std::exception &e) {
+        ERROR("Error in handling history: ", e);
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }

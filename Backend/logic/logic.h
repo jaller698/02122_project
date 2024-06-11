@@ -14,3 +14,5 @@ struct Response handle_comparison(const web::json::value& request_body);
 struct Response handle_average(const web::json::value& request_body);
 struct Response handle_actionTracker(const web::json::value& request_body);
 struct Response handle_categories(const web::json::value& request_body);
+struct Response handle_history(const web::json::value& request_body);
+

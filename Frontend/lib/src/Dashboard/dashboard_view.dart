@@ -87,15 +87,16 @@ class _DashboardViewState extends State<DashboardView> {
               vals = vals + [snapshot.data!.$2[i].toInt()];
               names = names + [snapshot.data!.$1[i]];
             }
-            print(vals[2]);
+            print("energyscore:");
             //print("vals");
-            //print(snapshot.data!['foodScore']);
+            //
+            //print(snapshot.data!.$2[0]);
 
             const List<String> labels = ["Transport", "Home", "Food", "Other"];
             List<Segment> segments = [
               //TODO: we need to change these index's to match waht we want
               Segment(
-                  value: vals[0],
+                  value: vals[0]+1,
                   color: Colors.lightGreenAccent,
                   label: Text(names[0])),
               Segment(

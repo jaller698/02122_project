@@ -262,6 +262,8 @@ void dataBaseStart::updateUserScore(std::string username, int score){
 }
 
 void dataBaseStart::updateUserScore(std::string username, double score){
+    if (username == "guest")
+        return;
     connection->setSchema("CarbonFootprint");
     // set current score to something
     std::string command = "UPDATE Users SET CarbonScore = " + std::to_string(score) + " WHERE Username = '" + username + "'";

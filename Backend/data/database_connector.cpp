@@ -287,9 +287,6 @@ void dataBaseStart::insertAction(std::string username, std::string action, std::
 }
 web::json::value dataBaseStart::getAction(std::string username)
 {
-<<<<<<< HEAD
-        //print("we dont know if there is anything");
-=======
     connection->setSchema("CarbonFootprint");
     std::string command = "SELECT * FROM ActionTrackerData WHERE Username ='" + username + "'";
     statement = connection->createStatement();
@@ -308,29 +305,7 @@ web::json::value dataBaseStart::getAction(std::string username)
     return output;
     
 }
->>>>>>> master
 
-    connection->setSchema("CarbonFootprint");
-    std::string command = "SELECT * FROM ActionTrackerData WHERE User ='" + username + "'";
-    statement = connection->createStatement();
-    result_set = statement->executeQuery(command);
-    web::json::value output = web::json::value::array();
-DEBUG_PRINT("SQL Command: " + command);
-      if (result_set->next())
-    {
-        //print("hurray there is something");
-
-        web::json::value Action = web::json::value::object();
-        //Action["action"] = web::json::value::string(result_set->getString(2));
-        //Action["category"] = web::json::value::string(result_set->getString(3));
-        Action["date"] = web::json::value::string(result_set->getString(4));
-        Action["CarbonScore"] = web::json::value::number((double) result_set->getDouble(5));
-        output[output.size()] = Action;
-    }
-
-    return output;
-    
-}
 double dataBaseStart::getAverage()
 {
     connection->setSchema("CarbonFootprint");

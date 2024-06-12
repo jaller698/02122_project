@@ -1,7 +1,5 @@
 import 'package:carbon_footprint/src/Dashboard/carbon_score_pie_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/carbon_score_widget.dart';
-import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
-import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'week_summary_bar_chart.dart';
@@ -18,10 +16,6 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  static final DashboardController _dashboardController = DashboardController();
-
-  final SettingsController _settingsController = SettingsController();
-
   @override
   Widget build(BuildContext context) {
     return ListView(

@@ -15,6 +15,8 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
     body: jsonEncode(CarbonFormAnswer.toMap(answer)),
   );
 
+  print(CarbonFormAnswer.toMap(answer));
+
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
     // then save the form in history
@@ -25,6 +27,6 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
-    throw Exception('Failed to create form.' + response.statusCode.toString());
+    throw Exception('Failed to send form. Code: ${response.statusCode}');
   }
 }

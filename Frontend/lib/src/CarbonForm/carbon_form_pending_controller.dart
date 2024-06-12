@@ -29,6 +29,8 @@ class CarbonFormPendingController with ChangeNotifier {
         ? CarbonForm.fromMap(jsonDecode(data))
         : const CarbonForm(title: 'error', questions: []);
 
+    _carbonForm = form;
+
     notifyListeners();
     return form;
   }

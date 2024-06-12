@@ -2,14 +2,10 @@ import 'package:carbon_footprint/src/Dashboard/carbon_score_pie_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/carbon_score_widget.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:primer_progress_bar/primer_progress_bar.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
+import 'package:flutter/material.dart';
 
 import 'week_summary_bar_chart.dart';
-import 'dashboard_controller.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({
@@ -31,7 +27,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return ListView(
         children: [
-                CarbonScoreWidget(carbonScore: 1300),//UserController().carbonScore),
+                CarbonScoreWidget(carbonScore: UserController().carbonScore),
                 const Divider(),
                 const CarbonScorePieChart(),
                 const Divider(),
@@ -50,26 +46,9 @@ class _DashboardViewState extends State<DashboardView> {
                             'tips og reminders til at forminske ens forbrug'),
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Placeholder(
-                        fallbackHeight: 150,
-                        child: Text(
-                            'Hvis alle gjorde som dig, hvordan vil jorden se ud?'),
-                      ),
-                    ),
-                  ],
-                ),
-                const Divider(),
-                const Placeholder(
-                  fallbackHeight: 50,
-                  child: Center(
-                    child: Card(
-                      child: Text(' Jank central '),
-                    ),
-                  ),
+                  ]
                 ),
         ],
               );
-         }
   }
+}

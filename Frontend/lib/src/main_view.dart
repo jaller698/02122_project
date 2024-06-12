@@ -1,12 +1,11 @@
 import 'package:carbon_footprint/src/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'CarbonForm/carbon_form_view.dart';
 import 'CarbonTracker/carbon_tracker_view.dart';
 import 'Dashboard/dashboard_view.dart';
-import 'CarbonStats/Comparison_stat_view.dart';
 import 'CarbonStats/carbon_stat_view.dart';
+import 'Widgets/future_badge_icon_widget.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -66,7 +65,7 @@ class _MainViewState extends State<MainView> {
             label: 'Tracker',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.list_alt)),
+            icon: FutureBadgeIconWidget(),
             label: 'Forms',
           ),
           NavigationDestination(

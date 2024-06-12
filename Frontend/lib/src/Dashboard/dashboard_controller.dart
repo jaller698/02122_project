@@ -1,8 +1,66 @@
 import 'dart:convert';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:carbon_footprint/src/user_controller.dart';
 
 class DashboardController {
+  
+  Future<List<double>> last7days() async {
+      print("last7days has been called");
+      //var items = await carbonTrackerItems;
+      http.Request request = http.Request(
+          "GET", Uri.parse('${SettingsController.address}/actionTracker'));
+      request.body = jsonEncode(<String, String>{
+        'User': UserController().username,
+      });
+      request.headers.addAll(<String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
+      
+      http.Request request2 = http.Request(
+          "GET", Uri.parse('${SettingsController.address}/userScore'));
+      request2.body = jsonEncode(<String, String>{
+        'User': UserController().username,
+      });
+      request2.headers.addAll(<String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      });
+
+      var response = await request.send();
+      print("2nd thing work");
+      var items = await response.stream.transform(utf8.decoder).first;
+      //print(items);
+      var res = jsonDecode(items);
+      print(res);
+
+      var response2 = await request2.send();
+      var baseYearly = await response2.stream.transform(utf8.decoder).first;
+      var baseDaily = double.parse(baseYearly)/365;
+      //print("BaseYearly/actual carbonscore:");
+      //print(baseYearly);
+      //print("BaseDaily:");
+      //print(baseDaily);
+      var date = DateTime.now();
+      List<double> list = [0, 0, 0, 0, 0, 0, 0];
+ /*     for (var i = 0; i < res.length; i++) {
+          print(res[i]);
+          //list[diff.inDays] += items[i].carbonScore;
+          list[i] += baseDaily-i*2;
+        
+    }
+*/
+    for (var i = 0; i < res.length; i++) {
+      var diff = date.difference(DateTime.parse(res[i]['date']));
+      print(diff.inDays);
+      if (diff.inDays <= 7 && diff.inDays >= 0) {
+        //list[diff.inDays] += items[i].carbonScore;
+        list[diff.inDays] += baseDaily;
+      }
+    }
+
+      return list;
+  }
+
   Future<String> fetchStats(String username) async {
     //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
 

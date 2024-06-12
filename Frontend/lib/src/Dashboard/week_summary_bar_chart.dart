@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
+import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -33,68 +34,16 @@ class WeekSummaryBarChart extends StatefulWidget {
 
 class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
-    Future<List<double>> last7days() async {
-      print("last7days has been called");
-      //var items = await carbonTrackerItems;
-      http.Request request = http.Request(
-          "GET", Uri.parse('${SettingsController.address}/actionTracker'));
-      request.body = jsonEncode(<String, String>{
-        'User': UserController().username,
-      });
-      request.headers.addAll(<String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      });
-      
-      http.Request request2 = http.Request(
-          "GET", Uri.parse('${SettingsController.address}/userScore'));
-      request2.body = jsonEncode(<String, String>{
-        'User': UserController().username,
-      });
-      request2.headers.addAll(<String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      });
-
-      var response = await request.send();
-  print("2nd thing work");
-      var items = await response.stream.transform(utf8.decoder).first;
-      print("3rd thing work");
-      var res = jsonDecode(items);
-      print(res);
-
-      var response2 = await request2.send();
-      var baseYearly = await response2.stream.transform(utf8.decoder).first;
-      var baseDaily = double.parse(baseYearly)/365;
-      print("BaseYearly/actual carbonscore:");
-      print(baseYearly);
-      print("BaseDaily:");
-      print(baseDaily);
-      var date = DateTime.now();
-      List<double> list = [0, 0, 0, 0, 0, 0, 0];
-      for (var i = 0; i < items.length; i++) {
-          print(items[i]);
-          //list[diff.inDays] += items[i].carbonScore;
-          list[i] += baseDaily-i*2;
-        
-    }
-/*
-    for (var i = 0; i < items.length; i++) {
-      var diff = date.difference(items[i].dateAdded);
-      if (diff.inDays <= 7 && diff.inDays >= 0) {
-        //list[diff.inDays] += items[i].carbonScore;
-        list[diff.inDays] += baseDaily;
-      }
-    }
-*/
-      return list;
-  }
+  static final DashboardController _dashboardController = DashboardController();
   int touchedIndex = -1;
 
   bool isPlaying = false;
-
+var fut = _dashboardController.last7days();
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder(
-      future: last7days(),
+      future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AspectRatio(

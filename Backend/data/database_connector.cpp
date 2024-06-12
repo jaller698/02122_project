@@ -311,7 +311,7 @@ double dataBaseStart::getAverage()
     connection->setSchema("CarbonFootprint");
     double output = -1;
     statement = connection->createStatement();
-    result_set = statement->executeQuery("SELECT AVG(CarbonScore) FROM Users");
+    result_set = statement->executeQuery("SELECT AVG(CarbonScore) FROM Users WHERE CarbonScore > 0");
     if (result_set->next())
     {
         output = result_set->getDouble(1);

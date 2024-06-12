@@ -15,7 +15,7 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/comparison", handle_comparison},
     {"/average", handle_average},
     {"/carbonScoreCategories", handle_categories},
-    {"/carbonScoreHistory", handle_history}
+    {"/carbonScoreHistory", handle_history},
     {"/actionTracker", handle_Tracking}
 };
 

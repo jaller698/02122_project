@@ -60,7 +60,6 @@ class DashboardController {
       "totalScore": result2['totalScore'],
     };
     if (response.statusCode == 200) {
-      print(res);
       return (res.keys.toList(), res.values.toList());
     } else {
       throw Exception('Failed to load average score');

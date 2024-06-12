@@ -64,8 +64,6 @@ class CarbonFormHistoryController with ChangeNotifier {
       }
     }
 
-    print(itemMap);
-
     await db.insert(
       'form',
       itemMap,

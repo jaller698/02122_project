@@ -20,7 +20,9 @@ Future<bool> getUserSession(String username, String password) async {
   var response = await request.send();
 
   if (response.statusCode == 200) {
+    var responseBody = JsonDecoder().convert(await response.stream.transform(utf8.decoder).first);
     UserController().username = username;
+    UserController().carbonScore = responseBody['Score'];
     return true;
   } else if (response.statusCode == 401) {
     return false;

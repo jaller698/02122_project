@@ -152,7 +152,6 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
         builder: (context, snapshot) {
           //placeholder data
           if (snapshot.hasData) {
-
             List<int> vals = [];
             List<String> names = [];
             for (int i = 0; i < snapshot.data!.$1.length; i++) {
@@ -209,8 +208,10 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
               centerSpaceRadius: 40,
               sections: showingSections(segments), // Optional
             ));
-
-            return ListView(
+            return AspectRatio(
+                aspectRatio: 1,
+                
+            child:  ListView(
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1,
@@ -234,6 +235,7 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
                   ),
                 )
               ]
+            )
             );
           } else if (snapshot.hasError) {
             print('Error: ${snapshot.error.toString()}');
@@ -245,11 +247,8 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
                     'Please navigate to Forms(3) to provide infomation to generate a dashboard')
               ],
             ));
-          } else {
+              } else {
             return const Center(child: CircularProgressIndicator());
           }
         });
-
-
-
 }}

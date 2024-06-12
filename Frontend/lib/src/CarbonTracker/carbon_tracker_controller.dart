@@ -96,8 +96,6 @@ class CarbonTrackerController with ChangeNotifier {
       }
     }
 
-    print(itemMap);
-
     await db.insert(
       'carbon',
       itemMap,

@@ -81,14 +81,11 @@ class CarbonStatController {
     
     var result = await response.stream.transform(utf8.decoder).first;
     var result2 =  jsonDecode(result);
-    print(result2[0]['CarbonScore']);
     Map<String, String> res = {};
     for (int i=0; i<countries.length; i++){
       res.addAll({result2[i]['Country'].toString(): result2[i]['CarbonScore'].toString()});
     }
-    print(res.values.toList());
     if (response.statusCode == 200) {
-      print(res.keys.toList());
 
       return (res.keys.toList(),res.values.toList());
     } else {

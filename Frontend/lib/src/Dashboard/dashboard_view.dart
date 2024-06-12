@@ -31,7 +31,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return ListView(
         children: [
-                const CarbonScoreWidget(carbonScore: 200),
+                CarbonScoreWidget(carbonScore: 1300),//UserController().carbonScore),
                 const Divider(),
                 const CarbonScorePieChart(),
                 const Divider(),

@@ -19,6 +19,7 @@ Future<bool> createNewUser(String username, String password) async {
 
   if (response.statusCode == 201) {
     UserController().username = username;
+    UserController().carbonScore = 0;
     return true;
   } else if (response.statusCode == 409) {
     return false;

@@ -1,6 +1,6 @@
 class UserController {
   // singleton
-  UserController._hiddenConstructor();
+  UserController._hiddenConstructor() : _carbonScore = 0;
   static final UserController _singleton = UserController._hiddenConstructor();
   factory UserController() => _singleton;
 
@@ -13,11 +13,16 @@ class UserController {
   set username(String v) {
     _username = v;
   }
+  int _carbonScore;
+  int get carbonScore {
+    return _carbonScore;
+  }
+
+  set carbonScore(int v) {
+    _carbonScore = v;
+  }
 
   String? _sessionID;
-
-  // user data
-  int? _userscore;
 }
 
 class _UserData {

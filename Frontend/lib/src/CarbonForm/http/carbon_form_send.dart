@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form_answer.dart';
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_history_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
+import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
@@ -18,7 +19,8 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
     // If the server did return a 201 CREATED response,
     // then save the form in history
     CarbonFormHistoryController().addForm(answer);
-
+    var responseBody = JsonDecoder().convert(response.body);
+    UserController().carbonScore = responseBody['response']['carbonScore'];
     return;
   } else {
     // If the server did not return a 201 CREATED response,

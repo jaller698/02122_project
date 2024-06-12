@@ -1,5 +1,6 @@
 import 'package:carbon_footprint/src/LoginPage/http/get_user_session.dart';
 import 'package:carbon_footprint/src/main_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -103,12 +104,13 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ],
                 ),
-                TextButton(
+                kDebugMode ? TextButton(
                     onPressed: () => {
                         UserController().username = "guest",
+                        UserController().carbonScore = -1,
                         Navigator.popAndPushNamed(context, MainView.routeName)
                     },
-                    child: const Text('Continue as guest'))
+                    child: const Text('Continue as guest')) : Container()
               ],
             ),
           ),

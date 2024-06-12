@@ -4,6 +4,7 @@ import 'package:carbon_footprint/src/CarbonForm/carbon_form_pending_controller.d
 import 'package:flutter/material.dart';
 
 import 'Modals/carbon_form.dart';
+import 'Modals/carbon_form_answer.dart';
 import 'carbon_form_questionnaire.dart';
 
 class CarbonFormView extends StatelessWidget {
@@ -68,6 +69,14 @@ class CarbonFormView extends StatelessWidget {
                             title: Text(snapshot.data![index].title),
                             subtitle: Text(snapshot.data![index].id),
                             leading: Text(index.toString()),
+                            onTap: () {
+                              // TODO view old forms
+
+                              Navigator.restorablePushNamed(
+                                  context, CarbonFormQuestionnaire.routeName,
+                                  arguments: CarbonFormAnswer.toMap(
+                                      snapshot.data![index]));
+                            },
                           ),
                         );
                       },

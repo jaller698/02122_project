@@ -76,6 +76,8 @@ class CarbonFormHistoryController with ChangeNotifier {
     );
 
     await loadForms();
+
+    notifyListeners();
   }
 
   Future<void> removeForm(int id) async {
@@ -88,5 +90,7 @@ class CarbonFormHistoryController with ChangeNotifier {
     );
 
     await loadForms();
+
+    notifyListeners();
   }
 }

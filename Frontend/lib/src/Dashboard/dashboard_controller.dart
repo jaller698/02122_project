@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:carbon_footprint/src/user_controller.dart';
 
 class DashboardController {
-  
+
   Future<List<double>> last7days() async {
       print("last7days has been called");
       //var items = await carbonTrackerItems;
@@ -38,10 +38,10 @@ class DashboardController {
       var baseDaily = double.parse(baseYearly)/365;
       //print("BaseYearly/actual carbonscore:");
       //print(baseYearly);
-      //print("BaseDaily:");
-      //print(baseDaily);
+      print("BaseDaily:");
+      print(baseDaily);
       var date = DateTime.now();
-      List<double> list = [0, 0, 0, 0, 0, 0, 0];
+      List<double> list = [baseDaily, baseDaily, baseDaily, baseDaily, baseDaily, baseDaily, baseDaily];
  /*     for (var i = 0; i < res.length; i++) {
           print(res[i]);
           //list[diff.inDays] += items[i].carbonScore;
@@ -51,10 +51,17 @@ class DashboardController {
 */
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
+      print("days");
       print(diff.inDays);
-      if (diff.inDays <= 7 && diff.inDays >= 0) {
+      print(date.hour-diff.inHours);
+      if (diff.inDays <= 7 && diff.inDays>=0) {
+        if((diff.inDays==0 && date.hour<diff.inHours)){
+          list[1] += res[i]['CarbonScore'];
+        }else{
+          list[diff.inDays] += res[i]['CarbonScore'];
+        }
         //list[diff.inDays] += items[i].carbonScore;
-        list[diff.inDays] += baseDaily;
+        
       }
     }
 

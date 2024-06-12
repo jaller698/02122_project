@@ -35,13 +35,13 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
           padding: const EdgeInsets.all(8),
           itemCount: widget._carbonForm.questions.length,
           itemBuilder: (context, index) {
-            var _question = widget._carbonForm.questions[index];
+            var question = widget._carbonForm.questions[index];
 
-            switch (_question.type) {
+            switch (question.type) {
               // TODO - fix hint wraping
               case CarbonQuestionType.int:
                 return FormBuilderTextField(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -57,7 +57,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.float:
                 return FormBuilderTextField(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -69,7 +69,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.date:
                 return FormBuilderDateTimePicker(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -81,7 +81,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.dateTime:
                 return FormBuilderDateTimePicker(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -93,7 +93,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.time:
                 return FormBuilderDateTimePicker(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -105,7 +105,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.dateRange:
                 return FormBuilderDateRangePicker(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,
@@ -119,18 +119,18 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
                 );
               case CarbonQuestionType.checkBox:
                 return FormBuilderCheckbox(
-                  name: _question.title,
-                  title: Text(_question.type.name),
+                  name: question.title,
+                  title: Text(question.type.name),
                   validator: FormBuilderValidators.required(),
                 );
               case CarbonQuestionType.dropDown:
                 return FormBuilderDropdown(
-                  name: _question.title,
+                  name: question.title,
                   items: [], // TODO
                 );
               case CarbonQuestionType.slider:
                 return FormBuilderSlider(
-                  name: _question.title,
+                  name: question.title,
                   initialValue: 0,
                   min: 0,
                   max: 100,
@@ -144,7 +144,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
               case CarbonQuestionType.string:
               default:
                 return FormBuilderTextField(
-                  name: _question.title,
+                  name: question.title,
                   decoration: InputDecoration(
                     labelText: widget._carbonForm.questions[index].title,
                     hintText: widget._carbonForm.questions[index].type.name,

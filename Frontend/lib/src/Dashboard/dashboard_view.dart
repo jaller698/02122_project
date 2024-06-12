@@ -40,22 +40,20 @@ class _DashboardViewState extends State<DashboardView> {
     List<Widget> res = [];
 
     for (int i = 0; i < 5; i++) {
-      
-        res = res +
-            [
-              Indicator(
-                color: segments[i].color,
-                text: names[i],
-                isSquare: false,
-                size: DashboardView.touchedIndex == i ? 35 : 35,
-                textColor: DashboardView.touchedIndex == i
-                    ? (_settingsController.themeMode == ThemeMode.dark
-                        ? Colors.white
-                        : Colors.black)
-                    : Colors.grey,
-              )
-            ];
-      
+      res = res +
+          [
+            Indicator(
+              color: segments[i].color,
+              text: names[i],
+              isSquare: false,
+              size: DashboardView.touchedIndex == i ? 35 : 35,
+              textColor: DashboardView.touchedIndex == i
+                  ? (_settingsController.themeMode == ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black)
+                  : Colors.grey,
+            )
+          ];
     }
     return res;
   }
@@ -96,7 +94,7 @@ class _DashboardViewState extends State<DashboardView> {
             List<Segment> segments = [
               //TODO: we need to change these index's to match waht we want
               Segment(
-                  value: vals[0]+1,
+                  value: vals[0] + 1,
                   color: Colors.lightGreenAccent,
                   label: Text(names[0])),
               Segment(
@@ -112,9 +110,7 @@ class _DashboardViewState extends State<DashboardView> {
                   color: Colors.pinkAccent,
                   label: Text(names[3])),
               Segment(
-                  value: vals[4],
-                  color: Colors.purple,
-                  label: Text(names[4])),
+                  value: vals[4], color: Colors.purple, label: Text(names[4])),
               //number 5 is totalscore, so we dont include that.
               //Segment(value: vals[5], color: Colors.pinkAccent, label: Text(names[5])),
             ];
@@ -221,7 +217,15 @@ class _DashboardViewState extends State<DashboardView> {
               ],
             );
           } else if (snapshot.hasError) {
-            return Center(child: Text('error: ${snapshot.error.toString()}'));
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                    'Please navigate to Forms(3) to provide infomation to generate a dashboard'),
+                Text('Error: ${snapshot.error.toString()}'),
+              ],
+            ));
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -244,19 +248,19 @@ class _DashboardViewState extends State<DashboardView> {
         double? val2 = segments[2].value.toDouble();
         double? val3 = segments[3].value.toDouble();
         double? val4 = segments[4].value.toDouble();
-        double? total = val0 + val1 + val2 + val3+val4;
+        double? total = val0 + val1 + val2 + val3 + val4;
 
-        String? title0 = (val0 / total * 100).toStringAsFixed(1) + "%";
-        String? title1 = (val1 / total * 100).toStringAsFixed(1) + "%";
-        String? title2 = (val2 / total * 100).toStringAsFixed(1) + "%";
-        String? title3 = (val3 / total * 100).toStringAsFixed(1) + "%";
-         String? title4 = (val4 / total * 100).toStringAsFixed(1) + "%";
+        String? title0 = "${(val0 / total * 100).toStringAsFixed(1)}%";
+        String? title1 = "${(val1 / total * 100).toStringAsFixed(1)}%";
+        String? title2 = "${(val2 / total * 100).toStringAsFixed(1)}%";
+        String? title3 = "${(val3 / total * 100).toStringAsFixed(1)}%";
+        String? title4 = "${(val4 / total * 100).toStringAsFixed(1)}%";
         switch (i) {
           case 0:
             return PieChartSectionData(
               color: color0,
               value: val0,
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
@@ -268,7 +272,7 @@ class _DashboardViewState extends State<DashboardView> {
             return PieChartSectionData(
               color: color1,
               value: val1,
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
@@ -280,7 +284,7 @@ class _DashboardViewState extends State<DashboardView> {
             return PieChartSectionData(
               color: color2,
               value: val2,
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
@@ -292,7 +296,7 @@ class _DashboardViewState extends State<DashboardView> {
             return PieChartSectionData(
               color: color3,
               value: val3,
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),
@@ -300,11 +304,11 @@ class _DashboardViewState extends State<DashboardView> {
               radius: isTouched ? 110 : 80,
               titlePositionPercentageOffset: 0.55,
             );
-            case 4:
+          case 4:
             return PieChartSectionData(
               color: color4,
               value: val4,
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                   color: Colors.black,
                   fontSize: 22,
                   fontWeight: FontWeight.bold),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form_answer.dart';
+import 'package:carbon_footprint/src/CarbonForm/carbon_form_history_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,9 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
 
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
-    // then parse the JSON.
+    // then save the form in history
+    CarbonFormHistoryController().addForm(answer);
+
     return;
   } else {
     // If the server did not return a 201 CREATED response,

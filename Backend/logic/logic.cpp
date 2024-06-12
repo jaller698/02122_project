@@ -15,9 +15,8 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/comparison", handle_comparison},
     {"/average", handle_average},
     {"/carbonScoreCategories", handle_categories},
-    {"/carbonScoreHistory", handle_history}
+    {"/carbonScoreHistory", handle_history},
     {"/actionTracker", handle_Tracking}
-    
 };
 
 // Function which based on the endpoint, sends the data to the correct handler
@@ -275,7 +274,7 @@ struct Response handle_Tracking(const web::json::value &request_body)
     try {
         dataBaseStart db;
         auto username = request_body.at("User").as_string();
-        web::json::value actions = db.getAction(username);
+        auto actions = db.getAction(username);
         return Response(http::status_codes::OK, actions);
     } catch (const std::exception &e) {
         ERROR("Error in handling history: ", e);

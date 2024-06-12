@@ -1,3 +1,4 @@
+import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/widgets.dart';
 
 import 'carbon_history_view.dart';
@@ -30,7 +31,7 @@ class CarbonStatView extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const CarbonHistoryView()
+          UserController().username == 'guest' ? Container() : CarbonHistoryView()
         ],
       ),
     );

@@ -17,6 +17,7 @@ class dataBaseStart{
         void updateUserScore(std::string username, int score);
         void updateUserScore(std::string username, double score);
         void insertAction(std::string username, std::string action, std::string category, double carbonScoreChanged, std::string date);
+        web::json::value getAction(std::string username);
         void insertCategorizedScore(std::string username, double totalScore, double foodScore, double transportScore, double energyScore, double homeScore, double otherScore);
         int init();
         void reset();

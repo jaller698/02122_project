@@ -4,12 +4,12 @@ import 'package:sqflite/sqflite.dart';
 
 import 'Modals/carbon_form_answer.dart';
 
-class CarbonFormController with ChangeNotifier {
+class CarbonFormHistoryController with ChangeNotifier {
   // singleton
-  CarbonFormController._hiddenConstructor();
-  static final CarbonFormController _singleton =
-      CarbonFormController._hiddenConstructor();
-  factory CarbonFormController() => _singleton;
+  CarbonFormHistoryController._hiddenConstructor();
+  static final CarbonFormHistoryController _singleton =
+      CarbonFormHistoryController._hiddenConstructor();
+  factory CarbonFormHistoryController() => _singleton;
 
   List<CarbonFormAnswer>? _carbonForms;
   Future<List<CarbonFormAnswer>> get carbonForms {
@@ -26,7 +26,7 @@ class CarbonFormController with ChangeNotifier {
       join(await getDatabasesPath(), 'form_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE form(id INTEGER PRIMARY KEY, title TEXT)',
+          'CREATE TABLE form(count INTEGER PRIMARY KEY, title TEXT)',
         );
       },
       version: 1,
@@ -35,16 +35,14 @@ class CarbonFormController with ChangeNotifier {
     final List<Map<String, Object?>> carbonFormMaps =
         await (await _database).query('form');
 
-    final items = [
+    final form = [
       for (final Map<String, dynamic> map in carbonFormMaps)
         CarbonFormAnswer.fromMap(map),
     ];
 
-    _carbonForms = items;
+    _carbonForms = form;
 
-    notifyListeners();
-
-    return items;
+    return form;
   }
 
   Future<void> addForm(CarbonFormAnswer item) async {
@@ -52,7 +50,21 @@ class CarbonFormController with ChangeNotifier {
 
     var itemMap = CarbonFormAnswer.toMap(item);
 
-    itemMap['id'] = _carbonForms?.length ?? 0;
+    var itemList = await carbonForms;
+
+    for (var i = 0; i < itemList.length; i++) {
+      bool valid = true;
+      for (var item in itemList) {
+        if (item.id == i) valid = false;
+      }
+
+      if (valid) {
+        itemMap['count'] = i;
+        break;
+      }
+    }
+
+    print(itemMap);
 
     await db.insert(
       'form',
@@ -68,7 +80,7 @@ class CarbonFormController with ChangeNotifier {
 
     await db.delete(
       'form',
-      where: 'id = ?',
+      where: 'count = ?',
       whereArgs: [id],
     );
 

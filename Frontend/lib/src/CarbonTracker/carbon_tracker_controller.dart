@@ -8,6 +8,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin, // TODO
+//
 class CarbonTrackerController with ChangeNotifier {
   // singleton
   CarbonTrackerController._hiddenConstructor();
@@ -202,9 +204,8 @@ enum CarbonTrackerCategory {
     CarbonTackerType.fish,
   ]),
   carbonSaving(Icons.show_chart_rounded, [
-  CarbonTackerType.meatFreeDay,
-  CarbonTackerType.bikeToWork,
-
+    CarbonTackerType.meatFreeDay,
+    CarbonTackerType.bikeToWork,
   ]),
   custom(Icons.tune, [
     CarbonTackerType.custom,
@@ -234,8 +235,10 @@ enum CarbonTackerType {
       CarbonTrackInputTypes.single),
   fish(Icons.set_meal, 'Fish based meal', CarbonTrackInputTypes.single),
 
-  meatFreeDay(Icons.emoji_food_beverage_rounded, 'Meat free day',CarbonTrackInputTypes.carbonSaving),
-  bikeToWork(Icons.bike_scooter, 'Biked to work instead of taking the car', CarbonTrackInputTypes.carbonSaving),
+  meatFreeDay(Icons.emoji_food_beverage_rounded, 'Meat free day',
+      CarbonTrackInputTypes.carbonSaving),
+  bikeToWork(Icons.bike_scooter, 'Biked to work instead of taking the car',
+      CarbonTrackInputTypes.carbonSaving),
   // shopping
   // TODO design a better system, best if the user is also able to add custom items to track...
 

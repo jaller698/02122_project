@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// written by Martin,
+// helper widget used to display errors in a snackbar and possible fullscreen popup if desired
+
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> SnackBarCatchError(
     BuildContext context, error) {
   return ScaffoldMessenger.of(context).showSnackBar(

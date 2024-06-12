@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'carbon_history_controller.dart';
 
+// written by // TODO
+//
 class CarbonHistoryView extends StatefulWidget {
   const CarbonHistoryView({Key? key}) : super(key: key);
 
@@ -10,46 +12,43 @@ class CarbonHistoryView extends StatefulWidget {
 }
 
 class _CarbonHistoryViewState extends State<CarbonHistoryView> {
-  List<Color> gradientColors = [
-    Colors.cyan,
-    Colors.blue
-    ];
+  List<Color> gradientColors = [Colors.cyan, Colors.blue];
 
   bool showAvg = false;
 
-  static final CarbonHistoryController _historyController = CarbonHistoryController();
-  
+  static final CarbonHistoryController _historyController =
+      CarbonHistoryController();
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(future: _historyController.fetchHistory(), 
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return Stack(
-          children: <Widget>[
-            AspectRatio(
-              aspectRatio: 1.70,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  right: 18,
-                  left: 12,
-                  top: 24,
-                  bottom: 12,
+    return FutureBuilder(
+        future: _historyController.fetchHistory(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 1.70,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 18,
+                      left: 12,
+                      top: 24,
+                      bottom: 12,
+                    ),
+                    child: LineChart(
+                      mainData(snapshot),
+                    ),
+                  ),
                 ),
-                child: LineChart(
-                  mainData(snapshot),
-                ),
-              ),
-            ),
-          ],
-        );
-      } else {
-        if(snapshot.hasError)
-          print(snapshot.error);
-        return CircularProgressIndicator();
-      }
-    });
+              ],
+            );
+          } else {
+            if (snapshot.hasError) print(snapshot.error);
+            return CircularProgressIndicator();
+          }
+        });
   }
-
 
   LineChartData mainData(snapshot) {
     return LineChartData(
@@ -90,7 +89,7 @@ class _CarbonHistoryViewState extends State<CarbonHistoryView> {
       maxY: _historyController.maxScore,
       lineBarsData: [
         LineChartBarData(
-            spots: getLineSpots(snapshot),
+          spots: getLineSpots(snapshot),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,

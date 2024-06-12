@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'LoginPage/login_view.dart';
 import 'Settings/settings_view.dart';
 
+// written by Martin,
+// route navigator to all views beyond the 4 base main view handles
+// as root widget also handles changes which effect the entire app, such as a theme switch
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -20,14 +23,12 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           restorationScopeId: 'app',
-
-          // TODO implement settings controller for themes
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: SettingsController().themeMode,
-
           title: 'Carbon footprint',
           onGenerateRoute: (RouteSettings routeSettings) {
+            // root navigator
             return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {

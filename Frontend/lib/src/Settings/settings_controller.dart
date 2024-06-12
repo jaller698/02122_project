@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:carbon_footprint/src/user_controller.dart';
 
+// written by Martin,
+// controller to handles settings logic
 class SettingsController with ChangeNotifier {
   // singleton
   SettingsController._hiddenConstructor();
@@ -20,7 +22,7 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
 
-    // Important! Inform listeners a change has occurred.
+    // update app
     notifyListeners();
   }
 
@@ -28,10 +30,9 @@ class SettingsController with ChangeNotifier {
     if (newThemeMode == null) return;
     if (newThemeMode == _themeMode) return;
 
-    // Otherwise, store the new ThemeMode in memory
     _themeMode = newThemeMode;
 
-    // Important! Inform listeners a change has occurred.
+    // update app
     notifyListeners();
     await _settingsService.updateThemeMode(newThemeMode);
   }

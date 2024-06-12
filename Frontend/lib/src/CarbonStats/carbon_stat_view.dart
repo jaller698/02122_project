@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'carbon_history_view.dart';
 import 'Comparison_stat_view.dart';
 
+// written by // TODO
+//
 class CarbonStatView extends StatelessWidget {
   const CarbonStatView({super.key});
 

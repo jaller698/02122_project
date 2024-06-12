@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// written by // TODO
+// helper function for // TODO
 class Indicator extends StatelessWidget {
   const Indicator({
     super.key,
@@ -8,7 +10,7 @@ class Indicator extends StatelessWidget {
     required this.isSquare,
     this.size = 16,
     this.textColor,
-    this.textSize=18,
+    this.textSize = 18,
   });
   final Color color;
   final String text;

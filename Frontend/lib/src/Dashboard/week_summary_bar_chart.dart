@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'dart:convert';
-import 'package:carbon_footprint/src/user_controller.dart';
-
-
+// written by Martin,
+// a widget to display a summary of the last 7 days for the carbon tracker in the form of a bar graph
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});
 
@@ -38,10 +33,9 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   int touchedIndex = -1;
 
   bool isPlaying = false;
-var fut = _dashboardController.last7days();
+  var fut = _dashboardController.last7days();
   @override
   Widget build(BuildContext context) {
-    
     return FutureBuilder(
       future: fut,
       builder: (context, snapshot) {

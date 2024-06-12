@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'src/app.dart';
 
+// written by Flutter, required base function
+// pre initialization functions, such as settings to ensure dark mode gets sets before the first frame
 void main() async {
   final settingsController = SettingsController();
   WidgetsFlutterBinding.ensureInitialized();

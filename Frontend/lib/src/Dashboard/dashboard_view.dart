@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:carbon_footprint/src/Dashboard/carbon_score_pie_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/carbon_score_widget.dart';
-import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'week_summary_bar_chart.dart';
 
+// written by Martin, // TODO - somebody else was here
+// stateless part of stateful widget, contains route name
 class DashboardView extends StatefulWidget {
   const DashboardView({
     super.key,
@@ -19,8 +20,9 @@ class DashboardView extends StatefulWidget {
   State<DashboardView> createState() => _DashboardViewState();
 }
 
+// written by Martin,
+// a dashboard which contains widgets that contextualize the users actions from different sources along with fun facts
 class _DashboardViewState extends State<DashboardView> {
-
   get_random_tips() {
     // return a random tip
     var random_facts = [
@@ -54,7 +56,7 @@ class _DashboardViewState extends State<DashboardView> {
               children: [
                 Text(
                   get_random_tips(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),

@@ -8,6 +8,8 @@ import 'package:carbon_footprint/src/user_controller.dart';
 
 import 'sign_up_dialog.dart';
 
+// written by Martin,
+// stateless part of stateful widget, contains route name
 class LoginView extends StatefulWidget {
   const LoginView({
     super.key,
@@ -18,6 +20,8 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
+// written by Martin,
+// login page contains limited logic to handle authentication
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -104,13 +108,16 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ],
                 ),
-                kDebugMode ? TextButton(
-                    onPressed: () => {
-                        UserController().username = "guest",
-                        UserController().carbonScore = -1,
-                        Navigator.popAndPushNamed(context, MainView.routeName)
-                    },
-                    child: const Text('Continue as guest')) : Container()
+                kDebugMode
+                    ? TextButton(
+                        onPressed: () => {
+                              UserController().username = "guest",
+                              UserController().carbonScore = -1,
+                              Navigator.popAndPushNamed(
+                                  context, MainView.routeName)
+                            },
+                        child: const Text('Continue as guest'))
+                    : Container()
               ],
             ),
           ),

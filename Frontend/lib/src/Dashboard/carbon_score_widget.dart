@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 
+// written by // TODO
 class CarbonScoreWidget extends StatelessWidget {
   final int carbonScore;
   final double width;
   final double height;
 
   const CarbonScoreWidget({
-    Key? key,
+    super.key,
     required this.carbonScore,
     this.width = 100,
     this.height = 100,
-  }) : super(key: key);
+  });
 
   get_color(int carbonScore) {
     if (carbonScore < 2000) {
-      return ColorFilter.mode(Colors.green, BlendMode.color);
+      return const ColorFilter.mode(Colors.green, BlendMode.color);
     } else if (carbonScore < 4000) {
-      return ColorFilter.mode(Colors.yellow, BlendMode.color);
+      return const ColorFilter.mode(Colors.yellow, BlendMode.color);
     } else {
-      return ColorFilter.mode(Colors.red, BlendMode.color);
+      return const ColorFilter.mode(Colors.red, BlendMode.color);
     }
   }
 
@@ -38,17 +39,17 @@ class CarbonScoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (carbonScore <= 0) {
       return Container();
-    };
+    }
+    ;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         image: DecorationImage(
-          image: get_background(carbonScore).image,
-          fit: BoxFit.cover,
-          colorFilter: get_color(carbonScore)
-        ),
+            image: get_background(carbonScore).image,
+            fit: BoxFit.cover,
+            colorFilter: get_color(carbonScore)),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(

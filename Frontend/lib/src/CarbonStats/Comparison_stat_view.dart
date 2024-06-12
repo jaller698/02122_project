@@ -5,6 +5,8 @@ import 'dart:math';
 import 'Comparison_stat_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 
+// written by // TODO
+//
 class ComparisonStatView extends StatelessWidget {
   const ComparisonStatView({super.key});
 

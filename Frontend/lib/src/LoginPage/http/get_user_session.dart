@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin,
+// request to log in a user with given credentials
 Future<bool> getUserSession(String username, String password) async {
   http.Request request =
       http.Request("GET", Uri.parse('${SettingsController.address}/users'));
@@ -20,7 +22,8 @@ Future<bool> getUserSession(String username, String password) async {
   var response = await request.send();
 
   if (response.statusCode == 200) {
-    var responseBody = JsonDecoder().convert(await response.stream.transform(utf8.decoder).first);
+    var responseBody = JsonDecoder()
+        .convert(await response.stream.transform(utf8.decoder).first);
     UserController().username = username;
     UserController().carbonScore = responseBody['Score'];
     return true;

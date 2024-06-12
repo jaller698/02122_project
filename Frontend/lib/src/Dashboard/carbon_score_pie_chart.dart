@@ -9,6 +9,7 @@ import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 import 'dashboard_view.dart';
 
+// written by // TODO
 class CarbonScorePieChart extends StatefulWidget {
   const CarbonScorePieChart({super.key});
 
@@ -207,33 +208,29 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
             ));
             return AspectRatio(
                 aspectRatio: 1,
-                
-            child:  ListView(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 0.5,
-                          child: pieChart,
+                child: ListView(children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: Row(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 30,
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: addParts(segments, names),
-                      ),
-                    ],
-                  ),
-                )
-              ]
-            )
-            );
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 0.5,
+                            child: pieChart,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: addParts(segments, names),
+                        ),
+                      ],
+                    ),
+                  )
+                ]));
           } else if (snapshot.hasError) {
             if (kDebugMode) {
               print('Error: ${snapshot.error.toString()}');
@@ -246,8 +243,9 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
                     'Please navigate to Forms(3) to provide infomation to generate a dashboard')
               ],
             ));
-              } else {
+          } else {
             return const Center(child: CircularProgressIndicator());
           }
         });
-}}
+  }
+}

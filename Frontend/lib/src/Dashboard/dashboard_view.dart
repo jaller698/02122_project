@@ -3,13 +3,8 @@ import 'package:carbon_footprint/src/Dashboard/carbon_score_widget.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:primer_progress_bar/primer_progress_bar.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
-import 'package:carbon_footprint/src/user_controller.dart';
 
 import 'week_summary_bar_chart.dart';
-import 'dashboard_controller.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({
@@ -30,46 +25,66 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-        children: [
-                const CarbonScoreWidget(carbonScore: 200),
-                const Divider(),
-                const CarbonScorePieChart(),
-                const Divider(),
-                    Expanded(
-                      flex: 2,
-                      child: WeekSummaryBarChart(),
-                    ),
-                const Divider(),
-                const Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Placeholder(
-                        fallbackHeight: 150,
-                        child: Text(
-                            'tips og reminders til at forminske ens forbrug'),
+      children: [
+        const CarbonScoreWidget(carbonScore: 200),
+        const Divider(),
+        const CarbonScorePieChart(),
+        const Divider(),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: WeekSummaryBarChart(),
+            ),
+            const Expanded(
+              flex: 1,
+              child: Card(
+                child: Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Tips',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Placeholder(
-                        fallbackHeight: 150,
-                        child: Text(
-                            'Hvis alle gjorde som dig, hvordan vil jorden se ud?'),
-                      ),
-                    ),
-                  ],
-                ),
-                const Divider(),
-                const Placeholder(
-                  fallbackHeight: 50,
-                  child: Center(
-                    child: Card(
-                      child: Text(' Jank central '),
                     ),
                   ),
                 ),
-        ],
-              );
-         }
+              ),
+            ),
+          ],
+        ),
+        const Divider(),
+        const Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Placeholder(
+                fallbackHeight: 150,
+                child: Text('tips og reminders til at forminske ens forbrug'),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Placeholder(
+                fallbackHeight: 150,
+                child:
+                    Text('Hvis alle gjorde som dig, hvordan vil jorden se ud?'),
+              ),
+            ),
+          ],
+        ),
+        const Divider(),
+        const Placeholder(
+          fallbackHeight: 50,
+          child: Center(
+            child: Card(
+              child: Text(' Jank central '),
+            ),
+          ),
+        ),
+      ],
+    );
   }
+}

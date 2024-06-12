@@ -19,10 +19,6 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  static final DashboardController _dashboardController = DashboardController();
-
-  final SettingsController _settingsController = SettingsController();
-
   @override
   Widget build(BuildContext context) {
     return ListView(

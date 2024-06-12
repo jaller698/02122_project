@@ -3,26 +3,25 @@ import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 import 'dashboard_view.dart';
 
 class CarbonScorePieChart extends StatefulWidget {
-  const CarbonScorePieChart({Key? key}) : super(key: key);
+  const CarbonScorePieChart({super.key});
 
   @override
   State<CarbonScorePieChart> createState() => _CarbonScorePieChartState();
-
 }
 
 class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
-  SettingsController  _settingsController = SettingsController();
+  final SettingsController _settingsController = SettingsController();
 
-  DashboardController _dashboardController = DashboardController();
+  final DashboardController _dashboardController = DashboardController();
 
-List<Widget> addParts(List<Segment> segments, List<String> names) {
+  List<Widget> addParts(List<Segment> segments, List<String> names) {
     List<Widget> res = [];
 
     for (int i = 0; i < 5; i++) {
@@ -45,14 +44,13 @@ List<Widget> addParts(List<Segment> segments, List<String> names) {
   }
 
   Future<(List<String>, List<int>)> toMappp() async {
-
     var res1 = Future(() async =>
         await _dashboardController.fetchCategories(UserController().username));
 
     return res1;
   }
 
-List<PieChartSectionData> showingSections(List<Segment> segments) {
+  List<PieChartSectionData> showingSections(List<Segment> segments) {
     return List.generate(
       5,
       (i) {
@@ -145,8 +143,7 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
 
   @override
   Widget build(BuildContext context) {
-    var fut =
-        toMappp();
+    var fut = toMappp();
     return FutureBuilder(
         future: fut,
         builder: (context, snapshot) {
@@ -238,12 +235,14 @@ List<PieChartSectionData> showingSections(List<Segment> segments) {
             )
             );
           } else if (snapshot.hasError) {
-            print('Error: ${snapshot.error.toString()}');
-            return Center(
+            if (kDebugMode) {
+              print('Error: ${snapshot.error.toString()}');
+            }
+            return const Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                     'Please navigate to Forms(3) to provide infomation to generate a dashboard')
               ],
             ));

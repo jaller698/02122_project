@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:carbon_footprint/src/Dashboard/ChartStuff/indicator.dart';
@@ -16,7 +15,7 @@ class ComparisonStatView extends StatelessWidget {
   Future<(List<String>, List<String>)> toList() async {
     var res = (await _carbonController.fetchCountries());
     Future<(List<String>, List<String>)> fut2 = Future(() async => (
-              [
+          [
                 await _carbonController.fetchStats(UserController().username),
                 await _carbonController.fetchAverage()
               ] +
@@ -35,10 +34,7 @@ class ComparisonStatView extends StatelessWidget {
 //(_carbonController.fetchStats(UserController().username)).toString()
     var fut = toList();
 
-    const double width = 7;
-
     late List<BarChartGroupData> rawBarGroups;
-    late List<BarChartGroupData> showingBarGroups;
 
     // Make the names dynamic, except the first 2.
     //also this has to wait until the return types for the countries are made into maps.
@@ -81,7 +77,7 @@ class ComparisonStatView extends StatelessWidget {
           ];
           rawBarGroups = items;
           final barChart = BarChart(BarChartData(
-            maxY: vals.reduce(max)+100,
+            maxY: vals.reduce(max) + 100,
             //barGroups: showingBarGroups,
             barGroups: List.of(rawBarGroups),
             gridData: const FlGridData(show: false),
@@ -99,7 +95,7 @@ class ComparisonStatView extends StatelessWidget {
             //swapAnimationCurve: Curves.linear, // Optional
           ));
           return ListView(children: <Widget>[
-            Container(
+            SizedBox(
               height: 300,
               child: barChart,
             ),
@@ -132,7 +128,6 @@ List<Widget> createNames(List<String> names, List<Color> col) {
   }
   return res;
 }
-
 
 BarChartGroupData makeGroupData(int x, List<double> y, List<Color> col) {
   return BarChartGroupData(

@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+
 class CarbonFormAnswer {
   final String id;
   final String title;
@@ -12,6 +16,11 @@ class CarbonFormAnswer {
   });
 
   factory CarbonFormAnswer.fromMap(Map<String, dynamic> json) {
+    if (!json.containsKey('id')) {
+      json['id'] =
+          'HASH?${sha256.convert(utf8.encode(json.toString())).toString()}';
+    }
+
     return switch (json) {
       {
         'id': String id,
@@ -25,7 +34,7 @@ class CarbonFormAnswer {
           user: user,
           anwsers: anwsers,
         ),
-      _ => throw const FormatException('Failed to decode carbon form'),
+      _ => throw FormatException('Failed to decode carbon form: $json'),
     };
   }
 

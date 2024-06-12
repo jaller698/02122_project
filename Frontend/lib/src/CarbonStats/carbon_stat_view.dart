@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'carbon_history_view.dart';
 import 'Comparison_stat_view.dart';
 
-
 class CarbonStatView extends StatelessWidget {
   const CarbonStatView({super.key});
 
@@ -14,13 +13,13 @@ class CarbonStatView extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Column(
         children: <Widget>[
-          const Text(
-            'Carbon Stats',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // const Text(
+          //   'Carbon Stats',
+          //   style: TextStyle(
+          //     fontSize: 24,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
           Expanded(
             child: ComparisonStatView(),
           ),
@@ -31,7 +30,9 @@ class CarbonStatView extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          UserController().username == 'guest' ? Container() : CarbonHistoryView()
+          UserController().username == 'guest'
+              ? Container()
+              : CarbonHistoryView()
         ],
       ),
     );

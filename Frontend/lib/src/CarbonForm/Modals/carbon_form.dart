@@ -19,8 +19,6 @@ class CarbonForm {
           'HASH?${sha256.convert(utf8.encode(json.toString())).toString()}';
     }
 
-    print(json);
-
     return switch (json) {
       {
         'id': String id,

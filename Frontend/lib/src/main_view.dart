@@ -22,17 +22,31 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () =>
-                Navigator.restorablePushNamed(context, SettingsView.routeName),
-            icon: const Icon(
-              Icons.settings_rounded,
-            ),
-          ),
-        ],
-      ),
+      appBar: _currentPageIndex != 0
+          ? AppBar(
+              title: Text(
+                [
+                  'Dashboard',
+                  'Carbon Tracker',
+                  'Questionaires',
+                  'Carbon Stats',
+                ][_currentPageIndex],
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () => Navigator.restorablePushNamed(
+                      context, SettingsView.routeName),
+                  icon: const Icon(
+                    Icons.settings_rounded,
+                  ),
+                ),
+              ],
+            )
+          : null,
       // list of widgets to switch between depending on the current page index
       body: <Widget>[
         const DashboardView(),

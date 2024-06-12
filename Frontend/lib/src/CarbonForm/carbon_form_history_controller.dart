@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,7 +28,7 @@ class CarbonFormHistoryController with ChangeNotifier {
       join(await getDatabasesPath(), 'form_database.db'),
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE form(count INTEGER PRIMARY KEY, title TEXT)',
+          'CREATE TABLE form(count INTEGER PRIMARY KEY, json TEXT)',
         );
       },
       version: 1,
@@ -35,20 +37,23 @@ class CarbonFormHistoryController with ChangeNotifier {
     final List<Map<String, Object?>> carbonFormMaps =
         await (await _database).query('form');
 
-    final form = [
-      for (final Map<String, dynamic> map in carbonFormMaps)
-        CarbonFormAnswer.fromMap(map),
-    ];
+    List<CarbonFormAnswer> list = [];
 
-    _carbonForms = form;
+    for (final Map<String, dynamic> map in carbonFormMaps) {
+      list.add(CarbonFormAnswer.fromMap(jsonDecode(map['json'])));
+    }
 
-    return form;
+    _carbonForms = list;
+
+    return list;
   }
 
   Future<void> addForm(CarbonFormAnswer item) async {
     final db = await _database;
 
-    var itemMap = CarbonFormAnswer.toMap(item);
+    Map<String, dynamic> itemMap = {
+      'json': jsonEncode(CarbonFormAnswer.toMap(item))
+    };
 
     var itemList = await carbonForms;
 

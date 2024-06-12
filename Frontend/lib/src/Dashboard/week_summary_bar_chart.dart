@@ -2,8 +2,15 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
+import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:carbon_footprint/src/Settings/settings_controller.dart';
+import 'dart:convert';
+import 'package:carbon_footprint/src/user_controller.dart';
+
 
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});
@@ -27,15 +34,16 @@ class WeekSummaryBarChart extends StatefulWidget {
 
 class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
-
+  static final DashboardController _dashboardController = DashboardController();
   int touchedIndex = -1;
 
   bool isPlaying = false;
-
+var fut = _dashboardController.last7days();
   @override
   Widget build(BuildContext context) {
+    
     return FutureBuilder(
-      future: CarbonTrackerController().last7days(),
+      future: fut,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return AspectRatio(

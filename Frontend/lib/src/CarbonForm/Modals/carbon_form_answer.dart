@@ -26,7 +26,7 @@ class CarbonFormAnswer {
         'id': String id,
         'title': String title,
         'userID': String user,
-        'questions': Map<String, dynamic> anwsers,
+        'answers': Map<String, dynamic> anwsers,
       } =>
         CarbonFormAnswer(
           id: id,

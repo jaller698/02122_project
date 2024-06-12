@@ -16,53 +16,54 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-        listenable: SettingsController(),
-        builder: (context, child) {
-          return MaterialApp(
-            restorationScopeId: 'app',
+      listenable: SettingsController(),
+      builder: (context, child) {
+        return MaterialApp(
+          restorationScopeId: 'app',
 
-            // TODO implement settings controller for themes
-            theme: ThemeData.light(),
-            darkTheme: ThemeData.dark(),
-            themeMode: SettingsController().themeMode,
+          // TODO implement settings controller for themes
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: SettingsController().themeMode,
 
-            title: 'Carbon footprint',
-            onGenerateRoute: (RouteSettings routeSettings) {
-              return MaterialPageRoute<void>(
-                settings: routeSettings,
-                builder: (BuildContext context) {
-                  if (kIsWeb) {
-                    // web page routes
-                    switch (routeSettings.name) {
-                      case CarbonFormQuestionnaire.routeName:
-                        return CarbonFormQuestionnaire(
-                            carbonForm: routeSettings.arguments);
-                      case MainView.routeName:
-                      default:
-                        return const MainView();
-                    }
-                  } else {
-                    // app page routes
-                    switch (routeSettings.name) {
-                      case CarbonFormView.routeName:
-                        return const CarbonFormView();
-                      case CarbonFormQuestionnaire.routeName:
-                        return CarbonFormQuestionnaire(
-                            carbonForm: routeSettings.arguments);
-                      case SettingsView.routeName:
-                        return const SettingsView();
-                      case MainView.routeName:
-                        return const MainView();
-                      case CarbonTrackerView.routeName:
-                        return CarbonTrackerView();
-                      default:
-                        return const LoginView();
-                    }
+          title: 'Carbon footprint',
+          onGenerateRoute: (RouteSettings routeSettings) {
+            return MaterialPageRoute<void>(
+              settings: routeSettings,
+              builder: (BuildContext context) {
+                if (kIsWeb) {
+                  // web page routes
+                  switch (routeSettings.name) {
+                    case CarbonFormQuestionnaire.routeName:
+                      return CarbonFormQuestionnaire(
+                          carbonForm: routeSettings.arguments);
+                    case MainView.routeName:
+                    default:
+                      return const MainView();
                   }
-                },
-              );
-            },
-          );
-        });
+                } else {
+                  // app page routes
+                  switch (routeSettings.name) {
+                    case CarbonFormView.routeName:
+                      return const CarbonFormView();
+                    case CarbonFormQuestionnaire.routeName:
+                      return CarbonFormQuestionnaire(
+                          carbonForm: routeSettings.arguments);
+                    case SettingsView.routeName:
+                      return const SettingsView();
+                    case MainView.routeName:
+                      return const MainView();
+                    case CarbonTrackerView.routeName:
+                      return CarbonTrackerView();
+                    default:
+                      return const LoginView();
+                  }
+                }
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -1,5 +1,10 @@
+/* Written by Christian
+ * This file contains the tests for the questions endpoint
+*/
+
 #include "logic_test.h"
 
+// Test the retrieval of the questions
 TEST_F(logicTest, QuestionsRead) {
     web::json::value requestBody;
 
@@ -18,6 +23,7 @@ TEST_F(logicTest, QuestionsRead) {
 
 }
 
+// Test the answering of the questions
 TEST_F(logicTest, QuestionsAnswer) {
     // first get the questions
     web::json::value requestBody;
@@ -52,11 +58,12 @@ TEST_F(logicTest, QuestionsAnswer) {
     ASSERT_TRUE(responseJsonAnswer["response"]["carbonScore"].is_number());
 }
 
+// Test the answering of the questions with invalid data
 TEST_F(logicTest, InvalidQuestionsAnswer) {
     // first get the questions
     web::json::value requestBody;
 
-    // Send a valid POST request
+    // Send a valid POST request, to get the questions
     auto response = sendGetRequest("/questions", requestBody);
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::OK, response->status_code());
@@ -81,6 +88,7 @@ TEST_F(logicTest, InvalidQuestionsAnswer) {
     ASSERT_EQ(status_codes::BadRequest, responseAnswer->status_code());
 }
 
+// Test the answering of the questions, when it has already been answered
 TEST_F(logicTest, QuestionsUpdate) {
     // first get the questions
     web::json::value requestBody;

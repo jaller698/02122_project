@@ -1,26 +1,10 @@
+/* Written by Christian
+ * This file contains the tests for the action tracker 
+*/
+
 #include "logic_test.h"
 
-
-TEST_F(logicTest, ActionTrackerUpdate) {
-    // TODO: Not implemented in the logic yet
-    GTEST_SKIP();
-}
-
-TEST_F(logicTest, InvalidActionTrackerUpdate) {
-    // TODO: Not implemented in the logic yet
-    GTEST_SKIP();
-}
-
-TEST_F(logicTest, ActionTrackerDelete) {
-    // TODO: Not implemented in the logic yet, unsure if needed
-    GTEST_SKIP();
-}
-
-TEST_F(logicTest, InvalidActionTrackerDelete) {
-    // TODO: Not implemented in the logic yet, unsure if needed
-    GTEST_SKIP();
-}
-
+// Test the creation of an action tracker
 TEST_F(logicTest, ActionTrackerCreate) {
     web::json::value requestBody;
     requestBody[U("user")] = web::json::value::string(U("guest"));
@@ -36,6 +20,7 @@ TEST_F(logicTest, ActionTrackerCreate) {
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 
+// Test the creation of an action tracker with invalid data
 TEST_F(logicTest, InvalidActionTrackerCreate) {
     web::json::value requestBody;
     // Non existing user

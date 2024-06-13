@@ -1,11 +1,15 @@
+// Written by Christian
+
 #include "calculate_score.h"
 
+// list of scores for each category
 double foodScore=0;
 double transportScore=0;
 double energyScore=0;
 double homeScore=0;
 double otherScore=0;
 
+// find a pointer to the variable to add the score to
 double& findVar(std::string type)
 {
     if (type == "food")
@@ -30,6 +34,7 @@ double& findVar(std::string type)
     }
 }
 
+// calculate the carbon score based on the answers to the questions
 double calculateCarbonScore (std::vector<int> &answers, std::string userID)
 {
     try {
@@ -52,6 +57,7 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
             // map from json["type"] to varibale score:
             double& score = findVar(questions[i].at("category").as_string());
             double imd_score = answers[i] * questions[i].at("estimated cost of KG CO2 per unit").as_double();
+            // convert the score to years
             if (questions[i].at("unit").as_string() == "weeks" || questions[i].at("unit").as_string() == "times a week")
             {
                 imd_score *= 52;
@@ -67,7 +73,8 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
             else if (questions[i].at("unit").as_string() == "days" || questions[i].at("unit").as_string() == "times a day" ) 
             {
                 imd_score *= 365;
-            } else if (questions[i].at("unit").as_string() == "years" || questions[i].at("unit").as_string() == "times a year" || questions[i].at("unit").as_string() == "choice")
+            }
+            else if (questions[i].at("unit").as_string() == "years" || questions[i].at("unit").as_string() == "times a year" || questions[i].at("unit").as_string() == "choice")
             {
                 // do nothing
             } else {
@@ -108,6 +115,9 @@ double calculateCarbonScore (std::vector<int> &answers, std::string userID)
     }
 }
 
+// convert the answers to integers and call the other function
+// useful for questions where they answer might be "yes" or "no"
+// also pops the userID from the answers
 double calculateCarbonScore (const std::vector<std::string> &answers)
 {
     std::vector<int> ansMath;

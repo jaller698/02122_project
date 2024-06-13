@@ -5,6 +5,10 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::experimental::listener;
 
+/* Written by Christian
+ * Class to handle the REST API, this class is responsible for listening to incoming requests
+ * and routing them to the correct handler function in the logic layer
+*/
 class RestAPIEndpoint {
 public:
     ~RestAPIEndpoint();

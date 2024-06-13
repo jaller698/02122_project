@@ -1,5 +1,6 @@
-# To compile the project, run `make` in the terminal. To run the project, run `make run` in the terminal. To clean the project, run `make clean` in the terminal.
-# To run in debug mode (with debug prints), run `make DEBUG=1 (run)` in the terminal.
+# Written by Christian
+# Makefile, only for server-side testing. This Makefile is used to compile the project and run the tests.
+# to run, type "make test" in the terminal.
 
 CXX := g++
 TESTFLAGS := -I . -std=c++20 -Wall -Wextra -lmysqlcppconn -lcpprest -lssl -lcrypto -lgtest -DTEST_ENVIROMENT -DDEBUG

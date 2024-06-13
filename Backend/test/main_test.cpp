@@ -1,6 +1,11 @@
 #include "logic_test.h"
 
-
+/* Written by Christian
+ * Main function for the tests
+ * It runs all the tests and returns the result
+ * It also starts the REST API, in a seperate thread with the sync token
+ * so it can be gracefully stopped
+*/
 int main(int argc, char** argv) {
     INFO("Running main_test.cpp");
 

@@ -2,6 +2,10 @@
 #include "common.h"
 #include "http_common.h"
 
+/* Written by Christian
+ * common class for all logic tests
+ * it sets up the database before each test and resets it after each test
+*/
 class logicTest : public ::testing::Test {
     protected:
     void SetUp() override {

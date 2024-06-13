@@ -19,7 +19,10 @@ const std::unordered_map<std::string_view, HandlerFunction> read_handlers = {
     {"/actionTracker", handle_Tracking}
 };
 
-// Function which based on the endpoint, sends the data to the correct handler
+/* Written by Christian
+ * Function which based on the endpoint, sends the data to the correct handler
+ * It also distinguishes between read and write requests
+*/
 struct Response handle_data(const std::string &endpoint, web::json::value request_body, bool write_data)
 {
     DEBUG_PRINT("Received a request on endpoint: " + endpoint + " with body: " + request_body.serialize());
@@ -42,8 +45,11 @@ struct Response handle_data(const std::string &endpoint, web::json::value reques
     }
 }
 
-// Handle inserting the filled out questions into the database
-// Should return the carbon score, unless a sql exception occurs
+/* Written by Christian
+ * Handle inserting the filled out questions into the database
+ * Should return the carbon score, unless a sql exception occurs
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_questions_write(const web::json::value &request_body)
 {
     try {
@@ -80,8 +86,11 @@ struct Response handle_questions_write(const web::json::value &request_body)
     }
 }
 
-// Handle reading the questions from the database
-// and sending them to the users
+/* Written by Christian
+ * Handle reading the questions from the database
+ * and sending them to the users
+ * returns internal error if an exception occurs
+*/
 struct Response handle_questions_read([[maybe_unused]] const web::json::value &request_body)
 {
     try {
@@ -96,7 +105,10 @@ struct Response handle_questions_read([[maybe_unused]] const web::json::value &r
     }
 }
 
-// Handle signup request
+/* Written by Christian
+ * Handle the signup request, should return created if the user was created
+ * returns conflict if the user already exists
+ */
 struct Response handle_signup(const web::json::value &request_body)
 {
     try {
@@ -128,7 +140,11 @@ struct Response handle_signup(const web::json::value &request_body)
     }
 }
 
-// Handle login request
+/* Written by Christian
+ * Handle the login request, should return OK if the user was logged in
+ * returns unauthorized if the user does not exist or the password is incorrect
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_login(const web::json::value &request_body)
 {
     try {
@@ -162,11 +178,14 @@ struct Response handle_login(const web::json::value &request_body)
         return response;
     } catch (const std::exception &e) {
         ERROR("Error in handling login: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
 
-// Handle reading the user score from the database
+/* Written by Christian
+ * Handle reading the user score from the database
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_user_score_read(const web::json::value &request_body)
 {
     try {
@@ -175,11 +194,14 @@ struct Response handle_user_score_read(const web::json::value &request_body)
         return Response(web::http::status_codes::OK,db.get("Users", Name).at("Score"));
     } catch (const std::exception &e) {
         ERROR("Error in handling reading user score: ", e);
-        return Response(http::status_codes::InternalError, web::json::value::null());
+        return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
 
-// Handle updating the user score, should probably not be used
+/* Written by Christian
+ * Handle writing the user score to the database
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_user_score_write(const web::json::value &request_body)
 {
     try {
@@ -193,7 +215,10 @@ struct Response handle_user_score_write(const web::json::value &request_body)
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
-
+/* Written by Christian
+ * Handle the average request, should return the average carbon score
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_average([[maybe_unused]] const web::json::value &request_body) 
 {
     try {
@@ -208,7 +233,10 @@ struct Response handle_average([[maybe_unused]] const web::json::value &request_
     }
 }
 
-// Handle comparison request
+/* Written by Christian
+ * Handle the comparison request, should return the world comparison data for the given countries
+ * returns bad request if the request body is not as expected, or if the country codes are not found
+*/
 struct Response handle_comparison(const web::json::value &request_body)
 {
     try {
@@ -226,7 +254,10 @@ struct Response handle_comparison(const web::json::value &request_body)
     }
 }
 
-// Handle action tracker request
+/* Written by Christian
+ * Handle the action tracker request, should return OK if the action was tracked
+ * returns bad request if the request body is not as expected   
+*/
 struct Response handle_actionTracker(const web::json::value &request_body)
 {
     try {
@@ -244,6 +275,10 @@ struct Response handle_actionTracker(const web::json::value &request_body)
     }
 }
 
+/* Written by Christian
+ * Handle the categories request, should return the carbon score divided into categories
+ * returns bad request if the request body is not as expected 
+*/
 struct Response handle_categories(const web::json::value &request_body)
 {
     try {
@@ -257,6 +292,10 @@ struct Response handle_categories(const web::json::value &request_body)
     }
 }
 
+/* Written by Christian
+ * Handle the history request, should return the carbon score history of the user
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_history(const web::json::value &request_body)
 {
     try {
@@ -269,6 +308,11 @@ struct Response handle_history(const web::json::value &request_body)
         return Response(http::status_codes::BadRequest, web::json::value::null());
     }
 }
+
+/* Written by TODO
+ * Handle the tracking request, should return the actions the user has taken
+ * returns bad request if the request body is not as expected
+*/
 struct Response handle_Tracking(const web::json::value &request_body)
 {
     try {

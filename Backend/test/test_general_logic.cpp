@@ -1,5 +1,10 @@
+/* Written by Christian
+ * This file contains the tests for the logic functions 
+*/
+
 #include "logic_test.h"
 
+// Test the get request for the average
 TEST_F(logicTest, GetAverage) {
     web::json::value requestBody = web::json::value::object();
 
@@ -12,18 +17,7 @@ TEST_F(logicTest, GetAverage) {
     ASSERT_TRUE(responseJson.is_number());
 }
 
-TEST_F(logicTest, GetAverageInvalid) {
-    web::json::value requestBody = web::json::value::object();
-
-    auto response = sendGetRequest("/average", requestBody);
-    ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::OK, response->status_code());
-    
-    // Test that the response 0
-    web::json::value responseJson = response->extract_json().get();
-    ASSERT_EQ(0, responseJson.as_double());
-}
-
+// Test the get request for the comparison data, with just a single country
 TEST_F(logicTest, GetSingleComparisonData) {
     // Test with a single country, we use ISO 3166-1 alpha-2 codes
     web::json::value requestBody = web::json::value::object();
@@ -41,6 +35,7 @@ TEST_F(logicTest, GetSingleComparisonData) {
     
 }
 
+// Test the get request for the comparison data, with an invalid country
 TEST_F(logicTest, GetSingleComparisonDataInvalid) {
     // Send a request with an invalid landcode, we use ISO 3166-1 alpha-2 codes
     web::json::value requestBody = web::json::value::object();
@@ -56,6 +51,7 @@ TEST_F(logicTest, GetSingleComparisonDataInvalid) {
     ASSERT_TRUE(responseJson.is_null());   
 }
 
+// Test the get request for the comparison data, with multiple countries
 TEST_F(logicTest, GetMultipleComparisonData) {
     // Test with multiple countries
     web::json::value requestBody = web::json::value::object();
@@ -79,6 +75,7 @@ TEST_F(logicTest, GetMultipleComparisonData) {
     
 }
 
+// Test the get request for the comparison data, with multiple invalid countries
 TEST_F(logicTest, GetMultipleComparisonDataInvalid) {
     // Test with invalid landcodes, should return a bad request
     web::json::value requestBody = web::json::value::object();

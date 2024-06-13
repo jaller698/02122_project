@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
 
 // written by Martin,
-//
+// widget to display history of all items the user has logged
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
 
@@ -18,17 +18,22 @@ class CarbonTrackerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // to update if the controller changes
       body: ListenableBuilder(
         listenable: CarbonTrackerController(),
         builder: (context, child) {
+          // to update only when its future is completed
           return FutureBuilder(
             future: control.carbonTrackerItems,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final count = snapshot.data!.length - 1;
+                // offset to determin the current item to display, as this widgets nature as a nested listView,
+                // makes the index variable unrealiable to determin the next item
                 int offset = 0;
-                int indexOffset = 0;
 
+                // base list widget generate a list of widgets which displays a given day followed by another
+                // list widget of all item in the given day
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     if (offset >= snapshot.data!.length) {
@@ -37,7 +42,8 @@ class CarbonTrackerView extends StatelessWidget {
 
                     final curItem = snapshot.data![count - offset];
 
-                    indexOffset = offset;
+                    // set an unchanging offset to be incremeted by an index
+                    int indexOffset = offset;
                     return Column(
                       children: [
                         Text(
@@ -56,6 +62,7 @@ class CarbonTrackerView extends StatelessWidget {
                                 ? count - indexAdditive
                                 : count - indexAdditive + 1];
 
+                            // logic to check if the current widget is still within the save day
                             if (index == 0 ||
                                 (curItem.dateAdded.day ==
                                         lastItem.dateAdded.day &&
@@ -64,17 +71,19 @@ class CarbonTrackerView extends StatelessWidget {
                                     curItem.dateAdded.year ==
                                         lastItem.dateAdded.year)) {
                               offset++;
+                              // create widget
                               return ListTile(
                                 leading: Icon(curItem.type.icon),
                                 title: Text(curItem.type.text),
                                 subtitle: Text(
-                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')} - ${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
                                 trailing: Text(curItem.carbonScore.toString()),
                                 onTap: () {
                                   control.removeTrackerItem(curItem.id!);
                                 },
                               );
                             }
+                            // otherwise return null and stop current list builder
                             return null;
                           },
                         ),
@@ -91,6 +100,7 @@ class CarbonTrackerView extends StatelessWidget {
           );
         },
       ),
+      // floating button with both a tap and long press actions
       floatingActionButton: InkWell(
         onLongPress: () {
           // long press to select multiple items
@@ -110,6 +120,8 @@ class CarbonTrackerView extends StatelessWidget {
     );
   }
 
+  // written by Martin,
+  // show a bottom sheet to display all categories in which an item can be added
   Future<void> showAddCarbonItem(BuildContext context, bool singleAction) {
     return showModalBottomSheet<void>(
       constraints: const BoxConstraints(maxHeight: 400),
@@ -152,6 +164,8 @@ class CarbonTrackerView extends StatelessWidget {
     );
   }
 
+  // written by Martin,
+  // widget to show a list buttons for all item that can be added in the given category
   void showCarbonItemList(
       BuildContext context, bool singleAction, CarbonTrackerCategory category) {
     // if single item
@@ -232,6 +246,7 @@ class CarbonTrackerView extends StatelessWidget {
     }
   }
 
+  // written by // TODO
   void addSavingItem(CarbonTackerType type, CarbonTrackerController control) {
     switch (type.name) {
       case 'meatFreeDay':
@@ -279,6 +294,8 @@ class CarbonTrackerView extends StatelessWidget {
   }
 }
 
+// written by Martin,
+// stateless part of stateful widget, contains route name
 class TrackerInputDistance extends StatefulWidget {
   const TrackerInputDistance({
     super.key,
@@ -295,6 +312,8 @@ class TrackerInputDistance extends StatefulWidget {
   State<TrackerInputDistance> createState() => _TrackerInputDistanceState();
 }
 
+// written by Martin,
+// helper widget to input distances
 class _TrackerInputDistanceState extends State<TrackerInputDistance> {
   int _currentValue = 1;
 

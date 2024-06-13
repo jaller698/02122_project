@@ -5,7 +5,10 @@ import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-// written by Martin
+// written by Martin, heavily based on fl chart example: https://github.com/imaNNeo/fl_chart/blob/main/example/lib/presentation/samples/bar/bar_chart_sample1.dart
+// largest changes are hiding its "disco" mode behind a double click at line 81,
+// rewrote "mainBarData" and sub functions to utilize provided datasets instead of hardcoded values
+// added a "getWeekDay" function to remove hardcoded dates and add flexibility
 // a widget to display a summary of the last 7 days for the carbon tracker in the form of a bar graph
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});
@@ -147,6 +150,8 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
         }
       });
 
+  // written by Martin,
+  // helper function to get a specific name or letter of a day of the week based on a number
   String getWeekDay(int week, {bool char = true}) {
     if (week <= 0) week += 7;
 

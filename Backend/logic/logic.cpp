@@ -45,7 +45,7 @@ struct Response handle_data(const std::string &endpoint, web::json::value reques
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Gabriel
  * Handle inserting the filled out questions into the database
  * Should return the carbon score, unless a sql exception occurs
  * returns bad request if the request body is not as expected
@@ -86,7 +86,7 @@ struct Response handle_questions_write(const web::json::value &request_body)
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Gabriel
  * Handle reading the questions from the database
  * and sending them to the users
  * returns internal error if an exception occurs
@@ -182,7 +182,7 @@ struct Response handle_login(const web::json::value &request_body)
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Gabriel
  * Handle reading the user score from the database
  * returns bad request if the request body is not as expected
 */
@@ -198,7 +198,7 @@ struct Response handle_user_score_read(const web::json::value &request_body)
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Gabriel
  * Handle writing the user score to the database
  * returns bad request if the request body is not as expected
 */
@@ -309,7 +309,7 @@ struct Response handle_history(const web::json::value &request_body)
     }
 }
 
-/* Written by TODO
+/* Written by Gabriel
  * Handle the tracking request, should return the actions the user has taken
  * returns bad request if the request body is not as expected
 */

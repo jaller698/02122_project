@@ -1,5 +1,5 @@
 #include "database_connector.hpp"
-
+//everything is written by Christian, except for 1 that is written by Gabriel
 /* Written by Christian
  * Destructor for the database connection
 */
@@ -317,7 +317,7 @@ void dataBaseStart::insertAction(std::string username, std::string action, std::
     delete statement;
 }
 
-/* Written by TODO
+/* Written by Gabriel
  * Function to get the tracked actions from the database
 */
 web::json::value dataBaseStart::getAction(std::string username)

@@ -6,7 +6,7 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
 
-// written by Martin, // TODO
+// written by Martin,
 //
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});

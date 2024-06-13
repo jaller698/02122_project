@@ -1,6 +1,6 @@
 #pragma once
 
-// Dependices 
+// Dependices
 #include <map>
 #include <string>
 #include <vector>
@@ -27,7 +27,9 @@
 #include "data/query_comparison_data.h"
 #include "rest/rest_api.h"
 
-// Logging
+/* Written by Christian
+ *  Function to get the current time in the format of [YYYY-MM-DD HH:MM:SS]
+*/
 inline std::string get_time() {
     std::time_t now = std::time(nullptr);
     std::tm* timeinfo = std::localtime(&now);
@@ -40,6 +42,10 @@ inline std::string get_time() {
     return str;
 }
 
+/* Written by Christian
+ *  Function to print debug messages to the console, or a file depending on the context
+ *  if this is a release build, it will not print anything
+*/
 [[maybe_unused]] inline void _debug_print(std::string msg){
 #ifdef TEST_ENVIROMENT
     // pipe the output to a file:
@@ -57,6 +63,9 @@ inline std::string get_time() {
 #endif
 }
 
+/* Written by Christian
+ * Various logging Macros to make logging easier
+*/
 #define LOG(msg) std::cout << get_time() << msg << std::endl
 #define DEBUG_PRINT(msg) _debug_print(msg);
 #define WARNING(msg) std::cout << get_time() << "\033[93mWARNING: \033[0m" << msg << std::endl
@@ -68,6 +77,9 @@ inline std::string get_time() {
 #define INFO(msg) std::cout << get_time() << "\033[32mINFO: \033[0m" << msg << std::endl
 #define CRITICAL(msg) std::cerr << get_time() << "\033[31mCRITICAL: " << msg << "\033[0m"  << std::endl
 
+/* Written by Christian
+ * Struct to hold the response from the REST API
+*/
 struct Response {
     web::http::status_code status;
     web::json::value response;

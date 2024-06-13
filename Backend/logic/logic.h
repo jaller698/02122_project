@@ -1,3 +1,8 @@
+/* Written by Christian
+ * Declaration of the handler functions, these functions are responsible for handling the incoming requests
+ * and returning the appropriate response
+*/
+
 #pragma once
 #include "../common.h"
 

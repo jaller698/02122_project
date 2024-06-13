@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-// written by Martin, // TODO
-//
+// written by Martin,
+// class for handling completed carbon forms, so instead of a list of questions it has a map of anwsers
+// also handles all from and to map conversion, for further json encoding
 class CarbonFormAnswer {
   final String id;
   final String title;
@@ -18,6 +19,8 @@ class CarbonFormAnswer {
   });
 
   factory CarbonFormAnswer.fromMap(Map<String, dynamic> json) {
+    // carbon form pending and history controllers depends on an id, so in case the server fails to provide one,
+    // an id will be created based on its own hash
     if (!json.containsKey('id')) {
       json['id'] =
           'HASH?${sha256.convert(utf8.encode(json.toString())).toString()}';
@@ -43,6 +46,7 @@ class CarbonFormAnswer {
   static Map<String, dynamic> toMap(CarbonFormAnswer form) {
     Map<String, dynamic> m = <String, dynamic>{};
 
+    m['id'] = form.id;
     m['title'] = form.title;
     m['userID'] = form.user;
     m['answers'] = form.anwsers;

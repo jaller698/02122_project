@@ -1,3 +1,5 @@
+# Written by Christian
+# Makefile, only for server-side testing. This Makefile is used to compile the project.
 # To compile the project, run `make` in the terminal. To run the project, run `make run` in the terminal. To clean the project, run `make clean` in the terminal.
 # To run in debug mode (with debug prints), run `make DEBUG=1 (run)` in the terminal.
 

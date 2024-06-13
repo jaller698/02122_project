@@ -1,5 +1,11 @@
 #include "common.h"
 
+/* Written by Christian
+*  Main function of the program, starts the database and the REST API
+*  The REST API is started in the main thread, but can be started in seperate threads
+*  Useful for testing purposes
+*/
+
 int main() {
     try
     {

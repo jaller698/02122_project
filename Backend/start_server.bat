@@ -1,3 +1,6 @@
+REM Description: This script is used to start the server in a docker container.
+REM Written by Christian
+
 @echo off
 set docker_name="server_docker"
 docker stop %docker_name%

@@ -1,3 +1,8 @@
+/*   Written by Christian
+ *   This file contains the function declarations for the functions that calculate the carbon score
+ *   based on the user's answers to the questions in the quiz.
+*/
+
 #pragma once
 
 #include "../common.h"

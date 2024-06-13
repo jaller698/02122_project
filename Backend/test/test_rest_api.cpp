@@ -1,3 +1,7 @@
+/* Written by Christian
+ * General tests of the REST API
+*/
+
 #include <gtest/gtest.h>
 #include <cpprest/http_client.h>
 #include <cpprest/json.h>
@@ -6,6 +10,9 @@
 #include <thread>
 #include "http_common.h"
 
+/* Class for the REST api tests
+ * It sets up the database before each test and resets it after each test
+*/
 class RestAPIEndpointTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -29,6 +36,7 @@ protected:
     }
 };
 
+// Test a simple GET request
 TEST_F(RestAPIEndpointTest, ValidGetRequest) {
 
     // Send a valid GET request
@@ -36,6 +44,7 @@ TEST_F(RestAPIEndpointTest, ValidGetRequest) {
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 
+// Test a simple GET request
 TEST_F(RestAPIEndpointTest, ValidGetDataRequest) {
 
     // Send an invalid GET request
@@ -44,6 +53,7 @@ TEST_F(RestAPIEndpointTest, ValidGetDataRequest) {
     ASSERT_EQ(status_codes::OK, response->status_code());
 }
 
+// Test a simple POST request
 TEST_F(RestAPIEndpointTest, ValidPostRequest) {
 
     // Create a JSON object for the request body
@@ -57,6 +67,7 @@ TEST_F(RestAPIEndpointTest, ValidPostRequest) {
     ASSERT_EQ(status_codes::Created, response->status_code());
 }
 
+// Test a simple PUT request
 TEST_F (RestAPIEndpointTest, ValidPutRequest) {
 
     // Create a JSON object for the request body
@@ -78,17 +89,19 @@ TEST_F (RestAPIEndpointTest, ValidPutRequest) {
     ASSERT_NE(status_codes::OK, badResponse->status_code());
 }
 
+// Test a simple POST request, with empty data
 TEST_F (RestAPIEndpointTest, EmptyRequest) {
 
     // Create an empty JSON object for the request body
     web::json::value requestBody;
 
     // Send an invalid request
-    auto response = sendPostRequest("/notfound", requestBody);
+    auto response = sendPostRequest("/notfound", requestBody); // the endpoint doesn't matter
     ASSERT_NE(response, nullptr);
     ASSERT_EQ(status_codes::BadRequest, response->status_code());
 }
 
+// Test a simple POST request, with an invalid endpoint
 TEST_F (RestAPIEndpointTest, EndpointNotFound) {
     
     // Create a JSON object for the request body, it cannot be empty

@@ -1,5 +1,12 @@
+/* Written by Christian
+ * Class to handle the REST API, this class is responsible for listening to incoming requests
+ * and routing them to the correct handler function in the logic layer
+*/
+
 #include "rest_api.h"
 
+// Mark which methods we support
+// Using 0.0.0.0 as address to listen on all interfaces
 RestAPIEndpoint::RestAPIEndpoint() : listener_("http://0.0.0.0:8080") {
     listener_.support(methods::GET, std::bind(&RestAPIEndpoint::handle_get_request, this, std::placeholders::_1));
     listener_.support(methods::POST, std::bind(&RestAPIEndpoint::handle_post_request, this, std::placeholders::_1));
@@ -7,10 +14,15 @@ RestAPIEndpoint::RestAPIEndpoint() : listener_("http://0.0.0.0:8080") {
     listener_.support(methods::HEAD, std::bind(&RestAPIEndpoint::handle_head_request, this, std::placeholders::_1));
 }
 
+// Destructor to close the listener
 RestAPIEndpoint::~RestAPIEndpoint() {
     listener_.close().wait();
 }
 
+/* Start the listener and wait for requests
+ * can be started in a seperate thread, which is why we have the atomic bool
+ * to gracefully close down the thread
+*/
 void RestAPIEndpoint::listen(std::atomic<bool>& stop_flag) {
     DEBUG_PRINT("Listening on " + listener_.uri().to_string());
     try {

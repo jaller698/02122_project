@@ -1,3 +1,6 @@
+// Written by Christian
+// This file contains the function definition for the function that queries the comparison data from the world database
+
 #include "query_comparison_data.h"
 
 

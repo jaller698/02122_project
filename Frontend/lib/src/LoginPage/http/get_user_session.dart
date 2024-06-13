@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
-// written by Martin,
+// written by Martin, Christian
 // request to log in a user with given credentials
 Future<bool> getUserSession(String username, String password) async {
   http.Request request =

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'carbon_history_controller.dart';
 
-// written by // TODO
-//
+// written by Christian
+// simple class that builds CarbonHistoryView
 class CarbonHistoryView extends StatefulWidget {
   const CarbonHistoryView({Key? key}) : super(key: key);
 
@@ -11,10 +11,11 @@ class CarbonHistoryView extends StatefulWidget {
   _CarbonHistoryViewState createState() => _CarbonHistoryViewState();
 }
 
+
+// Written by Christian
+// This class is responsible for the state of the CarbonHistoryView
 class _CarbonHistoryViewState extends State<CarbonHistoryView> {
   List<Color> gradientColors = [Colors.cyan, Colors.blue];
-
-  bool showAvg = false;
 
   static final CarbonHistoryController _historyController =
       CarbonHistoryController();
@@ -22,7 +23,7 @@ class _CarbonHistoryViewState extends State<CarbonHistoryView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _historyController.fetchHistory(),
+        future: _historyController.fetchHistory(), // fetch the data, using the controller
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Stack(
@@ -43,13 +44,14 @@ class _CarbonHistoryViewState extends State<CarbonHistoryView> {
                 ),
               ],
             );
-          } else {
+          } else { // keep loading, until the data is fetched
             if (snapshot.hasError) print(snapshot.error);
-            return CircularProgressIndicator();
+            return CircularProgressIndicator(); 
           }
         });
   }
-
+  // This function creates the LineChartData object, which is used to create the LineChart
+  // example of the LineChartData object can be found here: https://pub.dev/packages/fl_chart
   LineChartData mainData(snapshot) {
     return LineChartData(
       gridData: FlGridData(

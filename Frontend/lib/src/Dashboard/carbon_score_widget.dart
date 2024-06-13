@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-// written by // TODO
+// written by Christian
+// simple widget that displays the carbon score, with a guiding background image
 class CarbonScoreWidget extends StatelessWidget {
   final int carbonScore;
   final double width;
@@ -13,7 +14,8 @@ class CarbonScoreWidget extends StatelessWidget {
     this.height = 100,
   });
 
-  get_color(int carbonScore) {
+  // returns a color filter based on the carbon score
+  get_color(int carbonScore) { 
     if (carbonScore < 2000) {
       return const ColorFilter.mode(Colors.green, BlendMode.color);
     } else if (carbonScore < 4000) {
@@ -23,6 +25,7 @@ class CarbonScoreWidget extends StatelessWidget {
     }
   }
 
+  // returns a background image based on the carbon score
   get_background(int carbonScore) {
     if (carbonScore < 2000) {
       return const Image(image: AssetImage('assets/images/good.jpg'));
@@ -35,6 +38,9 @@ class CarbonScoreWidget extends StatelessWidget {
     }
   }
 
+  // build the widget
+  // if the carbon score is 0 or less, return an empty container
+  // else return a container with a background image and the carbon score
   @override
   Widget build(BuildContext context) {
     if (carbonScore <= 0) {

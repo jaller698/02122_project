@@ -20,11 +20,11 @@ class DashboardView extends StatefulWidget {
   State<DashboardView> createState() => _DashboardViewState();
 }
 
-// written by Martin,
+// written by Martin, Christian
 // a dashboard which contains widgets that contextualize the users actions from different sources along with fun facts
 class _DashboardViewState extends State<DashboardView> {
   get_random_tips() {
-    // return a random tip
+    // return a random tip, currently hardcoded but could be fetched from a file or database
     var random_facts = [
       "Carbon dioxide consists of one carbon atom and two oxygen atoms, making its chemical formula CO2.",
       "CO2 is what gives soda and sparkling water their fizz.",
@@ -36,6 +36,8 @@ class _DashboardViewState extends State<DashboardView> {
     return random_facts[Random().nextInt(random_facts.length)];
   }
 
+  // Build the dashboard view, containing the carbon score, a pie chart, a bar chart and a random fact
+  // most functionality is handled by the widgets themselves, to give clean code here.
   @override
   Widget build(BuildContext context) {
     return ListView(

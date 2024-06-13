@@ -46,10 +46,7 @@ class _DashboardViewState extends State<DashboardView> {
         const Divider(),
         const CarbonScorePieChart(),
         const Divider(),
-        Expanded(
-          flex: 2,
-          child: WeekSummaryBarChart(),
-        ),
+        WeekSummaryBarChart(),
         const Divider(),
         Row(children: [
           Expanded(

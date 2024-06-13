@@ -5,7 +5,7 @@ import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-// written by Martin,
+// written by Martin
 // a widget to display a summary of the last 7 days for the carbon tracker in the form of a bar graph
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});

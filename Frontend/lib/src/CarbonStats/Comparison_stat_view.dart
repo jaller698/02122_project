@@ -5,8 +5,8 @@ import 'dart:math';
 import 'Comparison_stat_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 
-// written by // TODO
-//
+// written by Gabriel
+
 class ComparisonStatView extends StatelessWidget {
   const ComparisonStatView({super.key});
 
@@ -14,6 +14,7 @@ class ComparisonStatView extends StatelessWidget {
 
   static final CarbonStatController _carbonController = CarbonStatController();
 
+  //collects all info and merges it into one large tuple.
   Future<(List<String>, List<String>)> toList() async {
     var res = (await _carbonController.fetchCountries());
     Future<(List<String>, List<String>)> fut2 = Future(() async => (
@@ -29,18 +30,11 @@ class ComparisonStatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //  _carbonController.readStats().then(((value) {
-    //     k = value.toString();
-    //   }));
-    //FIgure out how to go from Future<double> to String.
-//(_carbonController.fetchStats(UserController().username)).toString()
+
     var fut = toList();
-
     late List<BarChartGroupData> rawBarGroups;
-
-    // Make the names dynamic, except the first 2.
-    //also this has to wait until the return types for the countries are made into maps.
-
+    
+    //The main function, it unpacks the data and fills it into a graph.
     return FutureBuilder(
       future: fut,
       builder: (context, snapshot) {
@@ -55,6 +49,7 @@ class ComparisonStatView extends StatelessWidget {
             Colors.orange
           ];
 
+          //Converts tuple into 2 lists, so its easier to work with (and nicer to read)
           List<double> vals = [];
           List<String> names = [];
           for (int i = 0; i < snapshot.data!.$1.length && i < col.length; i++) {
@@ -69,7 +64,6 @@ class ComparisonStatView extends StatelessWidget {
               children: createNames(names, col));
           ///////////////// doing this just to outline when this ends
 
-          //there is 100% a better way to do this, however i cannot be bothered to figure out how to apply something to an entire list in dart.
           final barchart1 = makeGroupData(0, vals, col);
           final items = [
             barchart1
@@ -113,6 +107,7 @@ class ComparisonStatView extends StatelessWidget {
   }
 }
 
+//this creates the names under the graph, so you can associate colours with names.
 List<Widget> createNames(List<String> names, List<Color> col) {
   List<Widget> res = [];
   for (int i = 0; i < names.length; i++) {
@@ -130,7 +125,7 @@ List<Widget> createNames(List<String> names, List<Color> col) {
   }
   return res;
 }
-
+//creates the pilars in the barchart.
 BarChartGroupData makeGroupData(int x, List<double> y, List<Color> col) {
   return BarChartGroupData(
     barsSpace: 4,
@@ -138,7 +133,7 @@ BarChartGroupData makeGroupData(int x, List<double> y, List<Color> col) {
     barRods: createBarchart(y, col),
   );
 }
-
+//extension of previous function.
 List<BarChartRodData> createBarchart(List<double> y, List<Color> col) {
   List<BarChartRodData> res = [];
   for (int i = 0; i < y.length; i++) {
@@ -153,7 +148,6 @@ List<BarChartRodData> createBarchart(List<double> y, List<Color> col) {
   }
   return res;
 }
-
 Widget bottomTitles(double value, TitleMeta meta) {
   final titles = <String>['Carbon score'];
 
@@ -171,24 +165,3 @@ Widget bottomTitles(double value, TitleMeta meta) {
     child: text,
   );
 }
-/* 
-// this is now legacy code, but keep it in case we need to figure something out.
-BarChartGroupData makeGroupData(int x, double y1, double y2) {
-  return BarChartGroupData(
-    barsSpace: 4,
-    x: x,
-    barRods: [
-      BarChartRodData(
-        toY: y1,
-        color: Colors.blue,
-        width: 10,
-      ),
-      BarChartRodData(
-        toY: y2,
-        color: Colors.red,
-        width: 10,
-      ),
-    ],
-  );
-}
-*/

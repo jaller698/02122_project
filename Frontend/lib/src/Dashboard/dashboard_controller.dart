@@ -3,11 +3,10 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:carbon_footprint/src/user_controller.dart';
 
-// written by // TODO
+// written by Gabriel and Natascha // TODO
 class DashboardController {
   Future<List<double>> last7days() async {
-    print("last7days has been called");
-    //var items = await carbonTrackerItems;
+
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/actionTracker'));
     request.body = jsonEncode(<String, String>{
@@ -26,20 +25,15 @@ class DashboardController {
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
+    //ask server, and then decode from utf8 and json
     var response = await request.send();
-    print("2nd thing work");
     var items = await response.stream.transform(utf8.decoder).first;
-    //print(items);
     var res = jsonDecode(items);
-    print(res);
 
     var response2 = await request2.send();
     var baseYearly = await response2.stream.transform(utf8.decoder).first;
     var baseDaily = double.parse(baseYearly) / 365;
-    //print("BaseYearly/actual carbonscore:");
-    //print(baseYearly);
-    print("BaseDaily:");
-    print(baseDaily);
+  
     var date = DateTime.now();
     List<double> list = [
       baseDaily,
@@ -50,25 +44,16 @@ class DashboardController {
       baseDaily,
       baseDaily
     ];
-    /*     for (var i = 0; i < res.length; i++) {
-          print(res[i]);
-          //list[diff.inDays] += items[i].carbonScore;
-          list[i] += baseDaily-i*2;
-        
-    }
-*/
+
+    //adds all elements from the last 7 days to the graph
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
-      print("days");
-      print(diff.inDays);
-      print(date.hour - diff.inHours);
       if (diff.inDays <= 7 && diff.inDays >= 0) {
         if ((diff.inDays == 0 && date.hour < diff.inHours)) {
           list[1] += res[i]['CarbonScore'];
         } else {
           list[diff.inDays] += res[i]['CarbonScore'];
         }
-        //list[diff.inDays] += items[i].carbonScore;
       }
     }
     //if any elements in the list are less than 0, set to 0 so we dont get negative carbon scores
@@ -80,6 +65,7 @@ class DashboardController {
     return list;
   }
 
+          // TODO: im not sure this method is EVER used.
   Future<String> fetchStats(String username) async {
     //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
 

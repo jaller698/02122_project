@@ -9,7 +9,7 @@ import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 import 'dashboard_view.dart';
 
-// written by // TODO
+// written by Natascha and Gabriel // TODO
 class CarbonScorePieChart extends StatefulWidget {
   const CarbonScorePieChart({super.key});
 
@@ -22,6 +22,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
 
   final DashboardController _dashboardController = DashboardController();
 
+// creates the segments of the piechart.
   List<Widget> addParts(List<Segment> segments, List<String> names) {
     List<Widget> res = [];
 
@@ -51,6 +52,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
     return res1;
   }
 
+//colors and writes names for the segments 
   List<PieChartSectionData> showingSections(List<Segment> segments) {
     return List.generate(
       5,
@@ -142,6 +144,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
     );
   }
 
+  //the main function.
   @override
   Widget build(BuildContext context) {
     var fut = toMappp();
@@ -152,6 +155,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
           if (snapshot.hasData) {
             List<int> vals = [];
             List<String> names = [];
+            //seperates the tuple into 2 lists, because its more readable.
             for (int i = 0; i < snapshot.data!.$1.length; i++) {
               vals = vals + [snapshot.data!.$2[i].toInt()];
               names = names + [snapshot.data!.$1[i]];

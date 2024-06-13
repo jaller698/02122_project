@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
-// written by // TODO
+// written by Gabriel
 //
 class CarbonStatController {
   double fromJsonScore(Map<String, dynamic> answer) {
@@ -13,11 +13,6 @@ class CarbonStatController {
         score,
       _ => throw const FormatException('Failed to decode Klefulnech'),
     };
-  }
-
-  Future<double> readStats() async {
-    //kinda like a placeholder
-    return 4.1;
   }
 
   Future<String> fetchStats(String username) async {
@@ -33,17 +28,14 @@ class CarbonStatController {
     });
 
     var response = await request.send();
-    var thing = await response.stream.transform(utf8.decoder).first;
+    var result = await response.stream.transform(utf8.decoder).first;
 
     //RESPONSE BURDE INDEHOLDE DATA'EN under "Score", but i dont know how to extract it
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
-      // then parse the JSON.""
-      //response[0];
 
-      return thing;
-      //fromJson(jsonDecode() as Map<String, dynamic>);
+      return result;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

@@ -1,4 +1,4 @@
-// written by Martin,
+// written by Martin
 // singleton which handles general account data
 
 class UserController {

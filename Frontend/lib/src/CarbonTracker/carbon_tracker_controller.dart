@@ -139,6 +139,7 @@ class CarbonTrackerController with ChangeNotifier {
     // TODO is this needed?
   }
 
+  //TODO delete this, it is outdated, the real function is in dashboard controller.
   Future<List<double>> last7days() async {
     var items = await carbonTrackerItems;
     var date = DateTime.now();

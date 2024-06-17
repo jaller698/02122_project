@@ -26,7 +26,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
   List<Widget> addParts(List<Segment> segments, List<String> names) {
     List<Widget> res = [];
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < segments.length; i++) {
       res = res +
           [
             Indicator(

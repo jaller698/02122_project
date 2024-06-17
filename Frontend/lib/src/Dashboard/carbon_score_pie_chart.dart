@@ -9,7 +9,7 @@ import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 import 'dashboard_view.dart';
 
-// written by Natascha and Gabriel 
+// written by Natascha and Gabriel
 class CarbonScorePieChart extends StatefulWidget {
   const CarbonScorePieChart({super.key});
 
@@ -52,94 +52,25 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
     return res1;
   }
 
-//colors and writes names for the segments 
+//colors and writes names for the segments
   List<PieChartSectionData> showingSections(List<Segment> segments) {
     return List.generate(
-      5,
+      segments.length,
       (i) {
         final isTouched = i == DashboardView.touchedIndex;
-        Color color0 = segments[0].color;
-        Color color1 = segments[1].color;
-        Color color2 = segments[2].color;
-        Color color3 = segments[3].color;
-        Color color4 = segments[4].color;
-
-        double? val0 = segments[0].value.toDouble();
-        double? val1 = segments[1].value.toDouble();
-        double? val2 = segments[2].value.toDouble();
-        double? val3 = segments[3].value.toDouble();
-        double? val4 = segments[4].value.toDouble();
-        double? total = val0 + val1 + val2 + val3 + val4;
-
-        String? title0 = "${(val0 / total * 100).toStringAsFixed(1)}%";
-        String? title1 = "${(val1 / total * 100).toStringAsFixed(1)}%";
-        String? title2 = "${(val2 / total * 100).toStringAsFixed(1)}%";
-        String? title3 = "${(val3 / total * 100).toStringAsFixed(1)}%";
-        String? title4 = "${(val4 / total * 100).toStringAsFixed(1)}%";
-        switch (i) {
-          case 0:
-            return PieChartSectionData(
-              color: color0,
-              value: val0,
-              titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-              title: title0,
-              radius: isTouched ? 110 : 80,
-              titlePositionPercentageOffset: 0.55,
-            );
-          case 1:
-            return PieChartSectionData(
-              color: color1,
-              value: val1,
-              titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-              title: title1,
-              radius: isTouched ? 110 : 80,
-              titlePositionPercentageOffset: 0.55,
-            );
-          case 2:
-            return PieChartSectionData(
-              color: color2,
-              value: val2,
-              titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-              title: title2,
-              radius: isTouched ? 110 : 80,
-              titlePositionPercentageOffset: 0.55,
-            );
-          case 3:
-            return PieChartSectionData(
-              color: color3,
-              value: val3,
-              titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-              title: title3,
-              radius: isTouched ? 110 : 80,
-              titlePositionPercentageOffset: 0.55,
-            );
-          case 4:
-            return PieChartSectionData(
-              color: color4,
-              value: val4,
-              titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-              title: title4,
-              radius: isTouched ? 110 : 80,
-              titlePositionPercentageOffset: 0.55,
-            );
-          default:
-            throw Error();
-        }
+        return PieChartSectionData(
+          color: segments[i].color,
+          value: segments[i].value.toDouble(),
+          titleStyle: const TextStyle(
+              color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
+          title: (segments[i].value.toDouble() /
+                      segments.fold(0, (sum, segment) => sum + segment.value) *
+                      100)
+                  .toStringAsFixed(1) +
+              "%",
+          radius: isTouched ? 110 : 80,
+          titlePositionPercentageOffset: 0.55,
+        );
       },
     );
   }

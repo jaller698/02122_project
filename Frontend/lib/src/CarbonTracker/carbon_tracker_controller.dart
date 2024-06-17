@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
-// written by Martin,
+// written by Martin
 // sql lite singleton controller which handles the users history of tracker items they have added
 class CarbonTrackerController with ChangeNotifier {
   // singleton

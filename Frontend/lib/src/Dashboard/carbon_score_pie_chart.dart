@@ -9,7 +9,7 @@ import 'package:primer_progress_bar/primer_progress_bar.dart';
 
 import 'dashboard_view.dart';
 
-// written by Natascha and Gabriel // TODO
+// written by Natascha and Gabriel 
 class CarbonScorePieChart extends StatefulWidget {
   const CarbonScorePieChart({super.key});
 

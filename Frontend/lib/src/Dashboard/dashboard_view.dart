@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'week_summary_bar_chart.dart';
 
-// written by Martin, // TODO - somebody else was here
+// written by Martin and Natascha
 // stateless part of stateful widget, contains route name
 class DashboardView extends StatefulWidget {
   const DashboardView({

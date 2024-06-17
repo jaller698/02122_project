@@ -6,7 +6,7 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
 
-// written by Martin,
+// written by Martin, 
 // widget to display history of all items the user has logged
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
@@ -246,27 +246,21 @@ class CarbonTrackerView extends StatelessWidget {
     }
   }
 
-  // written by // TODO
+  // written by Natascha
   void addSavingItem(CarbonTackerType type, CarbonTrackerController control) {
+    /* 
+    * The switch case seems overkill but it is to make it easier to update later.
+    * I expect that the carbon saving actions could require some more complicated calculations than the other categories
+    * If a certain action requires certain information or calcs,
+    * it would be easy to implement it by creating another case
+    */
     switch (type.name) {
       case 'meatFreeDay':
-        http.Request request = http.Request(
-            "PUT", Uri.parse('${SettingsController.address}/actionTracker'));
-        request.body = jsonEncode(<String, String>{
-          'name': type.name,
-          'user': UserController().username,
-          'type': 'carbonSaving',
-          'score': '-10',
-          'date': DateTime.now().toString(),
-        });
-        request.headers.addAll(<String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        });
         control.addTrackerItem(
           CarbonTrackerItem(
             type.name,
             type,
-            -100, //random number, proof of concept for reduction of daily score.
+            -10, //random number, proof of concept for reduction of daily score.
             DateTime.now(),
           ),
         );
@@ -276,7 +270,7 @@ class CarbonTrackerView extends StatelessWidget {
           CarbonTrackerItem(
             type.name,
             type,
-            -50, //will be based on the carbon form data
+            -20, //placeholder number, but could be updated to be based on the distance driven in a week
             DateTime.now(),
           ),
         );
@@ -286,7 +280,7 @@ class CarbonTrackerView extends StatelessWidget {
           CarbonTrackerItem(
             type.name,
             type,
-            1,
+            -1,
             DateTime.now(),
           ),
         );

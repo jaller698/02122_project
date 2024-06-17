@@ -1,5 +1,5 @@
 #include "database_connector.hpp"
-//everything is written by Christian, except for 1 that is written by Gabriel
+// Everything is written by Christian and Natascha, except for 1 that is written by Gabriel
 /* Written by Christian
  * Destructor for the database connection
 */
@@ -8,7 +8,7 @@ dataBaseStart::~dataBaseStart()
     delete connection;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to initialize the database, this function creates the tables if they don't exist
  * and populates the tables with the questions from the questions.json file
  * also creates a default account for the guest user,
@@ -157,7 +157,7 @@ int dataBaseStart::init()
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Generic function to get data from the database, this function is used to get the data from the database
  * and return it as a json object
 */
@@ -204,7 +204,7 @@ web::json::value dataBaseStart::get(std::string table, std::string key){
     return web::json::value::null();
 }
 
-/* Written by Christian 
+/* Written by Christian and Natascha
  * Function to insert data into the database
  * it converts a vector of int to a vector of string
 */
@@ -218,7 +218,7 @@ void dataBaseStart::insert(std::string table, std::vector<int> input)
     insert(table, inputStr);
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * actual insert function, this function inserts the data into the database
  * Only works on the more generic tables
 */
@@ -252,7 +252,7 @@ void dataBaseStart::insert(std::string table, std::vector<std::string> input)
     }
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to create a SQL statement from a vector of strings
  * this function is used to create the SQL statement to insert data into the database
 */
@@ -275,7 +275,7 @@ std::string dataBaseStart::createStatement(std::vector<std::string> input, std::
     return output;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to update the user score in the database
  * this is used only if the score is parsed as a int
 */
@@ -285,7 +285,7 @@ void dataBaseStart::updateUserScore(std::string username, int score){
     updateUserScore(username, (double) score);
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to update the user score in the database 
  * also updates the historic score
 */
@@ -305,7 +305,7 @@ void dataBaseStart::updateUserScore(std::string username, double score){
     delete statement;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to insert a tracked action into the database
 */
 void dataBaseStart::insertAction(std::string username, std::string action, std::string category, double carbonScoreChanged, std::string date)
@@ -339,7 +339,7 @@ web::json::value dataBaseStart::getAction(std::string username)
     
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to get the average carbon score from the user table in the database
 */
 double dataBaseStart::getAverage()
@@ -355,7 +355,7 @@ double dataBaseStart::getAverage()
     return output >= 0 ? output : 0;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to get the comparison data from the database
  * loops through the input array of landcodes and returns the data from the database
 */
@@ -382,7 +382,7 @@ web::json::value dataBaseStart::getComparison(web::json::array landcodes)
 
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to insert the categorized score into the database
  * updates the scores if the user already have a row in the table
 */
@@ -405,7 +405,7 @@ void dataBaseStart::insertCategorizedScore(std::string username, double totalSco
     delete statement;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to get the categorized score from the database 
 */
 web::json::value dataBaseStart::getCategories(std::string username) 
@@ -427,7 +427,7 @@ web::json::value dataBaseStart::getCategories(std::string username)
     return output;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to get the history of the user's carbon score
  * returns the last 7 entries 
 */
@@ -448,7 +448,7 @@ web::json::value dataBaseStart::getHistory(std::string username)
     return output;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to read the questions from the questions.json file
  * returns a vector of pairs with the question and the type
 */
@@ -474,7 +474,7 @@ std::vector<std::pair<std::string,std::string>> dataBaseStart::readQuestions()
     return output;
 }
 
-/* Written by Christian
+/* Written by Christian and Natascha
  * Function to update the questions in the database
  * compares the questions in the database with the questions in the questions.json file
  * if the question is not in the database it inserts it
@@ -532,7 +532,7 @@ void dataBaseStart::updateQuestions()
     }
 }
 
-/* Written by Christian
+/* Written by Christian 
  * Function to reset the database, this function drops all the tables in the database
  * and calls the init function to recreate the tables 
  * only allowed in debug mode (or test mode)

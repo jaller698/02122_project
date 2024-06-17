@@ -15,7 +15,7 @@ class CarbonScoreWidget extends StatelessWidget {
   });
 
   // returns a color filter based on the carbon score
-  get_color(int carbonScore) { 
+  get_color(int carbonScore) {
     if (carbonScore < 2000) {
       return const ColorFilter.mode(Colors.green, BlendMode.color);
     } else if (carbonScore < 4000) {
@@ -60,7 +60,7 @@ class CarbonScoreWidget extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          carbonScore.toString() + " Tons CO2 per year",
+          carbonScore.toString() + " Kg CO2 per year",
           style: TextStyle(
             color: Colors.grey[800],
             fontSize: 24,

@@ -326,7 +326,6 @@ web::json::value dataBaseStart::getAction(std::string username)
     std::string command = "SELECT * FROM ActionTrackerData WHERE Username ='" + username + "'";
     statement = connection->createStatement();
     result_set = statement->executeQuery(command);
-    DEBUG_PRINT("Result set:" + result_set);
 
     web::json::value output = web::json::value::array();
     while (result_set->next())

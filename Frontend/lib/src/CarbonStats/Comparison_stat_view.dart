@@ -19,7 +19,7 @@ class ComparisonStatView extends StatelessWidget {
     var res = (await _carbonController.fetchCountries());
     Future<(List<String>, List<String>)> fut2 = Future(() async => (
           [
-                await _carbonController.fetchStats(UserController().username),
+                UserController().carbonScore.toString(),
                 await _carbonController.fetchAverage()
               ] +
               res.$2,

@@ -66,7 +66,17 @@ class CarbonTrackerView extends StatelessWidget {
                                 ? count - indexAdditive
                                 : count - indexAdditive + 1];
 
+                            var curItemDate = DateTime.parse(curItem['date']);
+                            var lastItemDate = DateTime.parse(lastItem['date']);
+
                             // logic to check if the current widget is still within the save day
+                            if (index == 0 ||
+                                (curItemDate.day ==
+                                        lastItemDate.day &&
+                                    curItemDate.month ==
+                                        lastItemDate.month &&
+                                    curItemDate.year ==
+                                        lastItemDate.year)) {
                               offset++;
                               // create widget
                               return ListTile(
@@ -76,6 +86,7 @@ class CarbonTrackerView extends StatelessWidget {
                                     '${curItem['date']}'),
                                 trailing: Text(curItem['CarbonScore'].toString()),
                               );
+                            }
                             // otherwise return null and stop current list builder
                             return null;
                           },

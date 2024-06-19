@@ -18,11 +18,9 @@ class DashboardController {
     var response = await request.send();
     var items = await response.stream.transform(utf8.decoder).first;
     List<dynamic> res = jsonDecode(items);    
-    print(res);
     return res;
   }
   Future<List<double>> last7days() async {
-              print("hej");
     var baseDaily = UserController().carbonScore / 365;
   
     //print(res);
@@ -43,6 +41,7 @@ class DashboardController {
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
       if (diff.inDays < 7 && diff.inDays >= 0) {
+
         if ((diff.inDays == 0 && date.hour < diff.inHours)) {
           list[1] += res[i]['CarbonScore'];
         } else {

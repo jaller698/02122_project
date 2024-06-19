@@ -118,8 +118,7 @@ List<Widget> createNames(List<String> names, List<Color> col) {
             text: "${names[i]}   ",
             isSquare: true,
             size: 20,
-            textSize: 13,
-            textColor: Colors.black,
+            textSize: 13
           )
         ];
   }

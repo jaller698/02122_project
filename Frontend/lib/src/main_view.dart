@@ -7,6 +7,8 @@ import 'Dashboard/dashboard_view.dart';
 import 'CarbonStats/carbon_stat_view.dart';
 import 'Widgets/future_badge_icon_widget.dart';
 
+// written by Martin,
+// stateless part of stateful widget, contains route name
 class MainView extends StatefulWidget {
   const MainView({super.key});
   static const routeName = '/home';
@@ -15,13 +17,17 @@ class MainView extends StatefulWidget {
   State<MainView> createState() => _MainViewState();
 }
 
+// written by Martin,
+// base widget that handles topbar for view titles and settings button
+// also handles the bottombar to switch between the 4 main views of the app
 class _MainViewState extends State<MainView> {
   int _currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _currentPageIndex != 0
+      appBar: _currentPageIndex !=
+              0 // only show titles on views other than the dashboard
           ? AppBar(
               title: Text(
                 [
@@ -36,6 +42,7 @@ class _MainViewState extends State<MainView> {
                 ),
               ),
               actions: [
+                // settings button
                 IconButton(
                   onPressed: () => Navigator.restorablePushNamed(
                       context, SettingsView.routeName),
@@ -46,6 +53,7 @@ class _MainViewState extends State<MainView> {
               ],
             )
           : null,
+
       // list of widgets to switch between depending on the current page index
       body: <Widget>[
         const DashboardView(),
@@ -54,6 +62,7 @@ class _MainViewState extends State<MainView> {
         const CarbonStatView(),
       ][_currentPageIndex],
 
+      // bottom buttons to navigate between the 4 main views
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
           NavigationDestination(

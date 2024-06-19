@@ -4,6 +4,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../LoginPage/login_view.dart';
 
+// written by Martin,
+// stateless part of stateful widget, contains route name
 class SettingsView extends StatefulWidget {
   const SettingsView({
     super.key,
@@ -15,6 +17,8 @@ class SettingsView extends StatefulWidget {
   State<SettingsView> createState() => _SettingsViewState();
 }
 
+// written by Martin,
+// a settings page which handles UI for dark mode setting and log out and license pages
 class _SettingsViewState extends State<SettingsView> {
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -32,6 +36,7 @@ class _SettingsViewState extends State<SettingsView> {
           child: Column(
             children: <Widget>[
               FormBuilderSwitch(
+                // darkmode switch
                 name: 'darkmode',
                 title: const Text('Darkmode'),
                 initialValue: _settingsController.themeMode == ThemeMode.dark,
@@ -44,12 +49,14 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
               OutlinedButton(
+                  // logout button
                   onPressed: () {
                     _settingsController.logout();
                     Navigator.popAndPushNamed(context, LoginView.routeName);
                   },
                   child: const Text('Sign Out')),
               OutlinedButton(
+                  // licenses page
                   onPressed: () => showLicensePage(context: context),
                   child: const Text('Licenses')),
             ],

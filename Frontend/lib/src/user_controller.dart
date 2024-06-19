@@ -1,3 +1,6 @@
+// written by Martin
+// singleton which handles general account data
+
 class UserController {
   // singleton
   UserController._hiddenConstructor() : _carbonScore = 0;
@@ -13,6 +16,8 @@ class UserController {
   set username(String v) {
     _username = v;
   }
+
+  // user score
   int _carbonScore;
   int get carbonScore {
     return _carbonScore;
@@ -22,12 +27,6 @@ class UserController {
     _carbonScore = v;
   }
 
+  // unimplementated session token
   String? _sessionID;
-}
-
-class _UserData {
-  final String username;
-  int carbonScore;
-
-  _UserData(this.username, {this.carbonScore = 0});
 }

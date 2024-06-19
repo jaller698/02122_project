@@ -5,8 +5,11 @@ import 'package:http/http.dart' as http;
 
 import '../Settings/settings_controller.dart';
 
+// written by Christian
+// Controller for fetching carbon score history
 class CarbonHistoryController {
   double maxScore = 0;
+  // first use a POST request to get the history from the server
   Future<List<CarbonHistoricItem>> fetchHistory() async {
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/carbonScoreHistory'));
@@ -21,6 +24,7 @@ class CarbonHistoryController {
     var responseBody = await response.stream.transform(utf8.decoder).first;
     List<CarbonHistoricItem> history = [];
 
+    // if the server returns a 200 OK response, parse the JSON
     if (response.statusCode == 200) {
       List<dynamic> json = jsonDecode(responseBody);
       for (var item in json) {
@@ -40,6 +44,8 @@ class CarbonHistoryController {
   }
 }
 
+// class for storing a single item in the carbon score history
+// used to better parse the JSON response
 class CarbonHistoricItem {
   final String date;
   final int score;

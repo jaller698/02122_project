@@ -1,10 +1,14 @@
 #pragma once
 #include "../common.h"
 
+/* Written by Christian
+ * Class to handle database connection, this class is responsible for connecting to the database
+ * and executing queries to read and write data   
+*/
 class dataBaseStart{
     private:
         sql::mysql::MySQL_Driver *mysql_driver = sql::mysql::get_mysql_driver_instance();
-        sql::Connection *connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass");
+        sql::Connection *connection = mysql_driver->connect("tcp://127.0.0.1:3306", "root", "mypass"); //credentials to connect to the database
         sql::Statement *statement;
         sql::ResultSet *result_set;
         std::string createStatement(std::vector<std::string> input, std::string table, size_t tableSize = 0);

@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+// written by Martin,
+// pop up dialog for account creation or a user sign up
 class SignUpDialog extends StatefulWidget {
-  const SignUpDialog({
-    super.key,
-  });
+  const SignUpDialog({super.key});
 
   @override
   State<SignUpDialog> createState() => _SignUpDialogState();

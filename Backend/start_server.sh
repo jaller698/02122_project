@@ -1,4 +1,9 @@
 #! /bin/bash
+# Written by Christian
+# simple bash script that builds the docker image, runs the docker container, and executes the make command in the container
+# The script also runs the server and tests in separate terminal windows (if the test argument is passed)
+# needs to run on a linux machine with docker installed, and gnome as the DE.
+
 docker_name="server_docker"
 
 mkdir -p db

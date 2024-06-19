@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin, Christian
+// request to create a new user with given credentials
 Future<bool> createNewUser(String username, String password) async {
   var _hashedPassword = sha256.convert(utf8.encode(password));
   final response = await http.post(

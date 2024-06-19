@@ -6,6 +6,8 @@ import 'package:sqflite/sqflite.dart';
 
 import 'Modals/carbon_form_answer.dart';
 
+// written by Martin,
+// sql lite singleton controller which handles the users history of completed forms
 class CarbonFormHistoryController with ChangeNotifier {
   // singleton
   CarbonFormHistoryController._hiddenConstructor();
@@ -13,6 +15,7 @@ class CarbonFormHistoryController with ChangeNotifier {
       CarbonFormHistoryController._hiddenConstructor();
   factory CarbonFormHistoryController() => _singleton;
 
+  // private variable, which forces an initialization on first access
   List<CarbonFormAnswer>? _carbonForms;
   Future<List<CarbonFormAnswer>> get carbonForms {
     if (_carbonForms == null) {
@@ -21,8 +24,10 @@ class CarbonFormHistoryController with ChangeNotifier {
     return Future(() => _carbonForms!);
   }
 
+  // sql lite database
   static late Future<Database> _database;
 
+  // loads and returns all completed forms
   Future<List<CarbonFormAnswer>> loadForms() async {
     _database = openDatabase(
       join(await getDatabasesPath(), 'form_database.db'),
@@ -48,6 +53,7 @@ class CarbonFormHistoryController with ChangeNotifier {
     return list;
   }
 
+  // add a new completed form to keep
   Future<void> addForm(CarbonFormAnswer item) async {
     final db = await _database;
 
@@ -57,6 +63,7 @@ class CarbonFormHistoryController with ChangeNotifier {
 
     var itemList = await carbonForms;
 
+    // solution to prevent duplicate ids
     for (var i = 0; i < itemList.length; i++) {
       bool valid = true;
       for (var item in itemList) {
@@ -68,18 +75,22 @@ class CarbonFormHistoryController with ChangeNotifier {
         break;
       }
     }
+    try {
+      await db.insert(
+        'form',
+        itemMap,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
 
-    await db.insert(
-      'form',
-      itemMap,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    await loadForms();
+      await loadForms();
+    } catch (e) {
+      print(e);
+    }
 
     notifyListeners();
   }
 
+  // remove a form from history
   Future<void> removeForm(int id) async {
     final db = await _database;
 

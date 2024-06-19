@@ -1,6 +1,9 @@
 import 'package:carbon_footprint/src/CarbonForm/carbon_form_pending_controller.dart';
 import 'package:flutter/material.dart';
 
+// written by Martin,
+// helper widget to main_view which is used to display badges for unanswered questionnaires
+
 class FutureBadgeIconWidget extends StatelessWidget {
   const FutureBadgeIconWidget({
     super.key,

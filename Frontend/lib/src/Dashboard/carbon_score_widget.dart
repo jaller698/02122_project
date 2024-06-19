@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 
+// written by Christian
+// simple widget that displays the carbon score, with a guiding background image
 class CarbonScoreWidget extends StatelessWidget {
   final int carbonScore;
   final double width;
   final double height;
 
   const CarbonScoreWidget({
-    Key? key,
+    super.key,
     required this.carbonScore,
     this.width = 100,
     this.height = 100,
-  }) : super(key: key);
+  });
 
+  // returns a color filter based on the carbon score
   get_color(int carbonScore) {
     if (carbonScore < 2000) {
-      return ColorFilter.mode(Colors.green, BlendMode.color);
+      return const ColorFilter.mode(Colors.green, BlendMode.color);
     } else if (carbonScore < 4000) {
-      return ColorFilter.mode(Colors.yellow, BlendMode.color);
+      return const ColorFilter.mode(Colors.yellow, BlendMode.color);
     } else {
-      return ColorFilter.mode(Colors.red, BlendMode.color);
+      return const ColorFilter.mode(Colors.red, BlendMode.color);
     }
   }
 
+  // returns a background image based on the carbon score
   get_background(int carbonScore) {
     if (carbonScore < 2000) {
       return const Image(image: AssetImage('assets/images/good.jpg'));
@@ -34,28 +38,31 @@ class CarbonScoreWidget extends StatelessWidget {
     }
   }
 
+  // build the widget
+  // if the carbon score is 0 or less, return an empty container
+  // else return a container with a background image and the carbon score
   @override
   Widget build(BuildContext context) {
     if (carbonScore <= 0) {
       return Container();
-    };
+    }
+    ;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         image: DecorationImage(
-          image: get_background(carbonScore).image,
-          fit: BoxFit.cover,
-          colorFilter: get_color(carbonScore)
-        ),
+            image: get_background(carbonScore).image,
+            fit: BoxFit.cover,
+            colorFilter: get_color(carbonScore)),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: Text(
-          carbonScore.toString() + " Tons CO2 per year",
+          carbonScore.toString() + " Kg CO2 per year",
           style: TextStyle(
-            color: Colors.grey[800],
+            color: carbonScore <= 4000 ? Colors.grey[800] : Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),

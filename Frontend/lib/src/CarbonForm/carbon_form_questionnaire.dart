@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+// written by Martin,
+// stateless part of stateful widget, contains route name and the specific form to show
 class CarbonFormQuestionnaire extends StatefulWidget {
   CarbonFormQuestionnaire({super.key, required carbonForm})
       : _carbonForm = CarbonForm.fromMap(carbonForm);
@@ -20,6 +22,8 @@ class CarbonFormQuestionnaire extends StatefulWidget {
       _CarbonFormQuestionnaireState();
 }
 
+// written by Martin,
+// widget which allows the user to answer forms
 class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -37,6 +41,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
           itemBuilder: (context, index) {
             var question = widget._carbonForm.questions[index];
 
+            // input widget for all supported input types
             switch (question.type) {
               // TODO - fix hint wraping
               case CarbonQuestionType.int:
@@ -169,12 +174,15 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
         label: const Text('Submit'),
         icon: const Icon(Icons.check),
         onPressed: () {
+          // form validator, to check if the user has not managed to type letters into a numbers only field or similar
           if (_formKey.currentState!.saveAndValidate()) {
+            // send the now completed carbon form to the server
             Future<void> future = sendCarbonForm(CarbonFormAnswer(
                 title: widget._carbonForm.title,
                 user: UserController().username,
                 anwsers: _formKey.currentState!.value));
 
+            // catch error in case of failure and display it in the snackbar
             future.then((value) => Navigator.pop(context)).catchError((error) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               SnackBarCatchError(context, error);

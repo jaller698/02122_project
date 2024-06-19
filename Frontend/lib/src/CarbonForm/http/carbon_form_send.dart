@@ -6,7 +6,10 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin, // TODO
+// http post request to submit a completed carbon form or questionnaire
 Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
+  // the future http response to the request
   final response = await http.post(
     Uri.parse('${SettingsController.address}/questions'),
     headers: <String, String>{
@@ -15,13 +18,11 @@ Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
     body: jsonEncode(CarbonFormAnswer.toMap(answer)),
   );
 
-  print(CarbonFormAnswer.toMap(answer));
-
   if (response.statusCode == 201) {
     // If the server did return a 201 CREATED response,
-    // then save the form in history
+    // then saves the form in history
     CarbonFormHistoryController().addForm(answer);
-    var responseBody = JsonDecoder().convert(response.body);
+    var responseBody = const JsonDecoder().convert(response.body);
     UserController().carbonScore = responseBody['response']['carbonScore'];
     return;
   } else {

@@ -4,13 +4,13 @@ import 'package:carbon_footprint/src/CarbonForm/Modals/carbon_form.dart';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin,
+// http get request to get the latest carbon form or questionnaire
 Future<CarbonForm> fetchCarbonForm() async {
-  /*return CarbonForm.fromJson(
-      await jsonDecode(await rootBundle.loadString('assets/carbon_form.json'))
-          as Map<String, dynamic>);
-  */
+  // the future http response to the request
   final response =
       await http.get(Uri.parse('${SettingsController.address}/questions'));
+
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

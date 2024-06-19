@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
+// written by Martin,
+// class for carbon forms, in an object format instead of map, also contains conversion functions to and from maps
 class CarbonForm {
   final String id;
   final String title;
@@ -14,6 +16,8 @@ class CarbonForm {
   });
 
   factory CarbonForm.fromMap(Map<String, dynamic> json) {
+    // carbon form pending and history controllers depends on an id, so in case the server fails to provide one,
+    // an id will be created based on its own hash
     if (!json.containsKey('id')) {
       json['id'] =
           'HASH?${sha256.convert(utf8.encode(json.toString())).toString()}';
@@ -70,6 +74,8 @@ class CarbonForm {
   }
 }
 
+// written by Martin,
+// hardcoded enum for all supported question types
 enum CarbonQuestionType {
   arbitrary,
   int,
@@ -84,6 +90,8 @@ enum CarbonQuestionType {
   slider,
 }
 
+// written by Martin,
+// helper class for carbon form to represent questions as objects
 class CarbonQuestion {
   final String title;
   final CarbonQuestionType type;

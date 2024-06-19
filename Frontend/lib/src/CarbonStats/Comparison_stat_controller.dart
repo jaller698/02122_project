@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:http/http.dart' as http;
 
+// written by Gabriel
+//
 class CarbonStatController {
   double fromJsonScore(Map<String, dynamic> answer) {
     return switch (answer) {
@@ -11,11 +13,6 @@ class CarbonStatController {
         score,
       _ => throw const FormatException('Failed to decode Klefulnech'),
     };
-  }
-
-  Future<double> readStats() async {
-    //kinda like a placeholder
-    return 4.1;
   }
 
   Future<String> fetchStats(String username) async {
@@ -31,17 +28,14 @@ class CarbonStatController {
     });
 
     var response = await request.send();
-    var thing = await response.stream.transform(utf8.decoder).first;
+    var result = await response.stream.transform(utf8.decoder).first;
 
     //RESPONSE BURDE INDEHOLDE DATA'EN under "Score", but i dont know how to extract it
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
-      // then parse the JSON.""
-      //response[0];
 
-      return thing;
-      //fromJson(jsonDecode() as Map<String, dynamic>);
+      return result;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -64,13 +58,14 @@ class CarbonStatController {
       throw Exception('Failed to load average score');
     }
   }
-   Future<(List<String>,List<String>)> fetchCountries() async {
-    http.Request request =
-        http.Request("GET", Uri.parse('${SettingsController.address}/comparison'));
-        //gotta make this dynamic.
+
+  Future<(List<String>, List<String>)> fetchCountries() async {
+    http.Request request = http.Request(
+        "GET", Uri.parse('${SettingsController.address}/comparison'));
+    //gotta make this dynamic.
     var countries = ["DNK", "SWE"];
 
-      request.body = jsonEncode(<String, List<String>>{
+    request.body = jsonEncode(<String, List<String>>{
       'landcodes': countries,
     });
 
@@ -78,16 +73,17 @@ class CarbonStatController {
       'Content-Type': 'application/json; charset=UTF-8',
     });
     var response = await request.send();
-    
+
     var result = await response.stream.transform(utf8.decoder).first;
-    var result2 =  jsonDecode(result);
+    var result2 = jsonDecode(result);
     Map<String, String> res = {};
-    for (int i=0; i<countries.length; i++){
-      res.addAll({result2[i]['Country'].toString(): result2[i]['CarbonScore'].toString()});
+    for (int i = 0; i < countries.length; i++) {
+      res.addAll({
+        result2[i]['Country'].toString(): result2[i]['CarbonScore'].toString()
+      });
     }
     if (response.statusCode == 200) {
-
-      return (res.keys.toList(),res.values.toList());
+      return (res.keys.toList(), res.values.toList());
     } else {
       throw Exception('Failed to load average score');
     }

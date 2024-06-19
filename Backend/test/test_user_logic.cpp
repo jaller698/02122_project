@@ -79,7 +79,7 @@ TEST_F(logicTest, UpdateUserScoreWithNonExistingUser) {
 
     auto response = sendGetRequest("/userScore", requestBody);
     ASSERT_NE(response, nullptr);
-    ASSERT_EQ(status_codes::InternalError, response->status_code());
+    ASSERT_EQ(status_codes::BadRequest, response->status_code());
 }
 
 TEST_F(logicTest, getCategorizedCarbonScore) {

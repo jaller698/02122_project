@@ -1,3 +1,6 @@
+# Written by Christian
+# This Dockerfile is used to build an image containing a mariadb database and the necessary dependencies to compile the C++ code
+
 # Use mariadb as base image
 FROM mariadb
 
@@ -27,4 +30,5 @@ RUN apt-get update && \
     && make \
     && make install
 
+# Mark the ports 8080, 3306 as exposed
 EXPOSE 8080 3306

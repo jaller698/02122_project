@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'dart:convert';
-import 'package:carbon_footprint/src/user_controller.dart';
-
-
+// written by Martin, heavily based on fl chart example: https://github.com/imaNNeo/fl_chart/blob/main/example/lib/presentation/samples/bar/bar_chart_sample1.dart
+// largest changes are hiding its "disco" mode behind a double click at line 81,
+// rewrote "mainBarData" and sub functions to utilize provided datasets instead of hardcoded values
+// added a "getWeekDay" function to remove hardcoded dates and add flexibility
+// a widget to display a summary of the last 7 days for the carbon tracker in the form of a bar graph
 class WeekSummaryBarChart extends StatefulWidget {
   WeekSummaryBarChart({super.key});
 
@@ -38,10 +36,9 @@ class WeekSummaryBarChartState extends State<WeekSummaryBarChart> {
   int touchedIndex = -1;
 
   bool isPlaying = false;
-var fut = _dashboardController.last7days();
+  var fut = _dashboardController.last7days();
   @override
   Widget build(BuildContext context) {
-    
     return FutureBuilder(
       future: fut,
       builder: (context, snapshot) {
@@ -153,6 +150,8 @@ var fut = _dashboardController.last7days();
         }
       });
 
+  // written by Martin,
+  // helper function to get a specific name or letter of a day of the week based on a number
   String getWeekDay(int week, {bool char = true}) {
     if (week <= 0) week += 7;
 

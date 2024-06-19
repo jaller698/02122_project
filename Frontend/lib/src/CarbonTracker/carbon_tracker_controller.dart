@@ -8,6 +8,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
+// written by Martin
+// sql lite singleton controller which handles the users history of tracker items they have added
 class CarbonTrackerController with ChangeNotifier {
   // singleton
   CarbonTrackerController._hiddenConstructor();
@@ -15,6 +17,7 @@ class CarbonTrackerController with ChangeNotifier {
       CarbonTrackerController._hiddenConstructor();
   factory CarbonTrackerController() => _singleton;
 
+  // private variable, which forces an initialization on first access
   List<CarbonTrackerItem>? _carbonTrackerItems;
   Future<List<CarbonTrackerItem>> get carbonTrackerItems async {
     if (_carbonTrackerItems == null) {
@@ -25,8 +28,10 @@ class CarbonTrackerController with ChangeNotifier {
     return Future(() => _carbonTrackerItems!);
   }
 
+  // sql lite database
   static late Future<Database> _database;
 
+  // loads and returns all items the user has added
   Future<List<CarbonTrackerItem>> loadTrackerItems() async {
     // TODO - path not able to be found on windows, linux and web
     _database = openDatabase(
@@ -42,6 +47,7 @@ class CarbonTrackerController with ChangeNotifier {
     final List<Map<String, Object?>> carbonItemsMaps =
         await (await _database).query('carbon');
 
+    // carbon tracker item conversion from map to a list of objects
     final items = [
       for (final {
             'id': id as int,
@@ -62,6 +68,7 @@ class CarbonTrackerController with ChangeNotifier {
     return items;
   }
 
+  // updates a single item, by replacement
   Future<void> updateTrackerItems(CarbonTrackerItem item) async {
     final db = await _database;
 
@@ -77,6 +84,7 @@ class CarbonTrackerController with ChangeNotifier {
     await loadTrackerItems();
   }
 
+  // add a single new item
   Future<void> addTrackerItem(CarbonTrackerItem item) async {
     final db = await _database;
 
@@ -107,6 +115,7 @@ class CarbonTrackerController with ChangeNotifier {
     await loadTrackerItems();
   }
 
+  // removes an item based on id
   Future<void> removeTrackerItem(int id) async {
     final db = await _database;
 
@@ -137,22 +146,10 @@ class CarbonTrackerController with ChangeNotifier {
     // TODO is this needed?
   }
 
-  Future<List<double>> last7days() async {
-    var items = await carbonTrackerItems;
-    var date = DateTime.now();
-    List<double> list = [0, 0, 0, 0, 0, 0, 0];
-
-    for (var i = 0; i < items.length; i++) {
-      var diff = date.difference(items[i].dateAdded);
-      if (diff.inDays <= 7 && diff.inDays >= 0) {
-        list[diff.inDays] += items[i].carbonScore;
-      }
-    }
-
-    return list;
-  }
 }
 
+// written by Martin,
+// class for carbon item, in an object format instead of map
 class CarbonTrackerItem {
   final int? id;
   final String name;
@@ -184,6 +181,8 @@ class CarbonTrackerItem {
   }
 }
 
+// written by Martin,
+// enum over categories
 enum CarbonTrackerCategory {
   transport(Icons.explore, [
     CarbonTackerType.walking,
@@ -202,9 +201,8 @@ enum CarbonTrackerCategory {
     CarbonTackerType.fish,
   ]),
   carbonSaving(Icons.show_chart_rounded, [
-  CarbonTackerType.meatFreeDay,
-  CarbonTackerType.bikeToWork,
-
+    CarbonTackerType.meatFreeDay,
+    CarbonTackerType.bikeToWork,
   ]),
   custom(Icons.tune, [
     CarbonTackerType.custom,
@@ -216,6 +214,8 @@ enum CarbonTrackerCategory {
   const CarbonTrackerCategory(this.icon, this.types);
 }
 
+// written by Martin,
+// enum over types of actions
 enum CarbonTackerType {
   // transport
   walking(Icons.directions_walk, 'walk', CarbonTrackInputTypes.time),
@@ -234,8 +234,10 @@ enum CarbonTackerType {
       CarbonTrackInputTypes.single),
   fish(Icons.set_meal, 'Fish based meal', CarbonTrackInputTypes.single),
 
-  meatFreeDay(Icons.emoji_food_beverage_rounded, 'Meat free day',CarbonTrackInputTypes.carbonSaving),
-  bikeToWork(Icons.bike_scooter, 'Biked to work instead of taking the car', CarbonTrackInputTypes.carbonSaving),
+  meatFreeDay(Icons.emoji_food_beverage_rounded, 'Meat free day',
+      CarbonTrackInputTypes.carbonSaving),
+  bikeToWork(Icons.bike_scooter, 'Biked to work instead of taking the car',
+      CarbonTrackInputTypes.carbonSaving),
   // shopping
   // TODO design a better system, best if the user is also able to add custom items to track...
 
@@ -250,24 +252,12 @@ enum CarbonTackerType {
   const CarbonTackerType(this.icon, this.text, this.type);
 }
 
+// written by Martin,
+// enum of all supported input types
 enum CarbonTrackInputTypes { single, time, distance, custom, carbonSaving }
 
-// save to json string
-class CarbonTrackerObjectType {
-  // icon
-  // name
-  // input type
-
-  // ! to map
-}
-
-class CarbonTrackerObjectCategory {
-  // icon
-  // list of types
-
-  // ! to map
-}
-
+// written by Martin,
+// enum of all icons
 enum CarbonTrackerObjectIcons {
   // transport
   walking(Icons.directions_walk),

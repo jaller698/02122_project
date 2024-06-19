@@ -67,26 +67,15 @@ class CarbonTrackerView extends StatelessWidget {
                                 : count - indexAdditive + 1];
 
                             // logic to check if the current widget is still within the save day
-                            if (index == 0 ||
-                                (curItem['date'].day ==
-                                        lastItem['date'].day &&
-                                    curItem['date'].month ==
-                                        lastItem['date'].month &&
-                                    curItem['date'].year ==
-                                        lastItem['date'].year)) {
                               offset++;
                               // create widget
                               return ListTile(
-                                leading: Icon(curItem['Category'].icon),
-                                title: Text(curItem['Category'].text),
+                                leading: get_icon(curItem),
+                                title: Text(curItem["Category"]),
                                 subtitle: Text(
-                                    '${curItem['date'].hour.toString().padLeft(2, '0')}:${curItem['date']..minute.toString().padLeft(2, '0')}'),
+                                    '${curItem['date']}'),
                                 trailing: Text(curItem['CarbonScore'].toString()),
-                                onTap: () {
-                                  //control.removeTrackerItem(curItem.id!);
-                                },
                               );
-                            }
                             // otherwise return null and stop current list builder
                             return null;
                           },
@@ -289,6 +278,24 @@ class CarbonTrackerView extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Map<String, IconData> iconMap = {
+    "walking" : Icons.nordic_walking,
+    "car" : Icons.directions_car,
+    "cycling" : Icons.directions_bike,
+    "bus": Icons.directions_train,
+    "train": Icons.directions_train,
+    "boat": Icons.directions_boat,
+    "flight": Icons.flight,
+    "bikeToWork": Icons.directions_bike,
+    "meatFreeDay" : Icons.emoji_food_beverage_rounded,
+    "custom": Icons.question_mark
+
+  };
+
+  get_icon(curItem) {
+    return Icon(iconMap[curItem["Category"]]);
   }
 }
 

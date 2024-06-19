@@ -5,7 +5,7 @@ import 'package:carbon_footprint/src/user_controller.dart';
 
 // written by Gabriel and Natascha
 class DashboardController {
-  Future<List<Map<String, dynamic>>> getActions() async {
+  Future<List<dynamic>> getActions() async {
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/actionTracker'));
     request.body = jsonEncode(<String, String>{
@@ -17,41 +17,16 @@ class DashboardController {
         //ask server, and then decode from utf8 and json
     var response = await request.send();
     var items = await response.stream.transform(utf8.decoder).first;
-    var res = jsonDecode(items);    
+    List<dynamic> res = jsonDecode(items);    
     print(res);
-
     return res;
   }
   Future<List<double>> last7days() async {
               print("hej");
-    http.Request request = http.Request(
-        "GET", Uri.parse('${SettingsController.address}/actionTracker'));
-    request.body = jsonEncode(<String, String>{
-      'User': UserController().username,
-    });
-    request.headers.addAll(<String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
-        //ask server, and then decode from utf8 and json
-    var response = await request.send();
-    var items = await response.stream.transform(utf8.decoder).first;
-    var res = jsonDecode(items);    
-    print(res);
-    http.Request request2 = http.Request(
-        "GET", Uri.parse('${SettingsController.address}/userScore'));
-    request2.body = jsonEncode(<String, String>{
-      'User': UserController().username,
-    });
-    request2.headers.addAll(<String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
-
-    var response2 = await request2.send();
-    var baseYearly = await response2.stream.transform(utf8.decoder).first;
-    var baseDaily = double.parse(baseYearly) / 365;
+    var baseDaily = UserController().carbonScore / 365;
   
     //print(res);
-     //List<Map<String, dynamic>> res = await getActions();
+    List<dynamic> res = await getActions();
 
      var date = DateTime.now();
      List<double> list = [

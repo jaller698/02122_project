@@ -62,7 +62,7 @@ class CarbonScoreWidget extends StatelessWidget {
         child: Text(
           carbonScore.toString() + " Kg CO2 per year",
           style: TextStyle(
-            color: Colors.grey[800],
+            color: carbonScore <= 4000 ? Colors.grey[800] : Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),

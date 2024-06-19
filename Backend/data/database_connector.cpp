@@ -336,7 +336,6 @@ web::json::value dataBaseStart::getAction(std::string username)
         Action["Category"] = web::json::value::string(result_set->getString(3));
         Action["date"] = web::json::value::string(result_set->getString(4));
         Action["CarbonScore"] = web::json::value::number((double) result_set->getDouble(5));
-        DEBUG_PRINT("Output:" + Action);
         output[output.size()] = Action;
     }
 

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
+import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 
 // written by Martin, 
 // widget to display history of all items the user has logged
@@ -14,9 +15,11 @@ class CarbonTrackerView extends StatelessWidget {
   static const routeName = '/carbontracker';
 
   final CarbonTrackerController control = CarbonTrackerController();
-
+  final DashboardController dashboard = DashboardController();
   @override
   Widget build(BuildContext context) {
+ 
+
     return Scaffold(
       // to update if the controller changes
       body: ListenableBuilder(
@@ -24,7 +27,7 @@ class CarbonTrackerView extends StatelessWidget {
         builder: (context, child) {
           // to update only when its future is completed
           return FutureBuilder(
-            future: control.carbonTrackerItems,
+            future: dashboard.getActions(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final count = snapshot.data!.length - 1;
@@ -46,8 +49,9 @@ class CarbonTrackerView extends StatelessWidget {
                     int indexOffset = offset;
                     return Column(
                       children: [
-                        Text(
-                            '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                        Text(curItem['date']//really hope this works :)
+                            //'${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'
+                            ),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const ClampingScrollPhysics(),
@@ -64,22 +68,22 @@ class CarbonTrackerView extends StatelessWidget {
 
                             // logic to check if the current widget is still within the save day
                             if (index == 0 ||
-                                (curItem.dateAdded.day ==
-                                        lastItem.dateAdded.day &&
-                                    curItem.dateAdded.month ==
-                                        lastItem.dateAdded.month &&
-                                    curItem.dateAdded.year ==
-                                        lastItem.dateAdded.year)) {
+                                (curItem['date'].day ==
+                                        lastItem['date'].day &&
+                                    curItem['date'].month ==
+                                        lastItem['date'].month &&
+                                    curItem['date'].year ==
+                                        lastItem['date'].year)) {
                               offset++;
                               // create widget
                               return ListTile(
-                                leading: Icon(curItem.type.icon),
-                                title: Text(curItem.type.text),
+                                leading: Icon(curItem['Category'].icon),
+                                title: Text(curItem['Category'].text),
                                 subtitle: Text(
-                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
-                                trailing: Text(curItem.carbonScore.toString()),
+                                    '${curItem['date'].hour.toString().padLeft(2, '0')}:${curItem['date']..minute.toString().padLeft(2, '0')}'),
+                                trailing: Text(curItem['CarbonScore'].toString()),
                                 onTap: () {
-                                  control.removeTrackerItem(curItem.id!);
+                                  //control.removeTrackerItem(curItem.id!);
                                 },
                               );
                             }

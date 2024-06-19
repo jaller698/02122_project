@@ -5,8 +5,7 @@ import 'package:carbon_footprint/src/user_controller.dart';
 
 // written by Gabriel and Natascha
 class DashboardController {
-  Future<List<double>> last7days() async {
-
+  Future<List<Map<String, dynamic>>> getActions() async {
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/actionTracker'));
     request.body = jsonEncode(<String, String>{
@@ -15,7 +14,29 @@ class DashboardController {
     request.headers.addAll(<String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
+        //ask server, and then decode from utf8 and json
+    var response = await request.send();
+    var items = await response.stream.transform(utf8.decoder).first;
+    var res = jsonDecode(items);    
+    print(res);
 
+    return res;
+  }
+  Future<List<double>> last7days() async {
+              print("hej");
+    http.Request request = http.Request(
+        "GET", Uri.parse('${SettingsController.address}/actionTracker'));
+    request.body = jsonEncode(<String, String>{
+      'User': UserController().username,
+    });
+    request.headers.addAll(<String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+        //ask server, and then decode from utf8 and json
+    var response = await request.send();
+    var items = await response.stream.transform(utf8.decoder).first;
+    var res = jsonDecode(items);    
+    print(res);
     http.Request request2 = http.Request(
         "GET", Uri.parse('${SettingsController.address}/userScore'));
     request2.body = jsonEncode(<String, String>{
@@ -25,17 +46,15 @@ class DashboardController {
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
-    //ask server, and then decode from utf8 and json
-    var response = await request.send();
-    var items = await response.stream.transform(utf8.decoder).first;
-    var res = jsonDecode(items);
-
     var response2 = await request2.send();
     var baseYearly = await response2.stream.transform(utf8.decoder).first;
     var baseDaily = double.parse(baseYearly) / 365;
   
-    var date = DateTime.now();
-    List<double> list = [
+    //print(res);
+     //List<Map<String, dynamic>> res = await getActions();
+
+     var date = DateTime.now();
+     List<double> list = [
       baseDaily,
       baseDaily,
       baseDaily,
@@ -48,7 +67,7 @@ class DashboardController {
     //adds all elements from the last 7 days to the graph
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
-      if (diff.inDays <= 7 && diff.inDays >= 0) {
+      if (diff.inDays < 7 && diff.inDays >= 0) {
         if ((diff.inDays == 0 && date.hour < diff.inHours)) {
           list[1] += res[i]['CarbonScore'];
         } else {

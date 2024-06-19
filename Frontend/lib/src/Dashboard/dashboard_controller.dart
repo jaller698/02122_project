@@ -48,7 +48,7 @@ class DashboardController {
     //adds all elements from the last 7 days to the graph
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
-      if (diff.inDays <= 7 && diff.inDays >= 0) {
+      if (diff.inDays < 7 && diff.inDays >= 0) {
         if ((diff.inDays == 0 && date.hour < diff.inHours)) {
           list[1] += res[i]['CarbonScore'];
         } else {

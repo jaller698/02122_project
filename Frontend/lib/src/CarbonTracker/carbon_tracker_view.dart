@@ -48,7 +48,7 @@ class CarbonTrackerView extends StatelessWidget {
                     return Column(
                       children: [
                         Text(curItem['date']
-                                .substr(0, 9) //really hope this works :)
+                                .substring(0, 10) //really hope this works :)
                             //'${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'
                             ),
                         ListView.builder(

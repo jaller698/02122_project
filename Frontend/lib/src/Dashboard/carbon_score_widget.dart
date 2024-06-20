@@ -46,7 +46,6 @@ class CarbonScoreWidget extends StatelessWidget {
     if (carbonScore <= 0) {
       return Container();
     }
-    ;
     return Container(
       width: width,
       height: height,
@@ -60,7 +59,7 @@ class CarbonScoreWidget extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          carbonScore.toString() + " Kg CO2 per year",
+          "$carbonScore Kg CO2 per year",
           style: TextStyle(
             color: carbonScore <= 4000 ? Colors.grey[800] : Colors.white,
             fontSize: 24,

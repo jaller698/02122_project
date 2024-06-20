@@ -1,6 +1,4 @@
 import 'package:carbon_footprint/src/LoginPage/http/create_new_user.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -55,20 +53,20 @@ class _SignUpDialogState extends State<SignUpDialog> {
                 ),
                 FormBuilderCheckbox(
                   name: 'termsAndConditions',
-                  title: Text.rich(
+                  title: const Text.rich(
                     TextSpan(
                       text: 'I have read and accept the ',
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Terms of Service',
-                          style: const TextStyle(
-                              decoration: TextDecoration.underline),
+                          style:
+                              TextStyle(decoration: TextDecoration.underline),
                         ),
                         TextSpan(text: ' and ', children: <TextSpan>[
                           TextSpan(
                             text: 'Privacy Policy',
-                            style: const TextStyle(
-                                decoration: TextDecoration.underline),
+                            style:
+                                TextStyle(decoration: TextDecoration.underline),
                           )
                         ])
                       ],

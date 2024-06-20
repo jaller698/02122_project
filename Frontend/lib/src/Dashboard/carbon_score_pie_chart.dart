@@ -63,11 +63,8 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
           value: segments[i].value.toDouble(),
           titleStyle: const TextStyle(
               color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
-          title: (segments[i].value.toDouble() /
-                      segments.fold(0, (sum, segment) => sum + segment.value) *
-                      100)
-                  .toStringAsFixed(1) +
-              "%",
+          title:
+              "${(segments[i].value.toDouble() / segments.fold(0, (sum, segment) => sum + segment.value) * 100).toStringAsFixed(1)}%",
           radius: isTouched ? 110 : 80,
           titlePositionPercentageOffset: 0.55,
         );
@@ -91,8 +88,6 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
               vals = vals + [snapshot.data!.$2[i].toInt()];
               names = names + [snapshot.data!.$1[i]];
             }
-
-            const List<String> labels = ["Transport", "Home", "Food", "Other"];
             List<Segment> segments = [
               Segment(
                   value: vals[0] + 1,

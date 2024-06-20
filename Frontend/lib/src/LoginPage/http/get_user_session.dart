@@ -22,7 +22,7 @@ Future<bool> getUserSession(String username, String password) async {
   var response = await request.send();
 
   if (response.statusCode == 200) {
-    var responseBody = JsonDecoder()
+    var responseBody = const JsonDecoder()
         .convert(await response.stream.transform(utf8.decoder).first);
     UserController().username = username;
     UserController().carbonScore = responseBody['Score'];

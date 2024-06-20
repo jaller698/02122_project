@@ -1,10 +1,6 @@
 import 'package:carbon_footprint/src/CarbonTracker/carbon_tracker_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:http/http.dart' as http;
-import 'package:carbon_footprint/src/Settings/settings_controller.dart';
-import 'dart:convert';
-import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 
 // written by Martin, Natascha, and Christian

@@ -130,7 +130,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
               case CarbonQuestionType.dropDown:
                 return FormBuilderDropdown(
                   name: question.title,
-                  items: [],
+                  items: const [],
                 );
               case CarbonQuestionType.slider:
                 return FormBuilderSlider(

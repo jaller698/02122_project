@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'carbon_history_controller.dart';
@@ -46,8 +47,10 @@ class _CarbonHistoryViewState extends State<CarbonHistoryView> {
             );
           } else {
             // keep loading, until the data is fetched
-            if (snapshot.hasError) print(snapshot.error);
-            return CircularProgressIndicator();
+            if (snapshot.hasError && kDebugMode) {
+              print(snapshot.error);
+            }
+            return const CircularProgressIndicator();
           }
         });
   }
@@ -74,12 +77,12 @@ class _CarbonHistoryViewState extends State<CarbonHistoryView> {
           );
         },
       ),
-      titlesData: FlTitlesData(
+      titlesData: const FlTitlesData(
         show: true,
-        rightTitles: const AxisTitles(
+        rightTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
+        topTitles: AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
       ),

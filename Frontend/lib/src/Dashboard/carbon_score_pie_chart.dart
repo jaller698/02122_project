@@ -137,29 +137,27 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
             ));
             return AspectRatio(
                 aspectRatio: 1,
-                child: ListView(children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: Row(
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 30,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Row(
+                    children: <Widget>[
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Expanded(
+                        child: AspectRatio(
+                          aspectRatio: 0.5,
+                          child: pieChart,
                         ),
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 0.5,
-                            child: pieChart,
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: addParts(segments, names),
-                        ),
-                      ],
-                    ),
-                  )
-                ]));
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: addParts(segments, names),
+                      ),
+                    ],
+                  ),
+                ));
           } else if (snapshot.hasError) {
             if (kDebugMode) {
               print('Error: ${snapshot.error.toString()}');

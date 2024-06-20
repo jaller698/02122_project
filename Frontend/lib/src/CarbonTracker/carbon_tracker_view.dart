@@ -282,7 +282,7 @@ class CarbonTrackerView extends StatelessWidget {
     }
   }
 
-  Map<String, IconData> iconMap = {
+  final Map<String, IconData> iconMap = {
     "walking": Icons.nordic_walking,
     "car": Icons.directions_car,
     "cycling": Icons.directions_bike,

@@ -14,20 +14,21 @@ class DashboardController {
     request.headers.addAll(<String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
-        //ask server, and then decode from utf8 and json
+    //ask server, and then decode from utf8 and json
     var response = await request.send();
     var items = await response.stream.transform(utf8.decoder).first;
-    List<dynamic> res = jsonDecode(items);    
+    List<dynamic> res = jsonDecode(items);
     return res;
   }
+
   Future<List<double>> last7days() async {
     var baseDaily = UserController().carbonScore / 365;
-  
+
     //print(res);
     List<dynamic> res = await getActions();
 
-     var date = DateTime.now();
-     List<double> list = [
+    var date = DateTime.now();
+    List<double> list = [
       baseDaily,
       baseDaily,
       baseDaily,
@@ -41,7 +42,6 @@ class DashboardController {
     for (var i = 0; i < res.length; i++) {
       var diff = date.difference(DateTime.parse(res[i]['date']));
       if (diff.inDays < 7 && diff.inDays >= 0) {
-
         if ((diff.inDays == 0 && date.hour < diff.inHours)) {
           list[1] += res[i]['CarbonScore'];
         } else {
@@ -58,7 +58,7 @@ class DashboardController {
     return list;
   }
 
-          // TODO: im not sure this method is EVER used.
+  // TODO: im not sure this method is EVER used.
   Future<String> fetchStats(String username) async {
     //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
 

@@ -75,14 +75,17 @@ class CarbonFormHistoryController with ChangeNotifier {
         break;
       }
     }
+    try {
+      await db.insert(
+        'form',
+        itemMap,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
 
-    await db.insert(
-      'form',
-      itemMap,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-
-    await loadForms();
+      await loadForms();
+    } catch (e) {
+      print(e);
+    }
 
     notifyListeners();
   }

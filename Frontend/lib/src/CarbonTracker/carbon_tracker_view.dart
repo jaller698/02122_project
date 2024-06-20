@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 
-// written by Martin, 
+// written by Martin,
 // widget to display history of all items the user has logged
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
@@ -18,8 +18,6 @@ class CarbonTrackerView extends StatelessWidget {
   final DashboardController dashboard = DashboardController();
   @override
   Widget build(BuildContext context) {
- 
-
     return Scaffold(
       // to update if the controller changes
       body: ListenableBuilder(
@@ -49,7 +47,8 @@ class CarbonTrackerView extends StatelessWidget {
                     int indexOffset = offset;
                     return Column(
                       children: [
-                        Text(curItem['date']//really hope this works :)
+                        Text(curItem['date']
+                                .substr(0, 9) //really hope this works :)
                             //'${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'
                             ),
                         ListView.builder(
@@ -71,20 +70,17 @@ class CarbonTrackerView extends StatelessWidget {
 
                             // logic to check if the current widget is still within the save day
                             if (index == 0 ||
-                                (curItemDate.day ==
-                                        lastItemDate.day &&
-                                    curItemDate.month ==
-                                        lastItemDate.month &&
-                                    curItemDate.year ==
-                                        lastItemDate.year)) {
+                                (curItemDate.day == lastItemDate.day &&
+                                    curItemDate.month == lastItemDate.month &&
+                                    curItemDate.year == lastItemDate.year)) {
                               offset++;
                               // create widget
                               return ListTile(
                                 leading: get_icon(curItem),
                                 title: Text(curItem["Category"]),
-                                subtitle: Text(
-                                    '${curItem['date']}'),
-                                trailing: Text(curItem['CarbonScore'].toString()),
+                                subtitle: Text('${curItem['date']}'),
+                                trailing:
+                                    Text(curItem['CarbonScore'].toString()),
                               );
                             }
                             // otherwise return null and stop current list builder
@@ -292,17 +288,16 @@ class CarbonTrackerView extends StatelessWidget {
   }
 
   Map<String, IconData> iconMap = {
-    "walking" : Icons.nordic_walking,
-    "car" : Icons.directions_car,
-    "cycling" : Icons.directions_bike,
+    "walking": Icons.nordic_walking,
+    "car": Icons.directions_car,
+    "cycling": Icons.directions_bike,
     "bus": Icons.directions_train,
     "train": Icons.directions_train,
     "boat": Icons.directions_boat,
     "flight": Icons.flight,
     "bikeToWork": Icons.directions_bike,
-    "meatFreeDay" : Icons.emoji_food_beverage_rounded,
+    "meatFreeDay": Icons.emoji_food_beverage_rounded,
     "custom": Icons.question_mark
-
   };
 
   get_icon(curItem) {

@@ -21,7 +21,6 @@ class CarbonTrackerController with ChangeNotifier {
     sendToServer(item);
   }
 
-
   void sendToServer(CarbonTrackerItem item) {
     // send to server
     Map data = Map.from(item.toMap());
@@ -32,7 +31,6 @@ class CarbonTrackerController with ChangeNotifier {
         },
         body: jsonEncode(data));
   }
-
 }
 
 // written by Martin,
@@ -127,42 +125,3 @@ enum CarbonTackerType {
 // written by Martin,
 // enum of all supported input types
 enum CarbonTrackInputTypes { single, time, distance, custom, carbonSaving }
-
-
-
-// to track
-//  travel
-//    by foot
-//    car
-//      electric
-//        hybrid
-//      petrol
-//      diesel
-//    bus
-//    train
-//    plane
-//      distance (choose in settings?)
-//      time
-//  food
-//    meat
-//      fish
-//      meat (low to high)
-//    dairy
-//    vegan
-//  shopping
-//    clothes
-//      fast fashion
-//    electronics (large to small)
-//  energy consumption 
-//    region
-//      coal
-//      natrual gas
-//      wind
-//      solar
-//      hydro
-//      nuclear
-//    by month?
-
-
-// form creater on website
-//    creation from ymal or json file

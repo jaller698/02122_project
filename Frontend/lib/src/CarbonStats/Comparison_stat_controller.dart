@@ -16,8 +16,6 @@ class CarbonStatController {
   }
 
   Future<String> fetchStats(String username) async {
-    //We dont actually get anything here, because the JSON request doesnt contain the user. And i dont know how to add it.
-
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/userScore'));
     request.body = jsonEncode(<String, String>{
@@ -29,8 +27,6 @@ class CarbonStatController {
 
     var response = await request.send();
     var result = await response.stream.transform(utf8.decoder).first;
-
-    //RESPONSE BURDE INDEHOLDE DATA'EN under "Score", but i dont know how to extract it
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -62,7 +58,9 @@ class CarbonStatController {
   Future<(List<String>, List<String>)> fetchCountries() async {
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/comparison'));
-    //gotta make this dynamic.
+    
+    //this is currently hard coded, but it should have been dynamic.
+    //we have all the countries and data, but i just never implemented a way to pick different ones.
     var countries = ["DNK", "SWE"];
 
     request.body = jsonEncode(<String, List<String>>{

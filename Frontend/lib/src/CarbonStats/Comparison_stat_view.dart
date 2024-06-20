@@ -62,7 +62,7 @@ class ComparisonStatView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: createNames(names, col));
-          ///////////////// doing this just to outline when this ends
+          //////// doing this just to outline when this ends
 
           final barchart1 = makeGroupData(0, vals, col);
           final items = [
@@ -74,7 +74,7 @@ class ComparisonStatView extends StatelessWidget {
           rawBarGroups = items;
           final barChart = BarChart(BarChartData(
             maxY: vals.reduce(max) + 100,
-            //barGroups: showingBarGroups,
+           
             barGroups: List.of(rawBarGroups),
             gridData: const FlGridData(show: false),
             titlesData: const FlTitlesData(
@@ -87,8 +87,7 @@ class ComparisonStatView extends StatelessWidget {
                 ),
               ),
             ),
-            //swapAnimationDuration: Duration(milliseconds: 150), // Optional
-            //swapAnimationCurve: Curves.linear, // Optional
+  
           ));
           return ListView(children: <Widget>[
             SizedBox(

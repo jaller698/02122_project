@@ -6,7 +6,7 @@ import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:http/http.dart' as http;
 
-// written by Martin, // TODO
+// written by Martin
 // http post request to submit a completed carbon form or questionnaire
 Future<void> sendCarbonForm(CarbonFormAnswer answer) async {
   // the future http response to the request

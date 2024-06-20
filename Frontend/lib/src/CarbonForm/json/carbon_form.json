@@ -1,8 +1,0 @@
-{
-    "title": "form title",
-    "questions": {
-        "question1": "int",
-        "question2": "arbitrary",
-        "question3": "date"
-    }
-}

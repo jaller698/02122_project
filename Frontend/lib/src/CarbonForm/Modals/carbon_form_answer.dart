@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-// written by Martin,
+// written by Martin
 // class for handling completed carbon forms, so instead of a list of questions it has a map of anwsers
 // also handles all from and to map conversion, for further json encoding
 class CarbonFormAnswer {

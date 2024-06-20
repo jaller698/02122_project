@@ -94,7 +94,6 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
 
             const List<String> labels = ["Transport", "Home", "Food", "Other"];
             List<Segment> segments = [
-              //TODO: we need to change these index's to match waht we want
               Segment(
                   value: vals[0] + 1,
                   color: Colors.lightGreenAccent,

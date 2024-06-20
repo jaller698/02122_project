@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-// written by // TODO
-// helper function for // TODO
+// written by Natascha
+// helper function for the pie chart
 class Indicator extends StatelessWidget {
   const Indicator({
     super.key,

@@ -43,7 +43,6 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
 
             // input widget for all supported input types
             switch (question.type) {
-              // TODO - fix hint wraping
               case CarbonQuestionType.int:
                 return FormBuilderTextField(
                   name: question.title,
@@ -131,7 +130,7 @@ class _CarbonFormQuestionnaireState extends State<CarbonFormQuestionnaire> {
               case CarbonQuestionType.dropDown:
                 return FormBuilderDropdown(
                   name: question.title,
-                  items: [], // TODO
+                  items: [],
                 );
               case CarbonQuestionType.slider:
                 return FormBuilderSlider(

@@ -7,7 +7,7 @@ import 'Modals/carbon_form.dart';
 import 'Modals/carbon_form_answer.dart';
 import 'carbon_form_questionnaire.dart';
 
-// written by Martin, // TODO
+// written by Martin
 //
 class CarbonFormView extends StatelessWidget {
   const CarbonFormView({
@@ -72,8 +72,6 @@ class CarbonFormView extends StatelessWidget {
                             subtitle: Text(snapshot.data![index].id),
                             leading: Text(index.toString()),
                             onTap: () {
-                              // TODO view old forms
-
                               Navigator.restorablePushNamed(
                                   context, CarbonFormQuestionnaire.routeName,
                                   arguments: CarbonFormAnswer.toMap(

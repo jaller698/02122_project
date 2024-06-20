@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// written by Martin, // TODO
+// written by Martin
 //
 class CarbonTrackerControllerNew {
   // save

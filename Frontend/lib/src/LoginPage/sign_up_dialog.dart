@@ -63,26 +63,12 @@ class _SignUpDialogState extends State<SignUpDialog> {
                           text: 'Terms of Service',
                           style: const TextStyle(
                               decoration: TextDecoration.underline),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // TODO
-                              if (kDebugMode) {
-                                print('TODO show Terms of Service');
-                              }
-                            },
                         ),
                         TextSpan(text: ' and ', children: <TextSpan>[
                           TextSpan(
                             text: 'Privacy Policy',
                             style: const TextStyle(
                                 decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // TODO
-                                if (kDebugMode) {
-                                  print('TODO show Privacy Policy');
-                                }
-                              },
                           )
                         ])
                       ],

@@ -1,7 +1,7 @@
+@echo off
 REM Description: This script is used to start the server in a docker container.
 REM Written by Christian
 
-@echo off
 set docker_name="server_docker"
 docker stop %docker_name%
 docker rm %docker_name%
@@ -12,9 +12,12 @@ docker run -d --name %docker_name% --mount type=bind,source="%cd%",target=/app -
 
 TIMEOUT 20
 
-docker exec -ti %docker_name% make run DEBUG=1
-REM Uncomment the following line to run the tests
-REM docker exec -ti %docker_name% make test
+if "%1"=="test" (
+    docker exec -ti %docker_name% make test
+) else (
+    docker exec -ti %docker_name% make DEBUG=1 run
+)
+
 
 
 

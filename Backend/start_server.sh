@@ -2,7 +2,7 @@
 # Written by Christian
 # simple bash script that builds the docker image, runs the docker container, and executes the make command in the container
 # The script also runs the server and tests in separate terminal windows (if the test argument is passed)
-# needs to run on a linux machine with docker installed, and gnome as the DE.
+# needs to run on a unix-like machine with docker installed.
 
 docker_name="server_docker"
 
@@ -57,13 +57,13 @@ else
     wait 20 - $time_taken
 fi
 
-gnome-terminal --window-with-profile=default -- docker exec -it $docker_name make DEBUG=1 run 
 if [ "$1" = "test" ]
 then
     echo "Running tests"
     wait 3
-    docker exec -i $docker_name make DEBUG=1 test
+    docker exec -i $docker_name make test
 else 
     echo "Not running tests"
+    docker exec -i $docker_name make DEBUG=1 run
 fi
 

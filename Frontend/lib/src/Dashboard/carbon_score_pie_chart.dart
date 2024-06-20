@@ -45,7 +45,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
     return res;
   }
 
-  Future<(List<String>, List<int>)> toMappp() async {
+  Future<(List<String>, List<int>)> toList() async {
     var res1 = Future(() async =>
         await _dashboardController.fetchCategories(UserController().username));
 
@@ -78,7 +78,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
   //the main function.
   @override
   Widget build(BuildContext context) {
-    var fut = toMappp();
+    var fut = toList();
     return FutureBuilder(
         future: fut,
         builder: (context, snapshot) {

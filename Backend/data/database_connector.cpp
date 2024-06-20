@@ -326,10 +326,13 @@ web::json::value dataBaseStart::getAction(std::string username)
     std::string command = "SELECT * FROM ActionTrackerData WHERE Username ='" + username + "'";
     statement = connection->createStatement();
     result_set = statement->executeQuery(command);
+
     web::json::value output = web::json::value::array();
     while (result_set->next())
     {
         web::json::value Action = web::json::value::object();
+        Action["Action"] = web::json::value::string(result_set->getString(2));
+        Action["Category"] = web::json::value::string(result_set->getString(3));
         Action["date"] = web::json::value::string(result_set->getString(4));
         Action["CarbonScore"] = web::json::value::number((double) result_set->getDouble(5));
         output[output.size()] = Action;

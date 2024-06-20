@@ -5,8 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:carbon_footprint/src/Settings/settings_controller.dart';
 import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
+import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 
-// written by Martin, 
+// written by Martin,
 // widget to display history of all items the user has logged
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
@@ -14,7 +15,7 @@ class CarbonTrackerView extends StatelessWidget {
   static const routeName = '/carbontracker';
 
   final CarbonTrackerController control = CarbonTrackerController();
-
+  final DashboardController dashboard = DashboardController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class CarbonTrackerView extends StatelessWidget {
         builder: (context, child) {
           // to update only when its future is completed
           return FutureBuilder(
-            future: control.carbonTrackerItems,
+            future: dashboard.getActions(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final count = snapshot.data!.length - 1;
@@ -46,8 +47,10 @@ class CarbonTrackerView extends StatelessWidget {
                     int indexOffset = offset;
                     return Column(
                       children: [
-                        Text(
-                            '${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'),
+                        Text(curItem['date']
+                                .substring(0, 10) //really hope this works :)
+                            //'${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'
+                            ),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const ClampingScrollPhysics(),
@@ -62,25 +65,22 @@ class CarbonTrackerView extends StatelessWidget {
                                 ? count - indexAdditive
                                 : count - indexAdditive + 1];
 
+                            var curItemDate = DateTime.parse(curItem['date']);
+                            var lastItemDate = DateTime.parse(lastItem['date']);
+
                             // logic to check if the current widget is still within the save day
                             if (index == 0 ||
-                                (curItem.dateAdded.day ==
-                                        lastItem.dateAdded.day &&
-                                    curItem.dateAdded.month ==
-                                        lastItem.dateAdded.month &&
-                                    curItem.dateAdded.year ==
-                                        lastItem.dateAdded.year)) {
+                                (curItemDate.day == lastItemDate.day &&
+                                    curItemDate.month == lastItemDate.month &&
+                                    curItemDate.year == lastItemDate.year)) {
                               offset++;
                               // create widget
                               return ListTile(
-                                leading: Icon(curItem.type.icon),
-                                title: Text(curItem.type.text),
-                                subtitle: Text(
-                                    '${curItem.dateAdded.hour.toString().padLeft(2, '0')}:${curItem.dateAdded.minute.toString().padLeft(2, '0')}'),
-                                trailing: Text(curItem.carbonScore.toString()),
-                                onTap: () {
-                                  control.removeTrackerItem(curItem.id!);
-                                },
+                                leading: get_icon(curItem),
+                                title: Text(curItem["Category"]),
+                                subtitle: Text('${curItem['date']}'),
+                                trailing:
+                                    Text(curItem['CarbonScore'].toString()),
                               );
                             }
                             // otherwise return null and stop current list builder
@@ -285,6 +285,23 @@ class CarbonTrackerView extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Map<String, IconData> iconMap = {
+    "walking": Icons.nordic_walking,
+    "car": Icons.directions_car,
+    "cycling": Icons.directions_bike,
+    "bus": Icons.directions_train,
+    "train": Icons.directions_train,
+    "boat": Icons.directions_boat,
+    "flight": Icons.flight,
+    "bikeToWork": Icons.directions_bike,
+    "meatFreeDay": Icons.emoji_food_beverage_rounded,
+    "custom": Icons.question_mark
+  };
+
+  get_icon(curItem) {
+    return Icon(iconMap[curItem["Category"]]);
   }
 }
 

@@ -30,10 +30,9 @@ class ComparisonStatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var fut = toList();
     late List<BarChartGroupData> rawBarGroups;
-    
+
     //The main function, it unpacks the data and fills it into a graph.
     return FutureBuilder(
       future: fut,
@@ -65,16 +64,10 @@ class ComparisonStatView extends StatelessWidget {
           //////// doing this just to outline when this ends
 
           final barchart1 = makeGroupData(0, vals, col);
-          final items = [
-            barchart1
-            /*
-              insert more barcharts if needed.
-              */
-          ];
+          final items = [barchart1];
           rawBarGroups = items;
           final barChart = BarChart(BarChartData(
             maxY: vals.reduce(max) + 100,
-           
             barGroups: List.of(rawBarGroups),
             gridData: const FlGridData(show: false),
             titlesData: const FlTitlesData(
@@ -87,7 +80,6 @@ class ComparisonStatView extends StatelessWidget {
                 ),
               ),
             ),
-  
           ));
           return ListView(children: <Widget>[
             SizedBox(
@@ -113,16 +105,16 @@ List<Widget> createNames(List<String> names, List<Color> col) {
     res = res +
         [
           Indicator(
-            color: col[i],
-            text: "${names[i]}   ",
-            isSquare: true,
-            size: 20,
-            textSize: 13
-          )
+              color: col[i],
+              text: "${names[i]}   ",
+              isSquare: true,
+              size: 20,
+              textSize: 13)
         ];
   }
   return res;
 }
+
 //creates the pilars in the barchart.
 BarChartGroupData makeGroupData(int x, List<double> y, List<Color> col) {
   return BarChartGroupData(
@@ -131,6 +123,7 @@ BarChartGroupData makeGroupData(int x, List<double> y, List<Color> col) {
     barRods: createBarchart(y, col),
   );
 }
+
 //extension of previous function.
 List<BarChartRodData> createBarchart(List<double> y, List<Color> col) {
   List<BarChartRodData> res = [];
@@ -146,6 +139,7 @@ List<BarChartRodData> createBarchart(List<double> y, List<Color> col) {
   }
   return res;
 }
+
 Widget bottomTitles(double value, TitleMeta meta) {
   final titles = <String>['Carbon score'];
 

@@ -108,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ],
                 ),
-                kDebugMode
+                kDebugMode // Only show guest login, if in debug mode (some functionality, may not be available)
                     ? TextButton(
                         onPressed: () => {
                               UserController().username = "guest",

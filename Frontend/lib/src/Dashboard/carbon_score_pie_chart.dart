@@ -52,7 +52,7 @@ class _CarbonScorePieChartState extends State<CarbonScorePieChart> {
     return res1;
   }
 
-//colors and writes names for the segments
+// colors and writes names for the segments
   List<PieChartSectionData> showingSections(List<Segment> segments) {
     return List.generate(
       segments.length,

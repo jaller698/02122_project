@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-// written by Martin
+// written by Martin, and Christian
 // sql lite singleton controller which handles the users history of tracker items they have added
 class CarbonTrackerController with ChangeNotifier {
   // singleton

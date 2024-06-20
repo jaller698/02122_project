@@ -5,41 +5,8 @@ import 'package:http/http.dart' as http;
 // written by Gabriel
 //
 class CarbonStatController {
-  double fromJsonScore(Map<String, dynamic> answer) {
-    return switch (answer) {
-      {
-        'Score': double score,
-      } =>
-        score,
-      _ => throw const FormatException('Failed to decode Klefulnech'),
-    };
-  }
-
-  Future<String> fetchStats(String username) async {
-    http.Request request = http.Request(
-        "GET", Uri.parse('${SettingsController.address}/userScore'));
-    request.body = jsonEncode(<String, String>{
-      'User': username,
-    });
-    request.headers.addAll(<String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    });
-
-    var response = await request.send();
-    var result = await response.stream.transform(utf8.decoder).first;
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-
-      return result;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load form');
-    }
-  }
-
   Future<String> fetchAverage() async {
+    // Fetch the average user's carbonscore
     http.Request request =
         http.Request("GET", Uri.parse('${SettingsController.address}/average'));
     request.body = jsonEncode(<String, String>{}); // empty body
@@ -56,9 +23,10 @@ class CarbonStatController {
   }
 
   Future<(List<String>, List<String>)> fetchCountries() async {
+    // uses a list if ISO codes sent to the server to get the carbon score of the countries
     http.Request request = http.Request(
         "GET", Uri.parse('${SettingsController.address}/comparison'));
-    
+
     //this is currently hard coded, but it should have been dynamic.
     //we have all the countries and data, but i just never implemented a way to pick different ones.
     var countries = ["DNK", "SWE"];
@@ -73,11 +41,12 @@ class CarbonStatController {
     var response = await request.send();
 
     var result = await response.stream.transform(utf8.decoder).first;
-    var result2 = jsonDecode(result);
+    var resultBody = jsonDecode(result);
     Map<String, String> res = {};
     for (int i = 0; i < countries.length; i++) {
       res.addAll({
-        result2[i]['Country'].toString(): result2[i]['CarbonScore'].toString()
+        resultBody[i]['Country'].toString():
+            resultBody[i]['CarbonScore'].toString()
       });
     }
     if (response.statusCode == 200) {

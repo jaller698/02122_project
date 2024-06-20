@@ -38,7 +38,6 @@ class SettingsController with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    //this likely isnt enough, but hey lets see :)
     UserController().username = "";
   }
 }

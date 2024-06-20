@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:carbon_footprint/src/user_controller.dart';
 import 'package:carbon_footprint/src/Dashboard/dashboard_controller.dart';
 
-// written by Martin,
+// written by Martin, Natascha, and Christian
 // widget to display history of all items the user has logged
 class CarbonTrackerView extends StatelessWidget {
   CarbonTrackerView({super.key});
@@ -47,9 +47,8 @@ class CarbonTrackerView extends StatelessWidget {
                     int indexOffset = offset;
                     return Column(
                       children: [
-                        Text(curItem['date']
-                                .substring(0, 10) //really hope this works :)
-                            //'${curItem.dateAdded.day}/${curItem.dateAdded.month}/${curItem.dateAdded.year}'
+                        Text(curItem['date'].substring(0,
+                                10) // the date will always be the first 10 characters
                             ),
                         ListView.builder(
                           shrinkWrap: true,
@@ -76,7 +75,7 @@ class CarbonTrackerView extends StatelessWidget {
                               offset++;
                               // create widget
                               return ListTile(
-                                leading: get_icon(curItem),
+                                leading: getIcon(curItem),
                                 title: Text(curItem["Category"]),
                                 subtitle: Text('${curItem['date']}'),
                                 trailing:
@@ -300,7 +299,7 @@ class CarbonTrackerView extends StatelessWidget {
     "custom": Icons.question_mark
   };
 
-  get_icon(curItem) {
+  getIcon(curItem) {
     return Icon(iconMap[curItem["Category"]]);
   }
 }

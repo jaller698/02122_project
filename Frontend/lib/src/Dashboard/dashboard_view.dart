@@ -15,7 +15,6 @@ class DashboardView extends StatefulWidget {
   });
 
   static int touchedIndex = -1;
-  //static ThemeMode tm = _settingsService.themeMode() as ThemeMode;
   @override
   State<DashboardView> createState() => _DashboardViewState();
 }
@@ -24,7 +23,7 @@ class DashboardView extends StatefulWidget {
 // a dashboard which contains widgets that contextualize the users actions from different sources along with fun facts
 class _DashboardViewState extends State<DashboardView> {
   get_random_tips() {
-    // return a random tip, currently hardcoded but could be fetched from a file or database
+    // return a random fact, currently hardcoded but could be fetched from a file or database
     var random_facts = [
       "Carbon dioxide consists of one carbon atom and two oxygen atoms, making its chemical formula CO2.",
       "CO2 is what gives soda and sparkling water their fizz.",

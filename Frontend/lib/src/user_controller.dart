@@ -26,7 +26,4 @@ class UserController {
   set carbonScore(int v) {
     _carbonScore = v;
   }
-
-  // unimplementated session token
-  String? _sessionID;
 }

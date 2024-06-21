@@ -72,10 +72,7 @@ class CarbonFormView extends StatelessWidget {
                             subtitle: Text(snapshot.data![index].id),
                             leading: Text(index.toString()),
                             onTap: () {
-                              Navigator.restorablePushNamed(
-                                  context, CarbonFormQuestionnaire.routeName,
-                                  arguments: CarbonFormAnswer.toMap(
-                                      snapshot.data![index]));
+                              //Navigator.restorablePushNamed(context, CarbonFormQuestionnaire.routeName,arguments: CarbonFormAnswer.toMap(snapshot.data![index]));
                             },
                           ),
                         );
